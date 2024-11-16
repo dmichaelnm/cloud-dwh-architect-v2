@@ -2,6 +2,7 @@
 /src-capacitor
 /src-cordova
 /.quasar
+/functions
 /node_modules
 .eslintrc.cjs
 /quasar.config.*.temporary.compiled*
