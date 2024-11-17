@@ -46,6 +46,13 @@ export default {
 
   // Error Messages
   error: {
+    // Unexpected error
+    unexpected: {
+      // Dialog title
+      title: 'Unexpected Error',
+      // Dialog message
+      message: 'An unexpected error occured. This should not have happened. Please contact the administrator.'
+    },
     // Input field must not be empty.
     emptyInput: 'This field must not be empty.',
   },
@@ -84,5 +91,10 @@ export default {
       // Last Name
       lastName: 'Last Name',
     },
+    // Error Messages
+    error: {
+      // Password and Repeated Password are not equal
+      passwordRepeatInvalid: 'The repeated password must be equal to the password.'
+    }
   },
 };

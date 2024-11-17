@@ -2,7 +2,7 @@
   <!-- Authentication Container -->
   <authentication-container :message="$t('auth.message.register')">
     <!-- Form -->
-    <q-form @submit="onSubmit">
+    <q-form ref="registerForm" @submit="onSubmit">
       <!-- Form DIV -->
       <div class="q-col-gutter-y-sm">
         <!-- First & Last Name Row -->
@@ -59,6 +59,7 @@
             <input-value
               v-model="passwordRepeat"
               :label="$t('auth.label.passwordRepeat')"
+              :error-message="passwordRepeatError"
               type="password"
               auto-complete="new-password"
               mandatory
@@ -66,7 +67,7 @@
           </div>
         </div>
         <!-- Register Button Row -->
-        <div class="row">
+        <div class="row" style="margin-top: 8px">
           <!-- Register Button Column -->
           <div class="col text-center">
             <!-- Login Button -->
@@ -97,6 +98,17 @@ import AuthenticationContainer from 'components/app/auth/AuthenticationContainer
 import { ref } from 'vue';
 import InputValue from 'components/common/InputValue.vue';
 import ButtonPush from 'components/common/ButtonPush.vue';
+import { useComposables, useRunTask } from 'src/scripts/utilities/common';
+import { QForm } from 'quasar';
+import { createAccount } from 'src/scripts/application/Account';
+
+// Get composable components
+const comp = useComposables();
+// Get run task composable function
+const runTask = useRunTask();
+
+// Form reference
+const registerForm = ref<QForm | null>(null);
 
 // First Name
 const firstName = ref('');
@@ -108,6 +120,48 @@ const email = ref('');
 const password = ref('');
 // Password Repeat
 const passwordRepeat = ref('');
+// Password Repeat Error Message
+const passwordRepeatError = ref('');
 
-function onSubmit(): void {}
+function onSubmit(): void {
+  // Reset validation
+  resetValidation();
+
+  // Check password and repeated password for equality
+  if (password.value !== passwordRepeat.value) {
+    // Set error message on repeated password
+    passwordRepeatError.value = comp.i18n.t('auth.error.passwordRepeatInvalid');
+    return;
+  }
+
+  // Start the registration task
+  runTask(
+    async () => {
+      // Create new account
+      await createAccount(
+        firstName.value,
+        lastName.value,
+        email.value,
+        password.value,
+        comp.quasar.dark.isActive,
+        comp.i18n.locale.value
+      );
+    },
+    (error) => {
+      console.error(error);
+      return false;
+    }
+  );
+}
+
+/**
+ * Resets the validation state of the form.
+ * This includes clearing any validation error messages.
+ */
+function resetValidation(): void {
+  // Reset the form
+  registerForm.value?.resetValidation();
+  // Reset error messages
+  passwordRepeatError.value = '';
+}
 </script>

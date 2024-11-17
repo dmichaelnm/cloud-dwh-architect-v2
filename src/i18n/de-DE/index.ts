@@ -20,7 +20,7 @@ export default {
   // Common Labels
   label: {
     // Back
-    back: 'Zurück'
+    back: 'Zurück',
   },
 
   // Tooltip Messages
@@ -46,6 +46,15 @@ export default {
 
   // Error Messages
   error: {
+    // Unexpected error
+    unexpected: {
+      // Dialog title
+      title: 'Unerwarteter Fehler',
+      // Dialog message
+      message:
+        'Ein unerwarteter Fehler ist aufgetreten. Dies hätte nicht passieren dürfen. Bitte wenden Sie sich an ' +
+        'den Administrator.',
+    },
     // Input field must not be empty.
     emptyInput: 'Dieses Feld darf nicht leer sein.',
   },
@@ -85,6 +94,12 @@ export default {
       firstName: 'Vorname',
       // Last Name
       lastName: 'Nachname',
+    },
+    // Error Messages
+    error: {
+      // Password and Repeated Password are not equal
+      passwordRepeatInvalid:
+        'Das wiederholte Kennwort muss mit dem Kennwort übereinstimmen.',
     },
   },
 };
