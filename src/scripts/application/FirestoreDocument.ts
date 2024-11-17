@@ -1,8 +1,8 @@
 import firebase from 'firebase/compat';
+import { capitalize } from 'src/scripts/utilities/common';
 import DocumentReference = firebase.firestore.DocumentReference;
 import DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 import Timestamp = firebase.firestore.Timestamp;
-import { capitalize } from 'vue';
 
 /**
  * An enumeration representing different Firestore document types.

@@ -1,1 +1,40 @@
 // app global css in SCSS form
+
+@import "quasar.variables";
+
+body {
+  background-color: $background-body-light;
+  color: $text-light;
+  font-size: 10pt;
+}
+
+body.body--dark {
+  background-color: $background-body-dark;
+  color: $text-dark;
+}
+
+.container {
+  background-color: $background-container-light;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.body--dark .container {
+  background-color: $background-container-dark;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.container-caption {
+  font-variant: small-caps;
+  color: $text-caption-light;
+}
+
+.body--dark .container-caption {
+  color: $text-caption-dark;
+}
+
+.q-field {
+  font-size: 10pt;
+  font-weight: normal;
+}

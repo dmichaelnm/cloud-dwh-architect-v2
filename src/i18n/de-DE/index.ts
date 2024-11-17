@@ -12,9 +12,9 @@ export default {
   // Language labels
   language: {
     // English (US)
-    english: 'English (US)',
+    english: 'Englisch (US)',
     // German (DE)
-    german: 'German (DE)',
+    german: 'Deutsch (DE)',
   },
 
   // Tooltip Messages
@@ -44,9 +44,10 @@ export default {
     message: {
       // Login Page
       login:
-        'Please enter your login details in the input fields below. The password is case sensitive. If you do ' +
-        'not yet have an account, you can create a new one using the "Register account" link. However, this must ' +
-        'first be activated by an administrator before you can log in.',
+        'Bitte geben Sie Ihre Anmeldedaten in die unten stehenden Eingabefelder ein. ' +
+        'Beim Kennwort muss auf die Groß- und kleinschreibung geachtet werden. Falls Sie noch kein Konto haben, können ' +
+        'Sie ein neues Konto über den Link "Konto registrieren" erstellen. Dieses muss jedoch zuerst von einem ' +
+        'Administrator aktiviert werden, bevor Sie sich einloggen können.',
     },
   },
 };
