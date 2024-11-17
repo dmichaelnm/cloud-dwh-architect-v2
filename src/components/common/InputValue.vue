@@ -8,6 +8,8 @@
     :autofocus="autoFocus"
     :autocomplete="autoComplete"
     :rules="[(value) => (mandatory ? !!value : true) || $t('error.emptyInput')]"
+    :error="errorMessage !== undefined && errorMessage.length > 0"
+    :error-message="errorMessage"
     lazy-rules="ondemand"
     spellcheck="false"
     no-error-icon
@@ -41,6 +43,8 @@ const props = defineProps<{
   autoFocus?: boolean;
   /** Mandatory flag */
   mandatory?: boolean;
+  /** Error Message */
+  errorMessage?: string;
 }>();
 
 // Defines the events that can be emitted by this component

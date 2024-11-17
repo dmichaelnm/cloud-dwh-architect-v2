@@ -1,5 +1,7 @@
 import firebase from 'firebase/compat';
 import { capitalize } from 'src/scripts/utilities/common';
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+import { firebaseStore, getCurrentAccountName } from 'src/scripts/utilities/firebase';
 import DocumentReference = firebase.firestore.DocumentReference;
 import DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 import Timestamp = firebase.firestore.Timestamp;
@@ -163,6 +165,55 @@ export class FirestoreDocument<D extends IFirestoreDocumentData> {
   toString(): string {
     return `${capitalize(this.type)}: ${this.data.common.name}`;
   }
+}
+
+/**
+ * Creates a new document in Firestore.
+ *
+ * @param {EFirestoreDocumentType} type - The type of the Firestore document.
+ * @param {D} data - The data to be stored in the document.
+ * @param {string} [id] - Optional. The ID of the document. If not provided, an ID will be generated.
+ * @param {FirestoreDocument<never>} [parent] - Optional. The parent document under which this document will be created.
+ * @return {Promise<R>} A promise that resolves to the created document.
+ *
+ * @template D - The type of the specific data interface.
+ * @template R - The type of the specific document class.
+ */
+export async function createDocument<
+  D extends IFirestoreDocumentData,
+  R extends FirestoreDocument<D>
+>(
+  type: EFirestoreDocumentType,
+  data: D,
+  id?: string,
+  parent?: FirestoreDocument<never>
+): Promise<R> {
+  // Set meta information on data object, if not specified yet
+  if (data.common.meta) {
+    data.common.meta = {
+      created: {
+        at: Timestamp.now(),
+        by: getCurrentAccountName(),
+      },
+    };
+  }
+  // Create path
+  const path = parent ? parent.path + '/' + type : type;
+  // Create document
+  if (id) {
+    // Create document reference for specified ID.
+    const ref = doc(firebaseStore, path, id);
+    // Create document
+    await setDoc(ref, data);
+  } else {
+    // Create collection reference.
+    const ref = collection(firebaseStore, path);
+    // Add document with generated ID.
+    id = (await addDoc(ref, data)).id;
+  }
+
+  // Return document object
+  return new FirestoreDocument({ path: path, id: id, data: data }) as R;
 }
 
 /**
