@@ -6,7 +6,7 @@ export default {
     // Copyright Notice
     copyright: '&copy; Copyright 2024 Dirk Michael',
     // Version Information
-    version: 'Version {major}.{minor}.{patch} (Build: {build})'
+    version: 'Version {major}.{minor}.{patch} (Build: {build})',
   },
 
   // Language labels
@@ -14,7 +14,7 @@ export default {
     // English (US)
     english: 'English (US)',
     // German (DE)
-    german: 'German (DE)'
+    german: 'German (DE)',
   },
 
   // Common Labels
@@ -24,7 +24,7 @@ export default {
     // Close
     close: 'Close',
     // Detail
-    detail: 'Show Details'
+    detail: 'Show Details',
   },
 
   // Tooltip Messages
@@ -44,8 +44,8 @@ export default {
       // Threads
       threads: 'Threads',
       // Twitter / X
-      twitter: 'Twitter / X'
-    }
+      twitter: 'Twitter / X',
+    },
   },
 
   // Error Messages
@@ -55,10 +55,11 @@ export default {
       // Dialog title
       title: 'Unexpected Error',
       // Dialog message
-      message: 'An unexpected error occured. This should not have happened. Please contact the administrator.'
+      message:
+        'An unexpected error occured. This should not have happened. Please contact the administrator.',
     },
     // Input field must not be empty.
-    emptyInput: 'This field must not be empty.'
+    emptyInput: 'This field must not be empty.',
   },
 
   // Authentication Messages
@@ -74,7 +75,7 @@ export default {
       register:
         'You can register a new account here by completely filling out the fields below. The email address ' +
         'must not have been used for another account. After the account has been successfully created, it must be ' +
-        'activated by an administrator before you can use it.'
+        'activated by an administrator before you can use it.',
     },
     // Labels
     label: {
@@ -93,12 +94,31 @@ export default {
       // First Name
       firstName: 'First Name',
       // Last Name
-      lastName: 'Last Name'
+      lastName: 'Last Name',
+    },
+    // Dialog Messages
+    dialog: {
+      // Register Success Messages
+      register: {
+        // Title
+        title: 'Account Registration Successful',
+        // Message
+        message:
+          'Your account has been successfully registered. However, you need to be activated by an administrator ' +
+          'before you can log in.',
+      },
     },
     // Error Messages
     error: {
       // Password and Repeated Password are not equal
-      passwordRepeatInvalid: 'The repeated password must be equal to the password.'
-    }
-  }
+      passwordRepeatInvalid:
+        'The repeated password must be equal to the password.',
+      // Email address is invalid
+      invalidEmail: 'The email address is invalid.',
+      // Email address is already in use
+      emailInUse: 'The email address is already in use.',
+      // Password is too weak
+      passwordTooWeak: 'The password must contain at least 6 characters.',
+    },
+  },
 };

@@ -99,11 +99,29 @@ export default {
       // Last Name
       lastName: 'Nachname',
     },
+    // Dialog Messages
+    dialog: {
+      // Register Success Messages
+      register: {
+        // Title
+        title: 'Konto erfolgreich registriert',
+        // Message
+        message:
+          'Dein Konto wurde erfolgreich registriert. Allerdings musst du dich erst von einem Administrator ' +
+          'freischalten lassen, bevor du dich anmelden kannst.',
+      },
+    },
     // Error Messages
     error: {
       // Password and Repeated Password are not equal
       passwordRepeatInvalid:
         'Das wiederholte Kennwort muss mit dem Kennwort übereinstimmen.',
+      // Email address is invalid
+      invalidEmail: 'Die Email-Adresse ist ungültig.',
+      // Email address is already in use
+      emailInUse: 'Die E-Mail-Adresse wird bereits verwendet.',
+      // Password is too weak
+      passwordTooWeak: 'Das Kennwort muss mindestens 6 Zeichen enthalten',
     },
   },
 };

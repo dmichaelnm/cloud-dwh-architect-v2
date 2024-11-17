@@ -66,13 +66,22 @@
 <script setup lang="ts">
 import AuthenticationContainer from 'components/app/auth/AuthenticationContainer.vue';
 import InputValue from 'components/common/InputValue.vue';
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import ButtonPush from 'components/common/ButtonPush.vue';
+import { useComposables } from 'src/scripts/utilities/common';
+
+// Get composable components
+const comp = useComposables();
 
 // Email Address
 const email = ref('');
 // Password
 const password = ref('');
+
+onBeforeMount(() => {
+  // Set email from cookie
+  email.value = comp.quasar.cookies.get('email');
+});
 
 function onSubmit(): void {}
 </script>

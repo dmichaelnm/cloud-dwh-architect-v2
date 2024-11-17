@@ -58,6 +58,24 @@ export type TFuncShowMessageDialog = (
 ) => void;
 
 /**
+ * Represents a function to display a success dialog.
+ *
+ * @param {string} title - The title of the dialog.
+ * @param {string} message - The message to be displayed in the dialog.
+ * @param {string | null | undefined} [detail] - Additional details to be displayed, if any.
+ * @param {Function | null | undefined} [result] - An optional callback function to handle the result of the dialog.
+ */
+export type TFuncShowSuccessDialog = (
+  title: string,
+  message: string,
+  detail?: string | null | undefined,
+  result?:
+    | ((value: string) => boolean | void | Promise<boolean | void>)
+    | null
+    | undefined
+) => void;
+
+/**
  * Represents a selectable option in a UI dropdown or select component.
  *
  * @property {string|number} value - The value of the option.
@@ -106,6 +124,12 @@ export function useComposables() {
   };
 }
 
+/**
+ * Provides a composable function to run an asyncronous task with loading
+ * indicator and error handling.
+ *
+ * @return {function} A function that accepts a task function and an optional error handling function.
+ */
 export function useRunTask(): (
   fTask: () => Promise<void>,
   fError?: (error: unknown) => boolean
@@ -156,6 +180,7 @@ export function useRunTask(): (
 export function useMessageDialog(): {
   messageDialogOptions: Ref<TMessageDialogOptions>;
   showMessageDialog: TFuncShowMessageDialog;
+  showSuccessDialog: TFuncShowSuccessDialog;
 } {
   return {
     messageDialogOptions: messageDialogOptions,
@@ -170,6 +195,15 @@ export function useMessageDialog(): {
       messageDialogOptions.value.result = result;
       messageDialogOptions.value.visibility = true;
     },
+    showSuccessDialog: (title, message, detail, result) => {
+      messageDialogOptions.value.title = title;
+      messageDialogOptions.value.message = message;
+      messageDialogOptions.value.detail = detail;
+      messageDialogOptions.value.color = '#5dba73';
+      messageDialogOptions.value.buttons = [{ value: 'close', label: 'label.close' }];
+      messageDialogOptions.value.result = result;
+      messageDialogOptions.value.visibility = true;
+    }
   };
 }
 

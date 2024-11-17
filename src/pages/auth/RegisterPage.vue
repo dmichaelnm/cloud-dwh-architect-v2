@@ -35,6 +35,7 @@
             <input-value
               v-model="email"
               :label="$t('auth.label.email')"
+              :error-message="emailError"
               auto-complete="username"
               mandatory
             />
@@ -48,6 +49,7 @@
             <input-value
               v-model="password"
               :label="$t('auth.label.password')"
+              :error-message="passwordError"
               type="password"
               auto-complete="new-password"
               mandatory
@@ -98,14 +100,21 @@ import AuthenticationContainer from 'components/app/auth/AuthenticationContainer
 import { ref } from 'vue';
 import InputValue from 'components/common/InputValue.vue';
 import ButtonPush from 'components/common/ButtonPush.vue';
-import { useComposables, useRunTask } from 'src/scripts/utilities/common';
+import {
+  useComposables,
+  useMessageDialog,
+  useRunTask,
+} from 'src/scripts/utilities/common';
 import { QForm } from 'quasar';
 import { createAccount } from 'src/scripts/application/Account';
+import { processFirebaseError } from 'src/scripts/utilities/auth';
 
 // Get composable components
 const comp = useComposables();
 // Get run task composable function
 const runTask = useRunTask();
+// Get message dialog composable function
+const { showSuccessDialog } = useMessageDialog();
 
 // Form reference
 const registerForm = ref<QForm | null>(null);
@@ -116,13 +125,21 @@ const firstName = ref('');
 const lastName = ref('');
 // Email Address
 const email = ref('');
+// Email Address Error Message
+const emailError = ref('');
 // Password
 const password = ref('');
+// Password Error Message
+const passwordError = ref('');
 // Password Repeat
 const passwordRepeat = ref('');
 // Password Repeat Error Message
 const passwordRepeatError = ref('');
 
+/**
+ * Handles the submission of the registration form by performing validation,
+ * creating a new account, and processing any errors that occur.
+ */
 function onSubmit(): void {
   // Reset validation
   resetValidation();
@@ -146,10 +163,27 @@ function onSubmit(): void {
         comp.quasar.dark.isActive,
         comp.i18n.locale.value
       );
+      // Show success dialog
+      showSuccessDialog(
+        comp.i18n.t('auth.dialog.register.title'),
+        comp.i18n.t('auth.dialog.register.message'),
+        undefined,
+        () => {
+          // Set email cookie
+          comp.quasar.cookies.set('email', email.value);
+          // Route to login page
+          comp.router.push({ path: '/auth/login' });
+        }
+      );
     },
     (error) => {
-      console.error(error);
-      return false;
+      // Process error
+      return processFirebaseError(
+        error,
+        comp.i18n.t,
+        emailError,
+        passwordError
+      );
     }
   );
 }
@@ -162,6 +196,8 @@ function resetValidation(): void {
   // Reset the form
   registerForm.value?.resetValidation();
   // Reset error messages
+  emailError.value = '';
+  passwordError.value = '';
   passwordRepeatError.value = '';
 }
 </script>
