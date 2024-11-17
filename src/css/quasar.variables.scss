@@ -20,7 +20,7 @@ $dark      : #1D1D1D;
 $dark-page : #121212;
 
 $positive  : #21BA45;
-$negative  : #C10015;
+$negative  : #c3606a;
 $info      : #31CCEC;
 $warning   : #F2C037;
 
@@ -32,6 +32,17 @@ $background-body-dark: #080808;
 $background-container-light: #FFFFFF;
 $background-container-dark: #101010;
 
+// Frame Colors
+$frame-light: #E0E0E0;
+$frame-dark: #202020;
+$frame-hovered: #7070F0;
+
+// Button Colors
+$button-background-light: #7070F0;
+$button-background-dark: #7070F0;
+$button-text-light: #FFFFFF;
+$button-text-dark: #101010;
+
 // Text
 $text-light: #707070;
 $text-dark: #909090;
@@ -41,4 +52,5 @@ $text-caption-light: #303030;
 $text-caption-dark: #C0C0C0;
 
 // Hint Text
-$text-hint: #808080;
+$text-hint-light: #989898;
+$text-hint-dark: #484848;

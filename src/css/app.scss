@@ -38,3 +38,31 @@ body.body--dark {
   font-size: 10pt;
   font-weight: normal;
 }
+
+.q-field--outlined .q-field__control:before {
+  border-color: $frame-light;
+}
+
+.body--dark .q-field--outlined .q-field__control:before {
+  border-color: $frame-dark;
+}
+
+.q-field--outlined .q-field__control:hover:before {
+  border-color: $frame-hovered;
+}
+
+.q-field--dense .q-field__label {
+  color: $text-light;
+}
+
+.body--dark .q-field--dense .q-field__label {
+  color: $text-dark;
+}
+
+.q-menu {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.body--dark .q-menu {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}

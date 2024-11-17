@@ -19,6 +19,14 @@
           {{ message }}
         </div>
       </div>
+      <!-- Container Content Row -->
+      <div class="row auth-row">
+        <!-- Container Content Column -->
+        <div class="col">
+          <!-- Container Content Slot -->
+          <slot />
+        </div>
+      </div>
       <!-- Option Row -->
       <div class="row auth-row items-center">
         <!-- Dark Mode Option Column -->
@@ -78,6 +86,8 @@ defineProps<{
   message: string;
 }>();
 
+// Sets the dark mode and language settings from cookies on component mount.
+// Defaults to the browser's language if no language cookie is available.
 onBeforeMount(() => {
   // Set dark mode from cookie
   comp.quasar.dark.set(comp.quasar.cookies.get('dark-mode') === 'true');

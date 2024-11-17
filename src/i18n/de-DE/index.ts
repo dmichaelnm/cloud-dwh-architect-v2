@@ -2,7 +2,7 @@ export default {
   // Application Messages
   application: {
     // Title
-    title: 'Cloud DWH Architect',
+    title: 'Cloud Data Warehouse Architect',
     // Copyright Notice
     copyright: '&copy; Copyright 2024 Dirk Michael',
     // Version Information
@@ -15,6 +15,12 @@ export default {
     english: 'Englisch (US)',
     // German (DE)
     german: 'Deutsch (DE)',
+  },
+
+  // Common Labels
+  label: {
+    // Back
+    back: 'Zurück'
   },
 
   // Tooltip Messages
@@ -38,16 +44,47 @@ export default {
     },
   },
 
+  // Error Messages
+  error: {
+    // Input field must not be empty.
+    emptyInput: 'Dieses Feld darf nicht leer sein.',
+  },
+
   // Authentication Messages
   auth: {
     // Container Messages
     message: {
       // Login Page
       login:
-        'Bitte geben Sie Ihre Anmeldedaten in die unten stehenden Eingabefelder ein. ' +
-        'Beim Kennwort muss auf die Groß- und kleinschreibung geachtet werden. Falls Sie noch kein Konto haben, können ' +
-        'Sie ein neues Konto über den Link "Konto registrieren" erstellen. Dieses muss jedoch zuerst von einem ' +
-        'Administrator aktiviert werden, bevor Sie sich einloggen können.',
+        'Bitte geben Sie in die untenstehen Eingabefelder Ihre Anmeldeinformationen ein. Achten Sie bei der ' +
+        'Eingabe des Kennworts auch auf die Groß- und Kleinschreibung. Sollten Sie noch kein Konto besitzen, können ' +
+        'Sie sich über den Link "Konto registrieren" ein neues erstellen. Dieses muss jedoch erst von einem ' +
+        'Administrator freigeschaltet werden, bevor Sie sich anmelden können.',
+      // Register Page
+      register:
+        'Hier können Sie ein neues Konto registrieren, indem Sie die untenstehen Felder komplett ausfüllen. ' +
+        'Dabei darf die Email-Adresse noch nicht für ein anderes Konto verwendet worden sein. Nach der erfolgreichen ' +
+        'Erstellung des Kontos muss dieses noch von einem Administrator freigeschaltet werden, bevor Sie es ' +
+        'verwenden können.',
+    },
+    // Labels
+    label: {
+      // Email Address
+      email: 'Email-Adresse',
+      // Password
+      password: 'Kennwort',
+      // Repeat Password
+      passwordRepeat: 'Kennwort wiederholen',
+      // Login Button
+      login: 'Anmelden',
+      // Register Account
+      register: 'Konto registrieren',
+      // Reset Password
+      reset: 'Kennwort zurücksetzen',
+      // First Name
+      firstName: 'Vorname',
+      // Last Name
+      lastName: 'Nachname',
     },
   },
 };

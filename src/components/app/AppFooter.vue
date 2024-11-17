@@ -14,7 +14,6 @@
         <div class="col-6 text-center">
           <!-- Email Button -->
           <button-icon
-            color="#808080"
             icon="bi-envelope-fill"
             :tooltip="$t('tooltip.socialMedia.email')"
             href="mailto:dirkmichaelnm@gmail.com?subject=Cloud DWH Architect"
@@ -22,7 +21,6 @@
           />
           <!-- Discord -->
           <button-icon
-            color="#808080"
             icon="bi-discord"
             :tooltip="$t('tooltip.socialMedia.discord')"
             href="https://discord.gg/nepJ6jZEAr"
@@ -30,7 +28,6 @@
           />
           <!-- Twitch -->
           <button-icon
-            color="#808080"
             icon="bi-twitch"
             :tooltip="$t('tooltip.socialMedia.twitch')"
             href="https://www.twitch.tv/khrenn"
@@ -38,7 +35,6 @@
           />
           <!-- Linked In -->
           <button-icon
-            color="#808080"
             icon="bi-linkedin"
             :tooltip="$t('tooltip.socialMedia.linkedin')"
             href="https://www.linkedin.com/in/dirk-michael-7b651636/"
@@ -46,7 +42,6 @@
           />
           <!-- Instagram -->
           <button-icon
-            color="#808080"
             icon="bi-instagram"
             :tooltip="$t('tooltip.socialMedia.instagram')"
             href="https://www.instagram.com/dirk_michael_nm/"
@@ -54,7 +49,6 @@
           />
           <!-- Threads -->
           <button-icon
-            color="#808080"
             icon="bi-threads"
             :tooltip="$t('tooltip.socialMedia.threads')"
             href="https://www.threads.net/@dirk_michael_nm"
@@ -62,7 +56,6 @@
           />
           <!-- Twitter / X -->
           <button-icon
-            color="#808080"
             icon="bi-twitter-x"
             :tooltip="$t('tooltip.socialMedia.twitter')"
             href="https://twitter.com/dmic2501"
@@ -92,8 +85,12 @@
 .app-footer {
   padding: 4px 8px;
   background-color: transparent;
-  color: $text-hint;
+  color: $text-hint-light;
   font-size: 9pt;
+}
+
+.body--dark .app-footer {
+  color: $text-hint-dark;
 }
 </style>
 

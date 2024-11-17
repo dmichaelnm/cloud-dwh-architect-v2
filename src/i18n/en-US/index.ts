@@ -2,7 +2,7 @@ export default {
   // Application Messages
   application: {
     // Title
-    title: 'Cloud DWH Architect',
+    title: 'Cloud Data Warehouse Architect',
     // Copyright Notice
     copyright: '&copy; Copyright 2024 Dirk Michael',
     // Version Information
@@ -15,6 +15,12 @@ export default {
     english: 'English (US)',
     // German (DE)
     german: 'German (DE)',
+  },
+
+  // Common Labels
+  label: {
+    // Back
+    back: 'Back'
   },
 
   // Tooltip Messages
@@ -38,6 +44,12 @@ export default {
     },
   },
 
+  // Error Messages
+  error: {
+    // Input field must not be empty.
+    emptyInput: 'This field must not be empty.',
+  },
+
   // Authentication Messages
   auth: {
     // Container Messages
@@ -47,6 +59,30 @@ export default {
         'Please enter your login details in the input fields below. The password is case sensitive. If you do ' +
         'not yet have an account, you can create a new one using the "Register account" link. However, this must ' +
         'first be activated by an administrator before you can log in.',
+      // Register Page
+      register:
+        'You can register a new account here by completely filling out the fields below. The email address ' +
+        'must not have been used for another account. After the account has been successfully created, it must be ' +
+        'activated by an administrator before you can use it.',
+    },
+    // Labels
+    label: {
+      // Email Address
+      email: 'Email Address',
+      // Password
+      password: 'Password',
+      // Repeat Password
+      passwordRepeat: 'Repeat Password',
+      // Login Button
+      login: 'Log In',
+      // Register Account
+      register: 'Register Account',
+      // Reset Password
+      reset: 'Reset Password',
+      // First Name
+      firstName: 'First Name',
+      // Last Name
+      lastName: 'Last Name',
     },
   },
 };

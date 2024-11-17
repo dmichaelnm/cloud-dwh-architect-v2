@@ -5,7 +5,6 @@
     :size="iconSize"
     :href="href"
     :target="target"
-    :color="colorAttr"
     round
     flat
     @click="emit('click')"
@@ -46,6 +45,4 @@ const emit = defineEmits<{
 // if not provided in the props.
 const iconSize = computed(() => (props.size ? props.size : 'sm'));
 
-// Returns the color attribute based on the provided props or defaults to 'primary'.
-const colorAttr = computed(() => (props.color ? props.color : 'primary'));
 </script>
