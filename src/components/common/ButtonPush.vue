@@ -8,6 +8,7 @@
     :to="routeTo"
     dense
     no-caps
+    @click="emit('click')"
   />
 </template>
 
@@ -36,7 +37,6 @@
   color: $button-background-light;
   font-weight: normal;
 }
-
 </style>
 
 <script setup lang="ts">
@@ -52,6 +52,12 @@ const props = defineProps<{
   look?: 'push' | 'link';
   /** Routing path */
   routeTo?: string;
+}>();
+
+// Defines the events that can be emitted by this component
+const emit = defineEmits<{
+  /** Click event */
+  (event: 'click'): void;
 }>();
 
 // Computes the button look based on the 'look' prop, defaulting to 'push' if not provided.

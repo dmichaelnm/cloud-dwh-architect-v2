@@ -66,3 +66,42 @@ body.body--dark {
 .body--dark .q-menu {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
 }
+
+.dialog-frame {
+  background-color: $background-container-light;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.body--dark .dialog-frame {
+  background-color: $background-container-dark;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+.dialog-row {
+  padding: 8px;
+}
+
+.dialog-title {
+  font-size: 14pt;
+  color: $text-caption-light;
+  font-variant: small-caps;
+}
+
+.body--dark .dialog-title {
+  color: $text-caption-dark;
+}
+
+.q-expansion-item .q-item--dense {
+  padding: 0 0;
+}
+
+.q-expansion-item .q-item__label {
+  font-weight: normal;
+  color: $text-caption-light;
+}
+
+.body--dark .q-expansion-item .q-item__label {
+  color: $text-caption-dark;
+}

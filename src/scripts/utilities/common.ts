@@ -140,7 +140,7 @@ export function useRunTask(): (
               comp.i18n.t('error.unexpected.title'),
               comp.i18n.t('error.unexpected.message'),
               errorMessage,
-              'negative'
+              '#C3606A'
             );
           }
           // Resolve failed

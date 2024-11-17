@@ -21,6 +21,10 @@ export default {
   label: {
     // Back
     back: 'Zurück',
+    // Close
+    close: 'Schließen',
+    // Detail
+    detail: 'Details anzeigen',
   },
 
   // Tooltip Messages
