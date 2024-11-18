@@ -15,14 +15,17 @@ onBeforeMount(() => {
   // Lock the screen
   comp.quasar.loading.show();
   onAccountStateChanged(async (account) => {
-    // Log account
-    console.debug('Account state changed', account);
     // Check for authorized account
     if (account === null) {
       // Unlock the screen
       comp.quasar.loading.hide();
       // No authorized account, redirect to login page
       await comp.router.push({ path: '/auth/login' });
+    } else {
+      // Store account on session
+      comp.session.account = account;
+      // Unlock the screen
+      comp.quasar.loading.hide();
     }
   });
 });

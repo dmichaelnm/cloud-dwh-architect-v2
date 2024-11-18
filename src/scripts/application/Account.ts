@@ -3,7 +3,6 @@ import * as au from 'firebase/auth';
 import * as fs from 'firebase/firestore';
 import { firebaseAuth } from 'src/scripts/utilities/firebase';
 import { FirebaseError } from 'firebase/app';
-import { updateDocument } from 'src/scripts/application/FirestoreDocument';
 
 /**
  * Represents account data stored in the document.
@@ -30,6 +29,12 @@ export interface IAccountData extends fd.IFirestoreDocumentData {
  */
 export class Account extends fd.FirestoreDocument<IAccountData> {}
 
+/**
+ * Monitors the account state changes and handles the account accordingly.
+ *
+ * @param handler - A callback function to handle the account state. It receives an Account object if authenticated
+ *                  and valid, or null otherwise.
+ */
 export function onAccountStateChanged(
   handler: (account: Account | null) => void
 ): void {
@@ -38,6 +43,20 @@ export function onAccountStateChanged(
       // If the user is null then we don't have an authenticated Firebase user and
       // call the handler with null as account
       handler(null);
+    } else {
+      // Load account document
+      const account = await fd.loadDocument<IAccountData, Account>(
+        fd.EFirestoreDocumentType.Account,
+        user.uid
+      );
+      // Check, if account document was found and the account is not locked
+      if (account && !account.data.state.lock) {
+        // Call the handler with the account object
+        handler(account);
+      } else {
+        // No valid account, redirect to login page
+        handler(null);
+      }
     }
   });
 }
@@ -135,7 +154,7 @@ export async function login(email: string, password: string): Promise<Account> {
     if (!account.data.state.lock) {
       // Update last login timestamp
       account.data.state.lastLogin = fs.Timestamp.now();
-      await updateDocument(account, account.data, false);
+      await fd.updateDocument(account, account.data, false);
       // Account is not locked
       return account;
     }
