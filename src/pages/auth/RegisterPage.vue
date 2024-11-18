@@ -72,7 +72,7 @@
         <div class="row" style="margin-top: 8px">
           <!-- Register Button Column -->
           <div class="col text-center">
-            <!-- Login Button -->
+            <!-- Register Button -->
             <button-push :label="$t('auth.label.register')" type="submit" />
           </div>
         </div>

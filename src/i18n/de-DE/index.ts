@@ -79,6 +79,11 @@ export default {
         'Dabei darf die Email-Adresse noch nicht für ein anderes Konto verwendet worden sein. Nach der erfolgreichen ' +
         'Erstellung des Kontos muss dieses noch von einem Administrator freigeschaltet werden, bevor Sie es ' +
         'verwenden können.',
+      // Reset Password Page
+      reset:
+        'Falls Sie Ihr Kennwort vergessen haben oder aus anderen Gründen zurücksetzen möchten, können Sie ' +
+        'dies hier tun, indem Sie die Email-Adresse Ihres Kontos in das untenstehende Eingabefeld eintragen. Sie ' +
+        'erhalten eine Email an die angegebene Adresse. Diese enthält einen Link für das Ändern Ihres Kennworts.',
     },
     // Labels
     label: {
@@ -109,6 +114,15 @@ export default {
         message:
           'Dein Konto wurde erfolgreich registriert. Allerdings musst du dich erst von einem Administrator ' +
           'freischalten lassen, bevor du dich anmelden kannst.',
+      },
+      // Reset Password Success Messages
+      reset: {
+        // Title
+        title: 'Email versendet',
+        // Message
+        message:
+          'Die Email für das Zurücksetzen des Kennworts wurde versendet. Bitte prüfen Sie gegebenenfalls ' +
+          'auch den Spam-Ordner Ihres Postfachs.',
       },
     },
     // Error Messages

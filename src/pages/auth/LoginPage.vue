@@ -53,7 +53,11 @@
           <!-- Reset Password Column -->
           <div class="col text-right">
             <!-- Reset Password Button -->
-            <button-push :label="$t('auth.label.reset')" look="link" />
+            <button-push
+              :label="$t('auth.label.reset')"
+              look="link"
+              route-to="/auth/reset"
+            />
           </div>
         </div>
       </div>

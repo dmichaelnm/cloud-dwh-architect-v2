@@ -76,6 +76,11 @@ export default {
         'You can register a new account here by completely filling out the fields below. The email address ' +
         'must not have been used for another account. After the account has been successfully created, it must be ' +
         'activated by an administrator before you can use it.',
+      // Reset Password Page
+      reset:
+        'If you have forgotten your password or wish to reset it for other reasons, you can do so here by ' +
+        'entering the email address associated with your account in the field below. You will receive an email at ' +
+        'the specified address containing a link to change your password.',
     },
     // Labels
     label: {
@@ -106,6 +111,14 @@ export default {
         message:
           'Your account has been successfully registered. However, you need to be activated by an administrator ' +
           'before you can log in.',
+      },
+      // Reset Password Success Messages
+      reset: {
+        // Title
+        title: '`Email Sent`',
+        // Message
+        message:
+          'The email to reset the password has been sent. Please also check the spam folder of your mailbox if necessary.',
       },
     },
     // Error Messages

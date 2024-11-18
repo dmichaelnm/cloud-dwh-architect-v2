@@ -6,6 +6,7 @@ import {
 } from 'src/scripts/application/FirestoreDocument';
 import {
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   onAuthStateChanged,
   updateProfile,
 } from 'firebase/auth';
@@ -38,6 +39,15 @@ export function onAccountStateChanged(
       handler(null);
     }
   });
+}
+
+/**
+ * Initiates the process to reset a user's password by sending a reset link to the specified email address.
+ *
+ * @param {string} email - The email address linked to the user's account for which the password reset is requested.
+ */
+export async function resetPassword(email: string): Promise<void> {
+  await sendPasswordResetEmail(firebaseAuth, email);
 }
 
 /**
