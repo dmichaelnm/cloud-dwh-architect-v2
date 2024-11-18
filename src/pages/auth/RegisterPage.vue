@@ -107,7 +107,7 @@ import {
 } from 'src/scripts/utilities/common';
 import { QForm } from 'quasar';
 import { createAccount } from 'src/scripts/application/Account';
-import { processFirebaseError } from 'src/scripts/utilities/auth';
+import { processFirebaseError } from 'src/scripts/utilities/firebase';
 
 // Get composable components
 const comp = useComposables();

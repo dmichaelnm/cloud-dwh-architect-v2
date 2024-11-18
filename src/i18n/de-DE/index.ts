@@ -136,6 +136,12 @@ export default {
       emailInUse: 'Die E-Mail-Adresse wird bereits verwendet.',
       // Password is too weak
       passwordTooWeak: 'Das Kennwort muss mindestens 6 Zeichen enthalten',
+      // Invalid credentials
+      invalidCredentials: 'Die Anmeldedaten sind inkorrekt.',
+      // Too many failed requests
+      tooManyRequests: 'Zu viele Versuche. Probieren Sie es später erneut.',
+      // Account is locked
+      accountLocked: 'Das Konto ist gesperrt. Bitte wenden Sie sich an den Administrator.',
     },
   },
 };

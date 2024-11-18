@@ -1,10 +1,11 @@
-import firebase from 'firebase/compat';
 import { capitalize } from 'src/scripts/utilities/common';
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
-import { firebaseStore, getCurrentAccountName } from 'src/scripts/utilities/firebase';
-import DocumentReference = firebase.firestore.DocumentReference;
-import DocumentSnapshot = firebase.firestore.DocumentSnapshot;
-import Timestamp = firebase.firestore.Timestamp;
+import {
+  firebaseStore,
+  getCurrentAccountName,
+} from 'src/scripts/utilities/firebase';
+import * as fs from 'firebase/firestore';
+import firebase from 'firebase/compat';
+import UpdateData = firebase.firestore.UpdateData;
 
 /**
  * An enumeration representing different Firestore document types.
@@ -48,7 +49,7 @@ export interface IFirestoreDocumentData {
         /**
          * The timestamp when the document was created.
          */
-        at: Timestamp;
+        at: fs.Timestamp;
       };
       altered?: {
         /**
@@ -58,7 +59,7 @@ export interface IFirestoreDocumentData {
         /**
          * The timestamp when the document was altered last time.
          */
-        at: Timestamp;
+        at: fs.Timestamp;
       };
     };
   };
@@ -92,12 +93,12 @@ export type TFirestoreDocumentConfig = {
   /**
    * A reference to the Firestore document.
    */
-  reference?: DocumentReference;
+  reference?: fs.DocumentReference;
 
   /**
    * A Firestore document snapshot object.
    */
-  document?: DocumentSnapshot;
+  document?: fs.DocumentSnapshot;
 };
 
 export class FirestoreDocument<D extends IFirestoreDocumentData> {
@@ -189,10 +190,10 @@ export async function createDocument<
   parent?: FirestoreDocument<never>
 ): Promise<R> {
   // Set meta information on data object, if not specified yet
-  if (data.common.meta) {
+  if (data.common.meta === undefined) {
     data.common.meta = {
       created: {
-        at: Timestamp.now(),
+        at: fs.Timestamp.now(),
         by: getCurrentAccountName(),
       },
     };
@@ -202,18 +203,80 @@ export async function createDocument<
   // Create document
   if (id) {
     // Create document reference for specified ID.
-    const ref = doc(firebaseStore, path, id);
+    const ref = fs.doc(firebaseStore, path, id);
     // Create document
-    await setDoc(ref, data);
+    await fs.setDoc(ref, data);
   } else {
     // Create collection reference.
-    const ref = collection(firebaseStore, path);
+    const ref = fs.collection(firebaseStore, path);
     // Add document with generated ID.
-    id = (await addDoc(ref, data)).id;
+    id = (await fs.addDoc(ref, data)).id;
   }
 
   // Return document object
   return new FirestoreDocument({ path: path, id: id, data: data }) as R;
+}
+
+/**
+ * Loads a document from Firestore based on the specified type and ID.
+ *
+ * @param {EFirestoreDocumentType} type - The type of Firestore document to load.
+ * @param {string} id - The ID of the document to load.
+ * @param {FirestoreDocument<never>} [parent] - Optional parent document to create a nested path.
+ * @return {Promise<R | undefined>} A promise that resolves to the loaded document object if it exists, or undefined if not found.
+ *
+ * @template D - The type of the specific data interface.
+ * @template R - The type of the specific document class.
+ * */
+export async function loadDocument<
+  D extends IFirestoreDocumentData,
+  R extends FirestoreDocument<D>
+>(
+  type: EFirestoreDocumentType,
+  id: string,
+  parent?: FirestoreDocument<never>
+): Promise<R | undefined> {
+  // Create path
+  const path = parent ? parent.path + '/' + type : type;
+  // Create document reference
+  const ref = fs.doc(firebaseStore, path, id);
+  // Load the document from Firebase
+  const document = await fs.getDoc(ref);
+  // Check if document exists
+  if (document.exists()) {
+    // Create and return the document object
+    return new FirestoreDocument({ document: document }) as R;
+  }
+  // Return undefined because document was not found
+  return undefined;
+}
+
+/**
+ * Updates an existing Firestore document with the provided data.
+ *
+ * @param {R} document - The Firestore document reference to update.
+ * @param {D} data - The data to update the Firestore document with.
+ * @param {boolean} [updateMeta=true] - Flag to indicate whether to update metadata (e.g., timestamp, account name).
+ * @return {Promise<void>} - A promise that resolves when the document is successfully updated.
+ *
+ * @template D - The type of the specific data interface.
+ * @template R - The type of the specific document class.
+ */
+export async function updateDocument<
+  D extends IFirestoreDocumentData,
+  R extends FirestoreDocument<D>
+>(document: R, data: D, updateMeta: boolean = true): Promise<void> {
+  // Update metadata if necessary
+  if (updateMeta && data.common.meta) {
+    data.common.meta.altered = {
+      at: fs.Timestamp.now(),
+      by: getCurrentAccountName(),
+    }
+  }
+  // Create document reference
+  const ref = fs.doc(firebaseStore, document.path, document.id);
+  // Update the Firestore document
+  await fs.updateDoc(ref, data as UpdateData);
 }
 
 /**
@@ -235,7 +298,7 @@ function getTypeFromPath(path: string): EFirestoreDocumentType {
  * @param reference - The Firestore DocumentReference object that contains the full path.
  * @return The path of the Firestore document minus the document ID.
  */
-function getPathFromReference(reference: DocumentReference): string {
+function getPathFromReference(reference: fs.DocumentReference): string {
   // Splits the Firestore document path into segments
   const segments = reference.path.split('/');
   // Remove the last segments and rebuild the path from the remaining segments

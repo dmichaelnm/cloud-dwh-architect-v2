@@ -132,6 +132,12 @@ export default {
       emailInUse: 'The email address is already in use.',
       // Password is too weak
       passwordTooWeak: 'The password must contain at least 6 characters.',
+      // Invalid credentials
+      invalidCredentials: 'The login credentials are incorrect.',
+      // Too many failed requests
+      tooManyRequests: 'Too many attempts. Please try again later.',
+      // Account is locked
+      accountLocked: 'The account is locked. Please contact the administrator.',
     },
   },
 };

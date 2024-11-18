@@ -1,23 +1,14 @@
-import {
-  createDocument,
-  EFirestoreDocumentType,
-  FirestoreDocument,
-  IFirestoreDocumentData,
-} from 'src/scripts/application/FirestoreDocument';
-import {
-  createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
-  onAuthStateChanged,
-  updateProfile,
-} from 'firebase/auth';
+import * as fd from 'src/scripts/application/FirestoreDocument';
+import * as au from 'firebase/auth';
+import * as fs from 'firebase/firestore';
 import { firebaseAuth } from 'src/scripts/utilities/firebase';
-import firebase from 'firebase/compat';
-import Timestamp = firebase.firestore.Timestamp;
+import { FirebaseError } from 'firebase/app';
+import { updateDocument } from 'src/scripts/application/FirestoreDocument';
 
 /**
  * Represents account data stored in the document.
  */
-export interface IAccountData extends IFirestoreDocumentData {
+export interface IAccountData extends fd.IFirestoreDocumentData {
   /** Account preferences */
   preference: {
     /** Preferred dark mode */
@@ -25,29 +16,30 @@ export interface IAccountData extends IFirestoreDocumentData {
     /** Preferred language code */
     language: string;
   };
+  /** State variables */
+  state: {
+    /** Lock state */
+    lock: boolean;
+    /** Timestamp of last login */
+    lastLogin: fs.Timestamp | null;
+  };
 }
 
-export class Account extends FirestoreDocument<IAccountData> {}
+/**
+ * This class represents a Firebase account.
+ */
+export class Account extends fd.FirestoreDocument<IAccountData> {}
 
 export function onAccountStateChanged(
   handler: (account: Account | null) => void
 ): void {
-  onAuthStateChanged(firebaseAuth, async (user) => {
+  au.onAuthStateChanged(firebaseAuth, async (user) => {
     if (user === null) {
       // If the user is null then we don't have an authenticated Firebase user and
       // call the handler with null as account
       handler(null);
     }
   });
-}
-
-/**
- * Initiates the process to reset a user's password by sending a reset link to the specified email address.
- *
- * @param {string} email - The email address linked to the user's account for which the password reset is requested.
- */
-export async function resetPassword(email: string): Promise<void> {
-  await sendPasswordResetEmail(firebaseAuth, email);
 }
 
 /**
@@ -70,13 +62,13 @@ export async function createAccount(
   language: string
 ): Promise<Account> {
   // Create the firebase user
-  const credentials = await createUserWithEmailAndPassword(
+  const credentials = await au.createUserWithEmailAndPassword(
     firebaseAuth,
     email,
     password
   );
   // Update the display name of the firebase user
-  await updateProfile(credentials.user, {
+  await au.updateProfile(credentials.user, {
     displayName: `${firstName} ${lastName}`,
   });
   // Create the account data
@@ -86,7 +78,7 @@ export async function createAccount(
       description: null,
       meta: {
         created: {
-          at: Timestamp.now(),
+          at: fs.Timestamp.now(),
           by: 'System',
         },
       },
@@ -95,11 +87,69 @@ export async function createAccount(
       darkMode: darkMode,
       language: language,
     },
+    state: {
+      lock: true,
+      lastLogin: null,
+    },
   };
   // Create and return the account document
-  return await createDocument<IAccountData, Account>(
-    EFirestoreDocumentType.Account,
+  return await fd.createDocument<IAccountData, Account>(
+    fd.EFirestoreDocumentType.Account,
     data,
     credentials.user.uid
+  );
+}
+
+/**
+ * Initiates the process to reset a user's password by sending a reset link to the specified email address.
+ *
+ * @param {string} email - The email address linked to the user's account for which the password reset is requested.
+ */
+export async function resetPassword(email: string): Promise<void> {
+  await au.sendPasswordResetEmail(firebaseAuth, email);
+}
+
+/**
+ * Authenticates a user with the given email and password.
+ *
+ * @param {string} email - The email address of the user attempting to log in.
+ * @param {string} password - The password of the user attempting to log in.
+ * @return {Promise<Account>} A promise that resolves to the user's account if authentication is successful, and the account is not locked.
+ * @throws {FirebaseError} If the account is locked or the account document is not found in Firestore.
+ */
+export async function login(email: string, password: string): Promise<Account> {
+  // Sign in Firebase
+  const credentials = await au.signInWithEmailAndPassword(
+    firebaseAuth,
+    email,
+    password
+  );
+  // Load the account document
+  const account = await fd.loadDocument<IAccountData, Account>(
+    fd.EFirestoreDocumentType.Account,
+    credentials.user.uid
+  );
+  // Check if account was found
+  if (account) {
+    // Check if account is not locked.
+    if (!account.data.state.lock) {
+      // Update last login timestamp
+      account.data.state.lastLogin = fs.Timestamp.now();
+      await updateDocument(account, account.data, false);
+      // Account is not locked
+      return account;
+    }
+    // Sign out
+    await au.signOut(firebaseAuth);
+    // Account is locked, throw Firebase error
+    throw new FirebaseError(
+      'auth/account-locked',
+      'The account is locked. Please contact the administrator.'
+    );
+  }
+  // Throw firebase error
+  throw new FirebaseError(
+    'auth/account-not-found',
+    'The account document was not found in Firestore.'
   );
 }

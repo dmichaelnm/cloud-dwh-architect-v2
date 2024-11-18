@@ -58,7 +58,7 @@ import {
   useMessageDialog,
   useRunTask,
 } from 'src/scripts/utilities/common';
-import { processFirebaseError } from 'src/scripts/utilities/auth';
+import { processFirebaseError } from 'src/scripts/utilities/firebase';
 import { resetPassword } from 'src/scripts/application/Account';
 
 // Get composable components
