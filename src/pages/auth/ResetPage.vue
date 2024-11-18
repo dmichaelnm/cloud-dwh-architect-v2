@@ -21,7 +21,7 @@
           </div>
         </div>
         <!-- Reset Password Button Row -->
-        <div class="row" style="margin-top: 8px">
+        <div class="row">
           <!-- Reset Password Button Column -->
           <div class="col text-center">
             <!-- Reset Password Button -->
@@ -51,7 +51,7 @@
 import AuthenticationContainer from 'components/app/auth/AuthenticationContainer.vue';
 import { QForm } from 'quasar';
 import InputValue from 'components/common/InputValue.vue';
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import ButtonPush from 'components/common/ButtonPush.vue';
 import {
   useComposables,
@@ -75,6 +75,12 @@ const resetForm = ref<QForm | null>(null);
 const email = ref('');
 // Email Address Error Message
 const emailError = ref('');
+
+// Lifecycle method that is called before this component is mounted
+onBeforeMount(() => {
+  // Set email from cookie
+  email.value = comp.quasar.cookies.get('email') ?? '';
+});
 
 /**
  * Handles the submission of the reset password form.

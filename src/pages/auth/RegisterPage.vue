@@ -97,7 +97,7 @@
 
 <script setup lang="ts">
 import AuthenticationContainer from 'components/app/auth/AuthenticationContainer.vue';
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import InputValue from 'components/common/InputValue.vue';
 import ButtonPush from 'components/common/ButtonPush.vue';
 import {
@@ -135,6 +135,12 @@ const passwordError = ref('');
 const passwordRepeat = ref('');
 // Password Repeat Error Message
 const passwordRepeatError = ref('');
+
+// Lifecycle method that is called before this component is mounted
+onBeforeMount(() => {
+  // Set email from cookie
+  email.value = comp.quasar.cookies.get('email') ?? '';
+});
 
 /**
  * Handles the submission of the registration form by performing validation,

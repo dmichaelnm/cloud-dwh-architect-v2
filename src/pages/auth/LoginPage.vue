@@ -82,6 +82,7 @@ const email = ref('');
 // Password
 const password = ref('');
 
+// Lifecycle method that is called before this component is mounted
 onBeforeMount(() => {
   // Set email from cookie
   email.value = comp.quasar.cookies.get('email');

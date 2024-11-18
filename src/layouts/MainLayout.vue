@@ -7,8 +7,10 @@ import { onBeforeMount } from 'vue';
 import { useComposables } from 'src/scripts/utilities/common';
 import { onAccountStateChanged } from 'src/scripts/application/Account';
 
+// Get composable components
 const comp = useComposables();
 
+// Lifecycle method that is called before this component is mounted
 onBeforeMount(() => {
   // Lock the screen
   comp.quasar.loading.show();
