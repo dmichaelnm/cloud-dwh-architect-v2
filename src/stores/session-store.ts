@@ -7,5 +7,12 @@ export const useSessionStore = defineStore('session', {
     account: null as Account | null,
   }),
   getters: {},
-  actions: {},
+  actions: {
+    /**
+     * Resets the current user session.
+     */
+    resetSession(): void {
+      this.account = null;
+    },
+  },
 });

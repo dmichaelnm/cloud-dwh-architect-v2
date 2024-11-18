@@ -255,7 +255,6 @@ export async function loadDocument<
  * Updates an existing Firestore document with the provided data.
  *
  * @param {R} document - The Firestore document reference to update.
- * @param {D} data - The data to update the Firestore document with.
  * @param {boolean} [updateMeta=true] - Flag to indicate whether to update metadata (e.g., timestamp, account name).
  * @return {Promise<void>} - A promise that resolves when the document is successfully updated.
  *
@@ -265,10 +264,10 @@ export async function loadDocument<
 export async function updateDocument<
   D extends IFirestoreDocumentData,
   R extends FirestoreDocument<D>
->(document: R, data: D, updateMeta: boolean = true): Promise<void> {
+>(document: R, updateMeta: boolean = true): Promise<void> {
   // Update metadata if necessary
-  if (updateMeta && data.common.meta) {
-    data.common.meta.altered = {
+  if (updateMeta && document.data.common.meta) {
+    document.data.common.meta.altered = {
       at: fs.Timestamp.now(),
       by: getCurrentAccountName(),
     }
@@ -276,7 +275,7 @@ export async function updateDocument<
   // Create document reference
   const ref = fs.doc(firebaseStore, document.path, document.id);
   // Update the Firestore document
-  await fs.updateDoc(ref, data as UpdateData);
+  await fs.updateDoc(ref, document.data as UpdateData);
 }
 
 /**

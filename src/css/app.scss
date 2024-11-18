@@ -105,3 +105,11 @@ body.body--dark {
 .body--dark .q-expansion-item .q-item__label {
   color: $text-caption-dark;
 }
+
+.q-separator {
+  background-color: $frame-light;
+}
+
+.body--dark .q-separator {
+  background-color: $frame-dark;
+}

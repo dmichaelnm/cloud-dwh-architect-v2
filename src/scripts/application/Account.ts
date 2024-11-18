@@ -154,7 +154,7 @@ export async function login(email: string, password: string): Promise<Account> {
     if (!account.data.state.lock) {
       // Update last login timestamp
       account.data.state.lastLogin = fs.Timestamp.now();
-      await fd.updateDocument(account, account.data, false);
+      await fd.updateDocument(account, false);
       // Account is not locked
       return account;
     }

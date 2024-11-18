@@ -25,6 +25,10 @@ export default {
     close: 'Schließen',
     // Detail
     detail: 'Details anzeigen',
+    // Dark Mode
+    darkMode: 'Dunkler Modus',
+    // Light Mode
+    lightMode: 'Heller Modus',
   },
 
   // Tooltip Messages

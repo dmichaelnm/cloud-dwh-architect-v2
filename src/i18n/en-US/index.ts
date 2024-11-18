@@ -25,6 +25,10 @@ export default {
     close: 'Close',
     // Detail
     detail: 'Show Details',
+    // Dark Mode
+    darkMode: 'Dark Mode',
+    // Light Mode
+    lightMode: 'Light Mode',
   },
 
   // Tooltip Messages

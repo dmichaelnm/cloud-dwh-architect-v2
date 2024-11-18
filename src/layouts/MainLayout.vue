@@ -24,7 +24,7 @@
           <!-- Account Menu Column -->
           <div class="col-auto">
             <!-- Account Menu -->
-            <account-menu @logout="logoutAccount" />
+            <account-menu />
           </div>
         </div>
       </div>
@@ -67,7 +67,7 @@
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
 import { useComposables } from 'src/scripts/utilities/common';
-import { logout, onAccountStateChanged } from 'src/scripts/application/Account';
+import { onAccountStateChanged } from 'src/scripts/application/Account';
 import AppFooter from 'components/app/AppFooter.vue';
 import AccountMenu from 'components/app/main/AccountMenu.vue';
 
@@ -88,14 +88,13 @@ onBeforeMount(() => {
     } else {
       // Store account on session
       comp.session.account = account;
+      // Set dark mode from account preference
+      comp.quasar.dark.set(account.data.preference.darkMode);
+      // Set language from account preference
+      comp.i18n.locale.value = account.data.preference.language;
       // Unlock the screen
       comp.quasar.loading.hide();
     }
   });
 });
-
-async function logoutAccount(): Promise<void> {
-  // Logout current account
-  await logout();
-}
 </script>
