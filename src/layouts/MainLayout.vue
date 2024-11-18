@@ -19,6 +19,11 @@
               }}
             </div>
           </div>
+          <!-- Project Menu Column -->
+          <div class="col-auto project-menu">
+            <!-- Project Menu -->
+            <project-menu />
+          </div>
           <!-- Space -->
           <div class="col-grow" />
           <!-- Account Menu Column -->
@@ -42,20 +47,25 @@
 @import 'src/css/quasar.variables';
 
 .header-bar {
-  background-color: $primary;
-  color: $text-caption-dark;
+  background-color: $background-container-light;
+  color: $text-caption-light;
   padding: 8px 16px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
 }
 
 .body--dark .header-bar {
-  color: $text-caption-light;
+  background-color: $background-container-dark;
+  color: $text-caption-dark;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.8);
 }
 
 .header-title {
   font-size: 14pt;
   font-variant: small-caps;
+}
+
+.project-menu {
+  padding: 0 48px;
 }
 
 .account-name {
@@ -70,6 +80,7 @@ import { useComposables } from 'src/scripts/utilities/common';
 import { onAccountStateChanged } from 'src/scripts/application/Account';
 import AppFooter from 'components/app/AppFooter.vue';
 import AccountMenu from 'components/app/main/AccountMenu.vue';
+import ProjectMenu from 'components/app/main/ProjectMenu.vue';
 
 // Get composable components
 const comp = useComposables();

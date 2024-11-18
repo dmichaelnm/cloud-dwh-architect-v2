@@ -146,4 +146,17 @@ export default {
       accountLocked: 'The account is locked. Please contact the administrator.',
     },
   },
+
+  // Project Messages
+  project: {
+    // Labels
+    label: {
+      // No project selected
+      noProject: 'No Project Selected',
+      // New project
+      newProject: 'Create New Project',
+      // Overview
+      overview: 'Project Overview',
+    },
+  },
 };

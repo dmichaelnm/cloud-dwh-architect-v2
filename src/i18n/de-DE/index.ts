@@ -150,4 +150,17 @@ export default {
       accountLocked: 'Das Konto ist gesperrt. Bitte wenden Sie sich an den Administrator.',
     },
   },
+
+  // Project Messages
+  project: {
+    // Labels
+    label: {
+      // No project selected
+      noProject: 'Kein Projekt ausgewählt',
+      // New project
+      newProject: 'Neues Projekt erstellen',
+      // Overview
+      overview: 'Projekt-Übersicht'
+    }
+  }
 };
