@@ -92,6 +92,8 @@ export default {
       passwordRepeat: 'Repeat Password',
       // Login Button
       login: 'Log In',
+      // Logout Menu Item
+      logout: 'Log Out',
       // Register Account
       register: 'Register Account',
       // Reset Password

@@ -159,7 +159,7 @@ export async function login(email: string, password: string): Promise<Account> {
       return account;
     }
     // Sign out
-    await au.signOut(firebaseAuth);
+    await logout();
     // Account is locked, throw Firebase error
     throw new FirebaseError(
       'auth/account-locked',
@@ -171,4 +171,12 @@ export async function login(email: string, password: string): Promise<Account> {
     'auth/account-not-found',
     'The account document was not found in Firestore.'
   );
+}
+
+/**
+ * Logs out the current user by signing them out of the Firebase authentication system.
+ */
+export async function logout(): Promise<void> {
+  // Logout the current account
+  await au.signOut(firebaseAuth);
 }

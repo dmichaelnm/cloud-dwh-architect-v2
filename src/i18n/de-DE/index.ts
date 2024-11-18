@@ -95,6 +95,8 @@ export default {
       passwordRepeat: 'Kennwort wiederholen',
       // Login Button
       login: 'Anmelden',
+      // Logout Menu Item
+      logout: 'Abmelden',
       // Register Account
       register: 'Konto registrieren',
       // Reset Password

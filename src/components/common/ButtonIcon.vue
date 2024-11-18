@@ -11,6 +11,8 @@
   >
     <!-- Tooltip -->
     <q-tooltip v-if="tooltip">{{ tooltip }}</q-tooltip>
+    <!-- Default Slot -->
+    <slot />
   </q-btn>
 </template>
 
@@ -44,5 +46,4 @@ const emit = defineEmits<{
 // Computed property for determining the icon size with a default value of 'sm'
 // if not provided in the props.
 const iconSize = computed(() => (props.size ? props.size : 'sm'));
-
 </script>
