@@ -37,6 +37,17 @@
   color: $button-background-light;
   font-weight: normal;
 }
+
+.button-look-secondary {
+  background-color: $text-hint-light;
+  color: $text-caption-dark;
+}
+
+.body--dark .button-look-secondary {
+  background-color: $text-hint-dark;
+  color: $text-caption-light;
+}
+
 </style>
 
 <script setup lang="ts">
@@ -49,7 +60,7 @@ const props = defineProps<{
   /** The type of the button */
   type?: 'button' | 'submit' | 'reset';
   /** The look of the button */
-  look?: 'push' | 'link';
+  look?: 'push' | 'link' | 'secondary';
   /** Routing path */
   routeTo?: string;
 }>();

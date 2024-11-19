@@ -22,7 +22,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'reset',
         component: () => import('pages/auth/ResetPage.vue'),
-      }
+      },
     ],
   },
 
@@ -32,6 +32,13 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
+    children: [
+      // Project Editor Page
+      {
+        path: 'project/editor',
+        component: () => import('pages/project/ProjectEditorPage.vue'),
+      },
+    ],
   },
 
   // ---------------------------------------------------------------------------

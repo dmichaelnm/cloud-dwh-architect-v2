@@ -21,14 +21,22 @@ export default {
   label: {
     // Back
     back: 'Zurück',
+    // Cancel
+    cancel: 'Abbrechen',
     // Close
     close: 'Schließen',
     // Detail
     detail: 'Details anzeigen',
+    // Description
+    description: 'Beschreibung (optional)',
     // Dark Mode
     darkMode: 'Dunkler Modus',
     // Light Mode
     lightMode: 'Heller Modus',
+    // Okay
+    okay: 'Okay',
+    // Save
+    save: 'Speichern',
   },
 
   // Tooltip Messages
@@ -49,6 +57,19 @@ export default {
       threads: 'Threads',
       // Twitter / X
       twitter: 'Twitter / X',
+    },
+  },
+
+  // Dialog Messages
+  dialog: {
+    // Discard Dialog
+    discard: {
+      // Title
+      title: 'Änderungen verwerfen?',
+      // Message
+      message:
+        'Wenn Sie den aktuellen Editor verlassen, gehen alles bisher gemachten Änderungen verloren. Sind Sie' +
+        ' sicher, dass Sie das wollen?',
     },
   },
 
@@ -147,7 +168,8 @@ export default {
       // Too many failed requests
       tooManyRequests: 'Zu viele Versuche. Probieren Sie es später erneut.',
       // Account is locked
-      accountLocked: 'Das Konto ist gesperrt. Bitte wenden Sie sich an den Administrator.',
+      accountLocked:
+        'Das Konto ist gesperrt. Bitte wenden Sie sich an den Administrator.',
     },
   },
 
@@ -160,7 +182,23 @@ export default {
       // New project
       newProject: 'Neues Projekt erstellen',
       // Overview
-      overview: 'Projekt-Übersicht'
-    }
-  }
+      overview: 'Projekt-Übersicht',
+      // Project Name
+      name: 'Name des Projekts',
+    },
+    // Editor Messages
+    editor: {
+      // Create Project Messages
+      create: {
+        // Editor Title
+        title: 'Neues Projekt erstellen',
+        // Editor Message
+        message:
+          'Beginnen Sie ein neues Projekt, indem Sie hier die grundlegenden Eigenschaften wie Name und ' +
+          'Beschreibung angeben. Außerdem können Sie weitere Mitglieder Ihrem Projekt hinzufügen und Ihnen ' +
+          'verschiedene Rollen zuweisen. Beachten Sie dabei jedoch, dass diese ein registriertes Konto für diese ' +
+          'Anwendung besitzen müssen.',
+      },
+    },
+  },
 };

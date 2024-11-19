@@ -21,14 +21,22 @@ export default {
   label: {
     // Back
     back: 'Back',
+    // Cancel
+    cancel: 'Cancel',
     // Close
     close: 'Close',
+    // Description
+    description: 'Description (optional)',
     // Detail
     detail: 'Show Details',
     // Dark Mode
     darkMode: 'Dark Mode',
+    // Okay
+    okay: 'Okay',
     // Light Mode
     lightMode: 'Light Mode',
+    // Save
+    save: 'Save',
   },
 
   // Tooltip Messages
@@ -49,6 +57,18 @@ export default {
       threads: 'Threads',
       // Twitter / X
       twitter: 'Twitter / X',
+    },
+  },
+
+  // Dialog Messages
+  dialog: {
+    // Discard Dialog
+    discard: {
+      // Title
+      title: 'Discard Changes?',
+      // Message
+      message:
+        'If you leave the current editor, all changes made so far will be lost. Are you sure you want to do this?',
     },
   },
 
@@ -157,6 +177,21 @@ export default {
       newProject: 'Create New Project',
       // Overview
       overview: 'Project Overview',
+      // Project Name
+      name: 'Project Name',
+    },
+    // Editor Messages
+    editor: {
+      // Create Project Messages
+      create: {
+        // Editor Title
+        title: 'Create New Project',
+        // Editor Message
+        message:
+          'Start a new project by specifying the basic properties such as name and description here. In addition, ' +
+          'you can add more members to your project and assign them different roles. Please note that they must have ' +
+          'a registered account for this application.',
+      },
     },
   },
 };

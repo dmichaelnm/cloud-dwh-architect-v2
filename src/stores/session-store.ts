@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { Account } from 'src/scripts/application/Account';
 import { Project } from 'src/scripts/application/Project';
+import { TEditorParameter } from 'src/scripts/utilities/common';
 
 export const useSessionStore = defineStore('session', {
   state: () => ({
@@ -10,6 +11,8 @@ export const useSessionStore = defineStore('session', {
     projects: [] as Project[],
     // The current selected project
     project: null as Project | null,
+    // Editor parameter
+    editorParameter: null as TEditorParameter | null,
   }),
   getters: {},
   actions: {

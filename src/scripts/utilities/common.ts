@@ -4,6 +4,21 @@ import { useRoute, useRouter } from 'vue-router';
 import { useSessionStore } from 'stores/session-store';
 import { inject, Ref, ref } from 'vue';
 import { getLanguageOptions } from 'src/scripts/utilities/options';
+import { EFirestoreDocumentType } from 'src/scripts/application/FirestoreDocument';
+
+/**
+ * Enumeration representing operations that can be performed on a document.
+ */
+export enum EDocumentOperation {
+  /** Create new document */
+  Create = 'create',
+  /** Edit document */
+  Edit = 'edit',
+  /** Delete document */
+  Delete = 'delete',
+  /** View document */
+  View = 'view',
+}
 
 export type TDialogButton = {
   /** The value of the dialog button. */
@@ -76,6 +91,43 @@ export type TFuncShowSuccessDialog = (
 ) => void;
 
 /**
+ * Type definition for a function that shows a confirmation dialog.
+ *
+ * @param {string} title - The title of the confirmation dialog.
+ * @param {string} message - The message to display in the confirmation dialog.
+ * @param {'normal' | 'warning'} type - The type of the confirmation dialog, either 'normal' or 'warning'.
+ * @param {string} [detail] - Optional detailed message to display in the dialog.
+ * @param {((value: string) => boolean | void | Promise<boolean | void>)} [result] - Optional callback function to handle
+ *        the result of the dialog. The callback receives a string value and can return a boolean, void, or a Promise
+ *        that resolves to boolean or void.
+ */
+export type TFuncShowConfirmationDialog = (
+  title: string,
+  message: string,
+  type: 'normnal' | 'warning',
+  detail?: string | null | undefined,
+  result?:
+    | ((value: string) => boolean | void | Promise<boolean | void>)
+    | null
+    | undefined
+) => void;
+
+/**
+ * Type definition for a function that opens an editor for Firestore documents.
+ *
+ * @param {string} callerPath - The path that is routed to when the editor has finished.
+ * @param {EFirestoreDocumentType} scope - The scope of the Firestore document.
+ * @param {EDocumentOperation} operation - The operation to be performed on the document.
+ * @param {string} [id] - Optional. The unique identifier of the document.
+ */
+export type TFuncOpenEditor = (
+  callerPath: string,
+  scope: EFirestoreDocumentType,
+  operation: EDocumentOperation,
+  id?: string
+) => void;
+
+/**
  * Represents a selectable option in a UI dropdown or select component.
  *
  * @property {string|number} value - The value of the option.
@@ -89,6 +141,20 @@ export type TSelectOption = {
   label: string;
   /** An optional icon */
   icon?: string;
+};
+
+/**
+ * Represents the parameters required to configure an editor.
+ */
+export type TEditorParameter = {
+  /** Scope of the editor */
+  scope: EFirestoreDocumentType;
+  /** The document operation */
+  operation: EDocumentOperation;
+  /** The ID of the document */
+  id: string | null;
+  /** The caller path */
+  callerPath: string;
 };
 
 // Message dialog options.
@@ -181,6 +247,7 @@ export function useMessageDialog(): {
   messageDialogOptions: Ref<TMessageDialogOptions>;
   showMessageDialog: TFuncShowMessageDialog;
   showSuccessDialog: TFuncShowSuccessDialog;
+  showConfirmationDialog: TFuncShowConfirmationDialog;
 } {
   return {
     messageDialogOptions: messageDialogOptions,
@@ -200,10 +267,79 @@ export function useMessageDialog(): {
       messageDialogOptions.value.message = message;
       messageDialogOptions.value.detail = detail;
       messageDialogOptions.value.color = '#5dba73';
-      messageDialogOptions.value.buttons = [{ value: 'close', label: 'label.close' }];
+      messageDialogOptions.value.buttons = [
+        { value: 'close', label: 'label.close' },
+      ];
       messageDialogOptions.value.result = result;
       messageDialogOptions.value.visibility = true;
-    }
+    },
+    showConfirmationDialog: (title, message, type, detail, result) => {
+      messageDialogOptions.value.title = title;
+      messageDialogOptions.value.message = message;
+      messageDialogOptions.value.detail = detail;
+      messageDialogOptions.value.color =
+        type === 'warning' ? '#e6c774' : '#7070F0';
+      messageDialogOptions.value.buttons = [
+        { value: 'okay', label: 'label.okay' },
+        { value: 'cancel', label: 'label.cancel' },
+      ];
+      messageDialogOptions.value.result = result;
+      messageDialogOptions.value.visibility = true;
+    },
+  };
+}
+
+/**
+ * Provides routing functions for navigating the application.
+ *
+ * @return {Object} An object containing routing functions.
+ * @return {Function} return.openEditor - Function to navigate to the editor.
+ */
+export function useRouting(): {
+  openEditor: TFuncOpenEditor;
+} {
+  // Get composable functions
+  const comp = useComposables();
+  // Get message dialog functions
+  const { showConfirmationDialog } = useMessageDialog();
+  // Return routing functions
+  return {
+    openEditor: async (callerPath, scope, operation, id) => {
+      // Check editor state
+      if (comp.session.editorParameter === null) {
+        // Set editor parameter
+        comp.session.editorParameter = {
+          scope: scope,
+          operation: operation,
+          id: id ? id : null,
+          callerPath: callerPath,
+        };
+        // Route to the editor
+        await comp.router.push({ path: `/${scope}/editor` });
+      } else {
+        // Show confirmation dialog
+        showConfirmationDialog(
+          comp.i18n.t('dialog.discard.title'),
+          comp.i18n.t('dialog.discard.message'),
+          'warning',
+          undefined,
+          async (value) => {
+            // If user has confirmed, set editor state and open the editor
+            if (value === 'okay') {
+              // Set editor parameter
+              comp.session.editorParameter = {
+                scope: scope,
+                operation: operation,
+                id: id ? id : null,
+                callerPath: callerPath,
+              };
+              // Route to the editor
+              await comp.router.push({ path: `/${scope}/editor` });
+            }
+          }
+        );
+      }
+    },
   };
 }
 

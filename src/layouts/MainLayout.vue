@@ -1,6 +1,12 @@
 <template>
   <!-- Layout -->
   <q-layout view="hHh Lpr fFf">
+    <!-- Message Dialog -->
+    <message-dialog
+      v-model="messageDialogOptions.visibility"
+      :options="messageDialogOptions"
+    />
+
     <!-- Header -->
     <q-header>
       <!-- Header DIV -->
@@ -40,6 +46,12 @@
       <!-- Application Footer -->
       <app-footer />
     </q-footer>
+
+    <!-- Page Container -->
+    <q-page-container>
+      <!-- Router View -->
+      <router-view />
+    </q-page-container>
   </q-layout>
 </template>
 
@@ -76,14 +88,17 @@
 
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
-import { useComposables } from 'src/scripts/utilities/common';
+import { useComposables, useMessageDialog } from 'src/scripts/utilities/common';
 import { onAccountStateChanged } from 'src/scripts/application/Account';
 import AppFooter from 'components/app/AppFooter.vue';
 import AccountMenu from 'components/app/main/AccountMenu.vue';
-import ProjectMenu from 'components/app/main/ProjectMenu.vue';
+import ProjectMenu from 'components/app/project/ProjectMenu.vue';
+import MessageDialog from 'components/common/MessageDialog.vue';
 
 // Get composable components
 const comp = useComposables();
+// Get message dialog options
+const { messageDialogOptions } = useMessageDialog();
 
 // Lifecycle method that is called before this component is mounted
 onBeforeMount(() => {

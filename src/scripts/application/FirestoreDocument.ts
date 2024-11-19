@@ -15,6 +15,10 @@ export enum EFirestoreDocumentType {
    * A Firestore document containing account information.
    */
   Account = 'account',
+  /**
+   * A Firestore document containing a project.
+   */
+  Project = 'project',
 }
 
 /**
@@ -270,7 +274,7 @@ export async function updateDocument<
     document.data.common.meta.altered = {
       at: fs.Timestamp.now(),
       by: getCurrentAccountName(),
-    }
+    };
   }
   // Create document reference
   const ref = fs.doc(firebaseStore, document.path, document.id);
