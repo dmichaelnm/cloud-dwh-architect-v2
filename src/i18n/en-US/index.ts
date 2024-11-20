@@ -96,6 +96,8 @@ export default {
     },
     // Input field must not be empty.
     emptyInput: 'This field must not be empty.',
+    // Account was not found
+    accountNotFound: 'The specified account could not be found.',
   },
 
   // Authentication Messages

@@ -314,7 +314,7 @@ export async function updateDocument<
   // Create document reference
   const ref = fs.doc(firebaseStore, document.path, document.id);
   // Update the Firestore document
-  await fs.updateDoc(ref, document.data as fs.UpdateData);
+  await fs.updateDoc(ref, document.data as fs.UpdateData<never>);
 }
 
 /**
