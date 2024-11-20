@@ -6,6 +6,7 @@
     :message="$t('dialog.selectAccount.message')"
     :handler="onSubmit"
     @update:model-value="(value) => (_modelValue = value)"
+    @before-show="onInit"
   >
     <!-- Dialog DIV -->
     <div>
@@ -65,6 +66,14 @@ const _modelValue = computed({
   get: () => props.modelValue,
   set: (value: boolean) => emit('update:modelValue', value),
 });
+
+/**
+ * Initializes the email input and error message by setting their values to empty strings.
+ */
+function onInit(): void {
+  email.value = '';
+  emailError.value = '';
+}
 
 /**
  * Handles the submission process by attempting to find and validate an account based on the provided email,

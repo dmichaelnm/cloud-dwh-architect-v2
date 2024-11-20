@@ -5,6 +5,7 @@
     :model-value="_modelValue"
     persistent
     @update:modelValue="(value) => (_modelValue = value)"
+    @before-show="emit('beforeShow')"
   >
     <!-- Dialog DIV -->
     <div
@@ -88,6 +89,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   /** Model update event */
   (event: 'update:modelValue', value: boolean): void;
+  /** Before show event */
+  (event: 'beforeShow'): void;
 }>();
 
 // The internal model value of this component
