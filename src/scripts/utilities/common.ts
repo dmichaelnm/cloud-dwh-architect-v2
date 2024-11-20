@@ -157,6 +157,19 @@ export type TEditorParameter = {
   callerPath: string;
 };
 
+/**
+ * Represents an editor tab within an interface.
+ *
+ * @property {string} key - The unique identifier for the tab.
+ * @property {string} label - The display name of the tab.
+ */
+export type TEditorTab = {
+  /** Tab key */
+  key: string;
+  /** Tab label */
+  label: string;
+}
+
 // Message dialog options.
 const messageDialogOptions = ref<TMessageDialogOptions>({
   visibility: false,

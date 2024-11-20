@@ -113,3 +113,13 @@ body.body--dark {
 .body--dark .q-separator {
   background-color: $frame-dark;
 }
+
+.q-tab__label {
+  font-size: 10pt;
+  font-weight: normal;
+  color: $primary;
+}
+
+.q-tab-panels {
+  background-color: transparent;
+}

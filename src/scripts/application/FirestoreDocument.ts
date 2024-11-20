@@ -4,8 +4,6 @@ import {
   getCurrentAccountName,
 } from 'src/scripts/utilities/firebase';
 import * as fs from 'firebase/firestore';
-import firebase from 'firebase/compat';
-import UpdateData = firebase.firestore.UpdateData;
 
 /**
  * An enumeration representing different Firestore document types.
@@ -256,6 +254,43 @@ export async function loadDocument<
 }
 
 /**
+ * Loads documents from a Firestore collection based on the specified type and constraints.
+ *
+ * @param type - The type of the Firestore document.
+ * @param parent - The parent Firestore document.
+ * @param constraints - The query constraints to filter the documents.
+ * @return A promise that resolves to an array of FirestoreDocument instances.
+ */
+export async function loadDocuments<
+  D extends IFirestoreDocumentData,
+  R extends FirestoreDocument<D>
+>(
+  type: EFirestoreDocumentType,
+  parent: FirestoreDocument<never> | null,
+  ...constraints: fs.QueryConstraint[]
+): Promise<R[]> {
+  // Create path to the documents
+  const path = parent ? parent.path + '/' + type : type;
+  // Create collection
+  const coll = fs.collection(firebaseStore, path);
+  // Create query
+  const qry = fs.query(coll, ...constraints);
+  // Execute the query
+  const snapshot = await fs.getDocs(qry);
+  // Create result array
+  const documents: R[] = [];
+  // Iterate over all documents
+  for (const doc of snapshot.docs) {
+    // Create document
+    const document = new FirestoreDocument({ document: doc }) as R;
+    // Add document to result array
+    documents.push(document);
+  }
+  // Return the result array
+  return documents;
+}
+
+/**
  * Updates an existing Firestore document with the provided data.
  *
  * @param {R} document - The Firestore document reference to update.
@@ -279,7 +314,7 @@ export async function updateDocument<
   // Create document reference
   const ref = fs.doc(firebaseStore, document.path, document.id);
   // Update the Firestore document
-  await fs.updateDoc(ref, document.data as UpdateData);
+  await fs.updateDoc(ref, document.data as fs.UpdateData);
 }
 
 /**

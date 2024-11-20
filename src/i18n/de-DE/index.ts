@@ -19,6 +19,8 @@ export default {
 
   // Common Labels
   label: {
+    // Custom Attributes
+    attributes: 'Benutzerdefinierte Attribute',
     // Back
     back: 'Zurück',
     // Cancel
@@ -31,6 +33,8 @@ export default {
     description: 'Beschreibung (optional)',
     // Dark Mode
     darkMode: 'Dunkler Modus',
+    // General
+    general: 'Allgemein',
     // Light Mode
     lightMode: 'Heller Modus',
     // Okay
@@ -70,6 +74,15 @@ export default {
       message:
         'Wenn Sie den aktuellen Editor verlassen, gehen alles bisher gemachten Änderungen verloren. Sind Sie' +
         ' sicher, dass Sie das wollen?',
+    },
+    // Select Account Dialog
+    selectAccount: {
+      // Title
+      title: 'Konto auswählen',
+      // Message
+      message:
+        'Geben Sie hier die Email-Adresse des Kontos an, welches Sie auswählen möchten. Das Konto muss bereits ' +
+        'registriert sein.',
     },
   },
 
@@ -183,6 +196,8 @@ export default {
       newProject: 'Neues Projekt erstellen',
       // Overview
       overview: 'Projekt-Übersicht',
+      // Project Members
+      member: 'Projekt-Mitglieder',
       // Project Name
       name: 'Name des Projekts',
     },
@@ -199,6 +214,13 @@ export default {
           'verschiedene Rollen zuweisen. Beachten Sie dabei jedoch, dass diese ein registriertes Konto für diese ' +
           'Anwendung besitzen müssen.',
       },
+    },
+    // General Tab Messages
+    general: {
+      // Message of the tab
+      message:
+        'Hier können Sie sehen, wer der Eigentümer und wer der Leiter des Projekts ist. Falls Sie selbst der ' +
+        'Projekteigentümer sind, können Sie hier den Projektleiter bestimmen.',
     },
   },
 };

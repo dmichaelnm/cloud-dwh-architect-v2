@@ -19,6 +19,8 @@ export default {
 
   // Common Labels
   label: {
+    // Custom Attributes
+    attributes: 'Custom Attributes',
     // Back
     back: 'Back',
     // Cancel
@@ -31,6 +33,8 @@ export default {
     detail: 'Show Details',
     // Dark Mode
     darkMode: 'Dark Mode',
+    // General
+    general: 'General',
     // Okay
     okay: 'Okay',
     // Light Mode
@@ -69,6 +73,14 @@ export default {
       // Message
       message:
         'If you leave the current editor, all changes made so far will be lost. Are you sure you want to do this?',
+    },
+    // Select Account Dialog
+    selectAccount: {
+      // Title
+      title: 'Select Account',
+      // Message
+      message:
+        'Please enter the email address of the account you wish to select here. The account must already be registered.',
     },
   },
 
@@ -177,6 +189,8 @@ export default {
       newProject: 'Create New Project',
       // Overview
       overview: 'Project Overview',
+      // Project Members
+      member: 'Project Members',
       // Project Name
       name: 'Project Name',
     },
@@ -192,6 +206,12 @@ export default {
           'you can add more members to your project and assign them different roles. Please note that they must have ' +
           'a registered account for this application.',
       },
+    },
+    // General Tab Messages
+    general: {
+      // Message of the tab
+      message:
+        'Displays the project owner and manager. Allows the owner to assign the project manager.',
     },
   },
 };

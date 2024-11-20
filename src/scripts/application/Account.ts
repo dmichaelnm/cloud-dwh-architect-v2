@@ -8,6 +8,8 @@ import { FirebaseError } from 'firebase/app';
  * Represents account data stored in the document.
  */
 export interface IAccountData extends fd.IFirestoreDocumentData {
+  /** Email address */
+  email: string;
   /** Account preferences */
   preference: {
     /** Preferred dark mode */
@@ -102,6 +104,7 @@ export async function createAccount(
         },
       },
     },
+    email: email,
     preference: {
       darkMode: darkMode,
       language: language,
@@ -179,4 +182,21 @@ export async function login(email: string, password: string): Promise<Account> {
 export async function logout(): Promise<void> {
   // Logout the current account
   await au.signOut(firebaseAuth);
+}
+
+/**
+ * Finds and returns an account based on the provided email address.
+ *
+ * @param {string} email - The email address to search for the account.
+ * @return {Promise<Account | null>} A promise that resolves to the account if found, otherwise null.
+ */
+export async function findAccount(email: string): Promise<Account | null> {
+  // Find documents
+  const documents = await fd.loadDocuments<IAccountData, Account>(
+    fd.EFirestoreDocumentType.Account,
+    null,
+    fs.where('email', '==', email)
+  );
+  // Exactly one document is expected, if not return null
+  return documents.length === 1 ? documents[0] : null;
 }
