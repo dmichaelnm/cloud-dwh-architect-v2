@@ -23,6 +23,8 @@ export interface IAccountData extends fd.IFirestoreDocumentData {
     lock: boolean;
     /** Timestamp of last login */
     lastLogin: fs.Timestamp | null;
+    /** ID of the current project */
+    currentProject: string | null;
   };
 }
 
@@ -112,6 +114,7 @@ export async function createAccount(
     state: {
       lock: true,
       lastLogin: null,
+      currentProject: null,
     },
   };
   // Create and return the account document

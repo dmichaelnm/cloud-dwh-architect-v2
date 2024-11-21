@@ -1,4 +1,7 @@
+import { where } from 'firebase/firestore';
 import * as fd from 'src/scripts/application/FirestoreDocument';
+import { EFirestoreDocumentType, loadDocuments } from 'src/scripts/application/FirestoreDocument';
+import { getCurrentAccountId } from 'src/scripts/utilities/firebase';
 
 /**
  * Enumeration for project member roles.
@@ -12,7 +15,7 @@ export enum EProjectMemberRole {
   /** Developer */
   Developer = 'developer',
   /** Visitor */
-  Visitor = 'visitor'
+  Visitor = 'visitor',
 }
 
 /**
@@ -41,3 +44,17 @@ export interface IProjectData extends fd.IFirestoreDocumentData {
  * Represents a Project document in Firestore.
  */
 export class Project extends fd.FirestoreDocument<IProjectData> {}
+
+/**
+ * Loads project documents where the current user has access.
+ *
+ * @return {Promise<Project[]>} A promise that resolves to an array of Project objects.
+ */
+export async function loadProjects(): Promise<Project[]> {
+  // Load project documents where the current user has access
+  return await loadDocuments<IProjectData, Project>(
+    EFirestoreDocumentType.Project,
+    null,
+    where('access', 'array-contains', getCurrentAccountId())
+  );
+}

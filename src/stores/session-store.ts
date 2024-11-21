@@ -17,6 +17,24 @@ export const useSessionStore = defineStore('session', {
   getters: {},
   actions: {
     /**
+     * Retrieves a project by its unique identifier.
+     *
+     * @param {string} id - The unique identifier of the project to retrieve.
+     * @return {Project | null} The matching project if found, otherwise null.
+     */
+    getProject(id: string | null): Project | null {
+      const project = this.projects.find((p) => p.id === id);
+      return project ?? null;
+    },
+    /**
+     * Sorts the list of projects by their common name in alphabetical order.
+     */
+    sortProjects(): void {
+      this.projects.sort((a, b) =>
+        a.data.common.name.localeCompare(b.data.common.name)
+      );
+    },
+    /**
      * Resets the current user session.
      */
     resetSession(): void {

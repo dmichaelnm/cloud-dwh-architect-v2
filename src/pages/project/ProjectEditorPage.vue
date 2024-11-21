@@ -13,6 +13,7 @@
       { key: 'member', label: 'project.label.member' },
       { key: 'attributes', label: 'label.attributes' },
     ]"
+    @save="onSaved"
   >
     <!-- Template for General tab -->
     <template v-slot:tab-general>
@@ -38,7 +39,13 @@ import {
   useComposables,
 } from 'src/scripts/utilities/common';
 import { EditorProjectData } from 'src/scripts/ui/project';
-import { EFirestoreDocumentType } from 'src/scripts/application/FirestoreDocument';
+import {
+  EFirestoreDocumentType,
+  FirestoreDocument,
+  IFirestoreDocumentData,
+  updateDocument,
+} from 'src/scripts/application/FirestoreDocument';
+import { Project } from 'src/scripts/application/Project';
 
 // Get composable components
 const comp = useComposables();
@@ -57,4 +64,24 @@ onBeforeMount(() => {
     };
   }
 });
+
+/**
+ * Handles the event when a document is saved to Firestore. This function adds the saved document
+ * to the session's projects list and sorts the projects.
+ *
+ * @param {FirestoreDocument<IFirestoreDocumentData>} document - The Firestore document that has been saved.
+ */
+function onSaved(document: FirestoreDocument<IFirestoreDocumentData>): void {
+  // Add project to session
+  comp.session.projects.push(document as Project);
+  // Sort projects
+  comp.session.sortProjects();
+  // Set new project as active on the account
+  if (comp.session.account) {
+    comp.session.account.data.state.currentProject = document.id;
+    updateDocument(comp.session.account);
+  }
+  // Set current project
+  comp.session.project = document as Project;
+}
 </script>

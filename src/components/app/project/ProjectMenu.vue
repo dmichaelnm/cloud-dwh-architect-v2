@@ -28,6 +28,16 @@
         />
         <!-- Project Overview Item -->
         <menu-item :label="$t('project.label.overview')" hide-icon />
+        <!-- Separator -->
+        <q-separator v-if="hasProjects" />
+        <!-- Project Items -->
+        <menu-item
+          v-for="prj in comp.session.projects"
+          :key="prj.id"
+          :label="prj.data.common.name"
+          hide-icon
+          @click="onProjectSelected(prj.id)"
+        />
       </q-menu>
     </q-btn>
   </div>
@@ -63,6 +73,12 @@ const comp = useComposables();
 // Get routing functions
 const { openEditor } = useRouting();
 
+// Defines the events that can be emitted by this component
+const emit = defineEmits<{
+  /** Project selected event */
+  (event: 'select', value: string): void;
+}>();
+
 // Computes the selected project's name or a default message if no project is
 // selected.
 const selectedProjectName = computed(() =>
@@ -70,4 +86,22 @@ const selectedProjectName = computed(() =>
     ? comp.session.project.data.common.name
     : comp.i18n.t('project.label.noProject')
 );
+
+// Computes whether there are any projects available in the session store.
+const hasProjects = computed(() => comp.session.projects.length > 0);
+
+/**
+ * Handles the action when a project is selected by updating the current project
+ * ID in the session account and emitting a 'select' event.
+ *
+ * @param {string} id - The ID of the selected project.
+ */
+function onProjectSelected(id: string): void {
+  if (comp.session.account) {
+    // Set project ID on account
+    comp.session.account.data.state.currentProject = id;
+    // Send event
+    emit('select', id);
+  }
+}
 </script>

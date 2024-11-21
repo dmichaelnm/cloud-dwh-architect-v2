@@ -23,6 +23,16 @@ export function getCurrentAccountName(): string {
 }
 
 /**
+ * Retrieves the current account ID of the authenticated user.
+ * If the user is not authenticated, it returns a placeholder value.
+ *
+ * @return {string} The account ID of the current user or a placeholder string if not authenticated.
+ */
+export function getCurrentAccountId(): string {
+  return firebaseAuth.currentUser?.uid ?? '?';
+}
+
+/**
  * Processes Firebase authentication errors and sets appropriate error messages.
  *
  * @param {unknown} error - The error object received from Firebase.
