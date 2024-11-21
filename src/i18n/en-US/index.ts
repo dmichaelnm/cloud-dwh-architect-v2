@@ -100,6 +100,17 @@ export default {
     accountNotFound: 'The specified account could not be found.',
   },
 
+  // Enumerations
+  enumeration: {
+    // Member Roles
+    memberRole: {
+      // Project Owner
+      owner: 'Project Owner',
+      // Project Manager
+      manager: 'Project Manager',
+    },
+  },
+
   // Authentication Messages
   auth: {
     // Container Messages

@@ -103,6 +103,17 @@ export default {
     accountNotFound: 'Das angegebene Konto konnte nicht gefunden werden.',
   },
 
+  // Enumerations
+  enumeration: {
+    // Member Roles
+    memberRole: {
+      // Project Owner
+      owner: 'Projekteigentümer',
+      // Project Manager
+      manager: 'Projektleiter',
+    }
+  },
+
   // Authentication Messages
   auth: {
     // Container Messages
