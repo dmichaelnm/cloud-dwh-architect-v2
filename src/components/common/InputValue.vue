@@ -1,7 +1,7 @@
 <template>
   <!-- Input -->
   <q-input
-    select="inputValue"
+    ref="inputValue"
     :model-value="_modelValue"
     :label="label"
     :type="type"
@@ -10,6 +10,7 @@
     :rules="[(value) => (mandatory ? !!value : true) || $t('error.emptyInput')]"
     :error="errorMessage !== undefined && errorMessage.length > 0"
     :error-message="errorMessage"
+    :hide-bottom-space="hideBottomSpace"
     lazy-rules="ondemand"
     spellcheck="false"
     no-error-icon
@@ -45,6 +46,8 @@ const props = defineProps<{
   mandatory?: boolean;
   /** Error Message */
   errorMessage?: string;
+  /** Flag for hiding the bottom space */
+  hideBottomSpace?: boolean;
 }>();
 
 // Defines the events that can be emitted by this component
@@ -66,8 +69,16 @@ function resetValidation(): void {
   inputValue.value?.resetValidation();
 }
 
+/**
+ * Selects the value of this input component.
+ */
+function select(): void {
+  inputValue.value?.select();
+}
+
 // Exposed methods of this component
 defineExpose({
   resetValidation,
+  select,
 });
 </script>

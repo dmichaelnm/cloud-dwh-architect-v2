@@ -6,7 +6,7 @@ export default {
     // Copyright Notice
     copyright: '&copy; Copyright 2024 Dirk Michael',
     // Version Information
-    version: 'Version {major}.{minor}.{patch} (Build: {build})',
+    version: 'Version {major}.{minor}.{patch} (Build: {build})'
   },
 
   // Language labels
@@ -14,7 +14,7 @@ export default {
     // English (US)
     english: 'Englisch (US)',
     // German (DE)
-    german: 'Deutsch (DE)',
+    german: 'Deutsch (DE)'
   },
 
   // Common Labels
@@ -41,6 +41,8 @@ export default {
     okay: 'Okay',
     // Save
     save: 'Speichern',
+    // Records per page
+    recordsPerPage: 'Zeilen pro Seite'
   },
 
   // Tooltip Messages
@@ -60,8 +62,8 @@ export default {
       // Threads
       threads: 'Threads',
       // Twitter / X
-      twitter: 'Twitter / X',
-    },
+      twitter: 'Twitter / X'
+    }
   },
 
   // Dialog Messages
@@ -73,7 +75,7 @@ export default {
       // Message
       message:
         'Wenn Sie den aktuellen Editor verlassen, gehen alles bisher gemachten Änderungen verloren. Sind Sie' +
-        ' sicher, dass Sie das wollen?',
+        ' sicher, dass Sie das wollen?'
     },
     // Select Account Dialog
     selectAccount: {
@@ -82,8 +84,8 @@ export default {
       // Message
       message:
         'Geben Sie hier die Email-Adresse des Kontos an, welches Sie auswählen möchten. Das Konto muss bereits ' +
-        'registriert sein.',
-    },
+        'registriert sein.'
+    }
   },
 
   // Error Messages
@@ -95,12 +97,12 @@ export default {
       // Dialog message
       message:
         'Ein unerwarteter Fehler ist aufgetreten. Dies hätte nicht passieren dürfen. Bitte wenden Sie sich an ' +
-        'den Administrator.',
+        'den Administrator.'
     },
     // Input field must not be empty.
     emptyInput: 'Dieses Feld darf nicht leer sein.',
     // Account was not found
-    accountNotFound: 'Das angegebene Konto konnte nicht gefunden werden.',
+    accountNotFound: 'Das angegebene Konto konnte nicht gefunden werden.'
   },
 
   // Enumerations
@@ -111,6 +113,10 @@ export default {
       owner: 'Projekteigentümer',
       // Project Manager
       manager: 'Projektleiter',
+      // Developer
+      developer: 'Entwickler',
+      // Visitor
+      visitor: 'Besucher'
     }
   },
 
@@ -134,7 +140,7 @@ export default {
       reset:
         'Falls Sie Ihr Kennwort vergessen haben oder aus anderen Gründen zurücksetzen möchten, können Sie ' +
         'dies hier tun, indem Sie die Email-Adresse Ihres Kontos in das untenstehende Eingabefeld eintragen. Sie ' +
-        'erhalten eine Email an die angegebene Adresse. Diese enthält einen Link für das Ändern Ihres Kennworts.',
+        'erhalten eine Email an die angegebene Adresse. Diese enthält einen Link für das Ändern Ihres Kennworts.'
     },
     // Labels
     label: {
@@ -155,7 +161,7 @@ export default {
       // First Name
       firstName: 'Vorname',
       // Last Name
-      lastName: 'Nachname',
+      lastName: 'Nachname'
     },
     // Dialog Messages
     dialog: {
@@ -166,7 +172,7 @@ export default {
         // Message
         message:
           'Dein Konto wurde erfolgreich registriert. Allerdings musst du dich erst von einem Administrator ' +
-          'freischalten lassen, bevor du dich anmelden kannst.',
+          'freischalten lassen, bevor du dich anmelden kannst.'
       },
       // Reset Password Success Messages
       reset: {
@@ -175,8 +181,8 @@ export default {
         // Message
         message:
           'Die Email für das Zurücksetzen des Kennworts wurde versendet. Bitte prüfen Sie gegebenenfalls ' +
-          'auch den Spam-Ordner Ihres Postfachs.',
-      },
+          'auch den Spam-Ordner Ihres Postfachs.'
+      }
     },
     // Error Messages
     error: {
@@ -195,12 +201,14 @@ export default {
       tooManyRequests: 'Zu viele Versuche. Probieren Sie es später erneut.',
       // Account is locked
       accountLocked:
-        'Das Konto ist gesperrt. Bitte wenden Sie sich an den Administrator.',
-    },
+        'Das Konto ist gesperrt. Bitte wenden Sie sich an den Administrator.'
+    }
   },
 
   // Project Messages
   project: {
+    // No Project Message
+    nothing: 'Bisher haben Sie weder ein Projekt erstellt noch wurden Sie einem Projekt als Mitglied zugeordnet.',
     // Labels
     label: {
       // No project selected
@@ -211,8 +219,12 @@ export default {
       overview: 'Projekt-Übersicht',
       // Project Members
       member: 'Projekt-Mitglieder',
+      // Name of a project member
+      memberName: 'Name des Mitglieds',
       // Project Name
       name: 'Name des Projekts',
+      // Role
+      role: 'Rolle im Projekt'
     },
     // Editor Messages
     editor: {
@@ -225,15 +237,40 @@ export default {
           'Beginnen Sie ein neues Projekt, indem Sie hier die grundlegenden Eigenschaften wie Name und ' +
           'Beschreibung angeben. Außerdem können Sie weitere Mitglieder Ihrem Projekt hinzufügen und Ihnen ' +
           'verschiedene Rollen zuweisen. Beachten Sie dabei jedoch, dass diese ein registriertes Konto für diese ' +
-          'Anwendung besitzen müssen.',
-      },
+          'Anwendung besitzen müssen.'
+      }
     },
     // General Tab Messages
     general: {
       // Message of the tab
       message:
         'Hier können Sie sehen, wer der Eigentümer und wer der Leiter des Projekts ist. Falls Sie selbst der ' +
-        'Projekteigentümer sind, können Sie hier den Projektleiter bestimmen.',
+        'Projekteigentümer sind, können Sie hier den Projektleiter bestimmen.'
     },
-  },
+    // Member Tab Messages
+    member: {
+      // Message of the tab
+      message:
+        'Die folgende Tabelle zeigt eine Liste aller Mitglieder dieses Projekts. Falls Sie der Projekteigentümer oder ' +
+        'der Projektleiter sind, können Sie hier Ihr Projektteam verwalten, indem Sie neue Mitglieder hinzufügen und ' +
+        'ihnen entsprechende Rollen zuweisen. Beachten Sie, dass der Projekteigentümer und der Projetleiter hier nicht ' +
+        'als separates Mitglied hinzugefügt werden können.',
+      // Empty Message
+      emptyMessage: 'Es wurden noch keine Mitglieder diesem Projekt zugeordnet.',
+      // Tooltip messages
+      tooltip: {
+        // Add Member
+        add: 'Mitglied hinzufügen'
+      },
+      // Error Messages
+      error: {
+        // Owner selected as member
+        owner: 'Der Projekteigentümer kann kein normales Projektmitglied sein.',
+        // Manager selected as member
+        manager: 'Der Projektleiter kann kein normales Projektmitglied sein.',
+        // Account is already member
+        member: 'Dieses Konto ist bereits ein Projektmitglied.',
+      }
+    }
+  }
 };

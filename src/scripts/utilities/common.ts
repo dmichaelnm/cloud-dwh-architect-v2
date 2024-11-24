@@ -20,6 +20,9 @@ export enum EDocumentOperation {
   View = 'view',
 }
 
+/**
+ * Represents a dialog button with value and label properties.
+ */
 export type TDialogButton = {
   /** The value of the dialog button. */
   value: string;
@@ -115,13 +118,11 @@ export type TFuncShowConfirmationDialog = (
 /**
  * Type definition for a function that opens an editor for Firestore documents.
  *
- * @param {string} callerPath - The path that is routed to when the editor has finished.
  * @param {EFirestoreDocumentType} scope - The scope of the Firestore document.
  * @param {EDocumentOperation} operation - The operation to be performed on the document.
  * @param {string} [id] - Optional. The unique identifier of the document.
  */
 export type TFuncOpenEditor = (
-  callerPath: string,
   scope: EFirestoreDocumentType,
   operation: EDocumentOperation,
   id?: string
@@ -153,8 +154,6 @@ export type TEditorParameter = {
   operation: EDocumentOperation;
   /** The ID of the document */
   id: string | null;
-  /** The caller path */
-  callerPath: string;
 };
 
 /**
@@ -168,7 +167,7 @@ export type TEditorTab = {
   key: string;
   /** Tab label */
   label: string;
-}
+};
 
 // Message dialog options.
 const messageDialogOptions = ref<TMessageDialogOptions>({
@@ -303,13 +302,15 @@ export function useMessageDialog(): {
 }
 
 /**
- * Provides routing functions for navigating the application.
+ * Composable function to handle routing and navigation within the application.
  *
- * @return {Object} An object containing routing functions.
- * @return {Function} return.openEditor - Function to navigate to the editor.
+ * @return {Object} An object containing two functions:
+ * - `openEditor`: Function to open an editor with specific parameters.
+ * - `routeTo`: Function to navigate to a specified path.
  */
 export function useRouting(): {
   openEditor: TFuncOpenEditor;
+  routeTo: (path: string) => void;
 } {
   // Get composable functions
   const comp = useComposables();
@@ -317,15 +318,14 @@ export function useRouting(): {
   const { showConfirmationDialog } = useMessageDialog();
   // Return routing functions
   return {
-    openEditor: async (callerPath, scope, operation, id) => {
+    openEditor: async (scope, operation, id) => {
       // Check editor state
       if (comp.session.editorParameter === null) {
         // Set editor parameter
         comp.session.editorParameter = {
           scope: scope,
           operation: operation,
-          id: id ? id : null,
-          callerPath: callerPath,
+          id: id ? id : null
         };
         // Route to the editor
         await comp.router.push({ path: `/${scope}/editor` });
@@ -344,10 +344,31 @@ export function useRouting(): {
                 scope: scope,
                 operation: operation,
                 id: id ? id : null,
-                callerPath: callerPath,
               };
               // Route to the editor
               await comp.router.push({ path: `/${scope}/editor` });
+            }
+          }
+        );
+      }
+    },
+    routeTo: async (path) => {
+      // Check editor state
+      if (comp.session.editorParameter === null) {
+        // Route to the editor
+        await comp.router.push({ path: path });
+      } else {
+        // Show confirmation dialog
+        showConfirmationDialog(
+          comp.i18n.t('dialog.discard.title'),
+          comp.i18n.t('dialog.discard.message'),
+          'warning',
+          undefined,
+          async (value) => {
+            // If user has confirmed, set editor state and open the editor
+            if (value === 'okay') {
+              // Route to the editor
+              await comp.router.push({ path: path });
             }
           }
         );

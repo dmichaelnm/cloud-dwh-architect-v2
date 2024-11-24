@@ -1,4 +1,35 @@
 import { IFirestoreDocumentData } from 'src/scripts/application/FirestoreDocument';
+import { QTableColumn } from 'quasar';
+import { TSelectOption } from 'src/scripts/utilities/common';
+
+/**
+ * Enumeration representing possible input types for a table column.
+ */
+export enum ETableColumnInput {
+  /** Text Input */
+  Text = 'text',
+  /** Select Input */
+  Select = 'select'
+}
+
+/**
+ * Enhanced table column type extending QTableColumn with additional properties.
+ *
+ * @property {ETableColumnInput} [input] - Input Type.
+ * @property {TSelectOption[]} [options] - Options for input type Select.
+ * @property {boolean} [translate] - Flag for translating the option labels.
+ * @property {boolean} [hideIcon] - Flag for hiding the options icon.
+ */
+export type TTableColumn = QTableColumn & {
+  /** Input Type */
+  input?: ETableColumnInput;
+  /** Options for input type Select */
+  options?: TSelectOption[],
+  /** Flag for translating the option labels */
+  translate?: boolean;
+  /** Flah for hiding the options icon */
+  hideIcon?: boolean;
+};
 
 /**
  * Abstract class representing generic editor data, providing base
@@ -6,7 +37,6 @@ import { IFirestoreDocumentData } from 'src/scripts/application/FirestoreDocumen
  * and data creation.
  */
 export abstract class EditorData<D extends IFirestoreDocumentData> {
-
   /** The name of the object */
   name: string;
 

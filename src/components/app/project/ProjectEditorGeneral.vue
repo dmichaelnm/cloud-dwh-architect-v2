@@ -8,7 +8,7 @@
         <div class="col-3">
           <!-- Owner Input -->
           <select-account
-            v-model="_modelValue.owner"
+            v-model="_modelValue.general.owner"
             :label="$t('enumeration.memberRole.owner')"
             read-only
           />
@@ -17,9 +17,10 @@
         <div class="col-3">
           <!-- Manager Input -->
           <select-account
-            v-model="_modelValue.manager"
+            v-model="_modelValue.general.manager"
             :label="$t('enumeration.memberRole.manager')"
-            @update:modelValue="(value) => (_modelValue.manager = value)"
+            :validate="validate"
+            @update:modelValue="(value) => (_modelValue.general.manager = value)"
           />
         </div>
       </div>
@@ -33,23 +34,44 @@
 import MessageComponent from 'components/common/MessageComponent.vue';
 import { computed } from 'vue';
 import SelectAccount from 'components/app/account/SelectAccount.vue';
-import { TProjectGeneral } from 'src/scripts/ui/project';
+import { EditorProjectData } from 'src/scripts/ui/project';
+import { Account } from 'src/scripts/application/Account';
+import { useComposables } from 'src/scripts/utilities/common';
+
+// Get composable components
+const comp = useComposables();
 
 // Defines the properties of this component
 const props = defineProps<{
   /** Model value */
-  modelValue: TProjectGeneral;
+  modelValue: EditorProjectData;
 }>();
 
 // Defines the events that can be emitted by this component
 const emit = defineEmits<{
   /** Model update event */
-  (event: 'update:modelValue', value: TProjectGeneral): void;
+  (event: 'update:modelValue', value: EditorProjectData): void;
 }>();
 
 // The internal model value of this component
 const _modelValue = computed({
   get: () => props.modelValue,
-  set: (value: TProjectGeneral) => emit('update:modelValue', value),
+  set: (value: EditorProjectData) => emit('update:modelValue', value),
 });
+
+/**
+ * Validates if a given account can be added as a manager.
+ *
+ * @param {Account} account - The account object to be validated.
+ * @return {string|null} - Returns an error message if the account is already a member; otherwise, returns null.
+ */
+function validate(account: Account): string | null {
+  // Check if manager account is not in member list
+  if (_modelValue.value.member.some(member => member.id === account.id)) {
+    // Selected account as already a normal project member
+    return comp.i18n.t('project.member.error.member');
+  }
+  // Validation successful
+  return null;
+}
 </script>

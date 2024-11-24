@@ -4,7 +4,7 @@
     <!-- Message Row -->
     <div class="row" v-if="message">
       <!-- Message Column -->
-      <div class="col-8">
+      <div class="col-6">
         <!-- Message -->
         {{ message }}
       </div>

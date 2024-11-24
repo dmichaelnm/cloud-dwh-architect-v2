@@ -41,6 +41,8 @@ export default {
     lightMode: 'Light Mode',
     // Save
     save: 'Save',
+    // Records per page
+    recordsPerPage: 'Records per page'
   },
 
   // Tooltip Messages
@@ -108,6 +110,10 @@ export default {
       owner: 'Project Owner',
       // Project Manager
       manager: 'Project Manager',
+      // Developer
+      developer: 'Developer',
+      // Visitor
+      visitor: 'Visitor'
     },
   },
 
@@ -194,6 +200,8 @@ export default {
 
   // Project Messages
   project: {
+    // No Project Message
+    nothing: 'You have not yet created a project nor have you been assigned to a project as a member.',
     // Labels
     label: {
       // No project selected
@@ -204,8 +212,12 @@ export default {
       overview: 'Project Overview',
       // Project Members
       member: 'Project Members',
+      // Name of a project member
+      memberName: 'Member Name',
       // Project Name
       name: 'Project Name',
+      // Role
+      role: 'Project Role'
     },
     // Editor Messages
     editor: {
@@ -225,6 +237,30 @@ export default {
       // Message of the tab
       message:
         'Displays the project owner and manager. Allows the owner to assign the project manager.',
+    },
+    // Member Tab Messages
+    member: {
+      // Message of the tab
+      message:
+        'The following table shows a list of all members of this project. If you are the project owner or the project ' +
+        'manager, you can manage your project team here by adding new members and assigning them appropriate roles. ' +
+        'Please note that the project owner and the project leader cannot be added here as separate members.',
+      // Empty Message
+      emptyMessage: 'No members have been assigned to this project yet.',
+      // Tooltip messages
+      tooltip: {
+        // Add Member
+        add: 'Add Member'
+      },
+      // Error Messages
+      error: {
+        // Owner selected as member
+        owner: 'The project owner cannot be a regular project member.',
+        // Manager selected as member
+        manager: 'The project manager cannot be a regular project member.',
+        // Account is already member
+        member: 'This account is already a project member.'
+      },
     },
   },
 };

@@ -17,11 +17,13 @@
   >
     <!-- Template for General tab -->
     <template v-slot:tab-general>
-      <project-editor-general v-model="editorData.general" />
+      <project-editor-general v-model="editorData" />
     </template>
 
     <!-- Template for Member tab -->
-    <template v-slot:tab-member></template>
+    <template v-slot:tab-member>
+      <project-editor-member v-model="editorData" />
+    </template>
 
     <!-- Template for Custom Attributes tab -->
     <template v-slot:tab-attributes></template>
@@ -46,6 +48,7 @@ import {
   updateDocument,
 } from 'src/scripts/application/FirestoreDocument';
 import { Project } from 'src/scripts/application/Project';
+import ProjectEditorMember from 'components/app/project/ProjectEditorMember.vue';
 
 // Get composable components
 const comp = useComposables();

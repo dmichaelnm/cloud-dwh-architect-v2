@@ -13,6 +13,10 @@ body.body--dark {
   color: $text-dark;
 }
 
+.q-dark {
+  color: $text-dark;
+}
+
 .container {
   background-color: $background-container-light;
   padding: 8px;
@@ -122,4 +126,24 @@ body.body--dark {
 
 .q-tab-panels {
   background-color: transparent;
+}
+
+.q-table__container {
+  background-color: transparent;
+}
+
+.q-table th  {
+  color: $text-caption-light;
+}
+
+.body--dark .q-table th  {
+  color: $text-caption-dark;
+}
+
+.q-table td  {
+  color: $text-light;
+}
+
+.body--dark .q-table td  {
+  color: $text-dark;
 }

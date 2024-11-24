@@ -164,10 +164,8 @@ const _modelValue = computed({
  * parameters and redirects the user to the previous path stored in the session.
  */
 function leaveEditor(): void {
-  // Get callers path
-  const path = comp.session.editorParameter?.callerPath;
   // Route to the callers path
-  comp.router.push({ path: path });
+  comp.router.back();
   // Reset editor parameter
   comp.session.editorParameter = null;
 }

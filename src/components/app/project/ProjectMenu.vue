@@ -20,7 +20,6 @@
           hide-icon
           @click="
             openEditor(
-              '/',
               EFirestoreDocumentType.Project,
               EDocumentOperation.Create
             )

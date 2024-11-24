@@ -96,6 +96,7 @@ async function onSubmit(): Promise<boolean> {
     if (error !== null) {
       // Validation has failed with a specific error message
       emailError.value = error;
+      return false;
     }
   }
   // Emit event

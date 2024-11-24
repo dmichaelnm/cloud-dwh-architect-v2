@@ -1,9 +1,13 @@
 <template>
   <!-- Select -->
   <q-select
+    ref="selectValue"
     :model-value="_modelValue"
     :options="options"
     :borderless="borderless"
+    :outlined="!borderless"
+    :label="label"
+    :autocomplete="autoComplete"
     dense
     options-dense
     emit-value
@@ -11,7 +15,7 @@
     @update:modelValue="(value) => (_modelValue = value)"
   >
     <!-- Template for Icon -->
-    <template v-slot:prepend>
+    <template v-slot:prepend v-if="!hideIcon">
       <!-- Icon -->
       <q-icon :name="selectedOption?.icon" size="xs" />
     </template>
@@ -49,9 +53,12 @@
 <style scoped lang="scss"></style>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { TSelectOption } from 'src/scripts/utilities/common';
-import { getLanguageOptions } from 'src/scripts/utilities/options';
+import { QSelect } from 'quasar';
+
+// Reference to the select component
+const selectValue = ref<QSelect | null>(null);
 
 // Defines the properties of this component
 const props = defineProps<{
@@ -63,6 +70,12 @@ const props = defineProps<{
   borderless?: boolean;
   /** Flag for translating the label keys of the options */
   translate?: boolean;
+  /** The label of this component */
+  label?: string;
+  /** Flag for hiding the options icon */
+  hideIcon?: boolean;
+  /** Auto complete attribute */
+  autoComplete?: string
 }>();
 
 // Defines the events that can be emitted by this component
@@ -77,9 +90,18 @@ const _modelValue = computed({
   set: (value: string | number | null) => emit('update:modelValue', value),
 });
 
-const selectedOption = computed(() => {
-  return getLanguageOptions().find(
-    (option) => option.value === _modelValue.value
-  );
-});
+// Returns the selected option object
+const selectedOption = computed(() =>
+  props.options.find((option) => option.value === _modelValue.value)
+);
+
+/**
+ * Displays the popup associated with the selected value.
+ */
+function showPopup(): void {
+  selectValue.value?.showPopup();
+}
+
+// Exposed methods of this component
+defineExpose({ showPopup });
 </script>

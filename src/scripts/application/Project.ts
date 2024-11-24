@@ -28,6 +28,8 @@ export type TProjectMember = {
   name: string;
   /** Role of the member */
   role: EProjectMemberRole;
+  /** Description */
+  description: string | null;
 };
 
 /**

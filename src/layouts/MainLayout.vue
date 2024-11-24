@@ -91,6 +91,7 @@ import { onBeforeMount } from 'vue';
 import {
   useComposables,
   useMessageDialog,
+  useRouting,
   useRunTask,
 } from 'src/scripts/utilities/common';
 import { onAccountStateChanged } from 'src/scripts/application/Account';
@@ -107,6 +108,8 @@ const comp = useComposables();
 const { messageDialogOptions } = useMessageDialog();
 // Get run task composable function
 const runTask = useRunTask();
+// Get routing composable function
+const { routeTo } = useRouting();
 
 // Lifecycle method that is called before this component is mounted
 onBeforeMount(() => {
@@ -131,6 +134,10 @@ onBeforeMount(() => {
       comp.session.sortProjects();
       // Set active project
       await switchProject();
+      // If no project is selected, show the No Project page
+      if (comp.session.project === null) {
+        routeTo('/project/none');
+      }
       // Unlock the screen
       comp.quasar.loading.hide();
     }

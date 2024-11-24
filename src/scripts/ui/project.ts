@@ -17,11 +17,14 @@ export type TProjectGeneral = {
 };
 
 /**
- * Class representing the data of an project in the editor.
+ * Class representing the data of a project in the editor.
  */
 export class EditorProjectData extends EditorData<IProjectData> {
   /** General properties of the project */
   general: TProjectGeneral;
+
+  /** Project members */
+  member: TProjectMember[];
 
   /**
    * Default constructor.
@@ -32,6 +35,7 @@ export class EditorProjectData extends EditorData<IProjectData> {
       owner: null,
       manager: null,
     };
+    this.member = [];
   }
 
   /**
@@ -49,13 +53,17 @@ export class EditorProjectData extends EditorData<IProjectData> {
       id: this.general.owner?.id as string,
       name: this.general.owner?.data.common.name as string,
       role: EProjectMemberRole.Owner,
+      description: null,
     });
     // Add manager to member array
     member.push({
       id: this.general.manager?.id as string,
       name: this.general.manager?.data.common.name as string,
       role: EProjectMemberRole.Manager,
+      description: null,
     });
+    // Add normal project members
+    member.push(...this.member);
     // Create access list
     const accessList: string[] = [];
     accessList.push(...new Set(member.map((m) => m.id)));

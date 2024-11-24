@@ -33,6 +33,11 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
+      // No Project Page
+      {
+        path: 'project/none',
+        component: () => import('pages/project/NoProjectPage.vue'),
+      },
       // Project Editor Page
       {
         path: 'project/editor',

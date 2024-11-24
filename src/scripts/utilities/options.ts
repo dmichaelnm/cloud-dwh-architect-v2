@@ -1,5 +1,6 @@
 import { TSelectOption } from 'src/scripts/utilities/common';
-import { flagUS, flagDE } from 'quasar-extras-svg-icons/country-flag-icons';
+import { flagDE, flagUS } from 'quasar-extras-svg-icons/country-flag-icons';
+import { EProjectMemberRole } from 'src/scripts/application/Project';
 
 /**
  * Retrieves the options for language selection.
@@ -17,6 +18,25 @@ export function getLanguageOptions(): TSelectOption[] {
       label: 'language.german',
       value: 'de-DE',
       icon: flagDE,
+    },
+  ];
+}
+
+/**
+ * Retrieves the available project member roles.
+ *
+ * @return {TSelectOption[]} An array of objects representing the project member roles.
+ * Each object contains a `value` and a `label` property.
+ */
+export function getProjectMemberRoles(): TSelectOption[] {
+  return [
+    {
+      value: EProjectMemberRole.Developer,
+      label: 'enumeration.memberRole.developer',
+    },
+    {
+      value: EProjectMemberRole.Visitor,
+      label: 'enumeration.memberRole.visitor',
     },
   ];
 }
