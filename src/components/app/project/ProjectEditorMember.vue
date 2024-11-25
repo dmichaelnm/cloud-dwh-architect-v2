@@ -13,6 +13,7 @@
     :empty-message="$t('project.member.emptyMessage')"
     :add-row-handler="openAccountDialog"
     :add-tooltip="$t('project.member.tooltip.add')"
+    :delete-tooltip="$t('project.member.tooltip.delete')"
     :columns="[
       {
         name: 'name',
@@ -40,6 +41,8 @@
         input: ETableColumnInput.Text
       },
     ]"
+    deletable
+    moveable
   ></editable-table>
 </template>
 

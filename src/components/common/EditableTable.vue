@@ -28,9 +28,22 @@
             dense
             wrap-cells
           >
+            <!-- Template for selection column -->
+            <template v-slot:body-cell-select="props">
+              <!-- Table Cell -->
+              <q-td :props="props">
+                <!-- Radio Buttun -->
+                <q-radio
+                  v-model="selectedRowIndex"
+                  :val="props.rowIndex"
+                  dense
+                  size="xs"
+                />
+              </q-td>
+            </template>
             <!-- Template for custom columns -->
             <template
-              v-for="col in computedColumns"
+              v-for="col in columns"
               :key="col.name"
               v-slot:[getSlotName(col)]="props"
             >
@@ -99,6 +112,13 @@
             @click="addRow"
             :tooltip="addTooltip"
           />
+          <!-- Delete Row Button -->
+          <button-icon
+            v-if="deletable && selectedRowIndex > -1"
+            icon="remove"
+            @click="deleteRow"
+            :tooltip="deleteTooltip"
+          />
         </div>
       </div>
     </div>
@@ -117,7 +137,7 @@
 
 <script setup lang="ts">
 import MessageComponent from 'components/common/MessageComponent.vue';
-import { computed, reactive } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import ButtonIcon from 'components/common/ButtonIcon.vue';
 import { ETableColumnInput, TTableColumn } from 'src/scripts/ui/common';
 import InputValue from 'components/common/InputValue.vue';
@@ -127,6 +147,9 @@ import { TSelectOption } from 'src/scripts/utilities/common';
 
 // Contains the references to popup editors in the editable table
 const references = reactive(<Record<string, any>>{});
+
+// Selected row index
+const selectedRowIndex = ref(-1);
 
 // Defines the properties of this component
 const props = defineProps<{
@@ -146,6 +169,12 @@ const props = defineProps<{
   columns: TTableColumn[];
   /** Validator function */
   validate?: (index: number, name: string, oldValue: any, newValue: any) => any;
+  /** Flag for the possibility of deleting rows */
+  deletable?: boolean;
+  /** Tooltip for the Delete button */
+  deleteTooltip?: string;
+  /** Flag for the possibility of moving rows */
+  moveable?: boolean;
 }>();
 
 // Defines the events that can be emitted by this component
@@ -164,6 +193,16 @@ const _modelValue = computed({
 const computedColumns = computed(() => {
   // Create computed columns array
   const colArr: TTableColumn[] = [];
+  // If rows are deletable or moveable, create a selection column
+  if (props.deletable || props.moveable) {
+    colArr.push({
+      name: 'select',
+      align: 'center',
+      label: '',
+      field: '',
+      headerStyle: 'width: 50px',
+    });
+  }
   // Add custom columns
   colArr.push(...props.columns);
   // Check last column for headerStyle attribute
@@ -185,7 +224,23 @@ async function addRow(): Promise<void> {
     await props.addRowHandler((row) => {
       // Add the new row to the model value
       _modelValue.value.push(row);
+      // Set selected index to new row
+      selectedRowIndex.value = _modelValue.value.length - 1;
     });
+  }
+}
+
+/**
+ * Deletes a row from the model based on the current selected row index.
+ */
+function deleteRow(): void {
+  // Remove the selected row
+  _modelValue.value.splice(selectedRowIndex.value, 1);
+  // Set the new selected index
+  selectedRowIndex.value -= 1;
+  // Check selected row index
+  if (selectedRowIndex.value < 0 && _modelValue.value.length > 0) {
+    selectedRowIndex.value = 0;
   }
 }
 

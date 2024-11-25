@@ -42,7 +42,7 @@ export default {
     // Save
     save: 'Save',
     // Records per page
-    recordsPerPage: 'Records per page'
+    recordsPerPage: 'Records per page',
   },
 
   // Tooltip Messages
@@ -113,7 +113,7 @@ export default {
       // Developer
       developer: 'Developer',
       // Visitor
-      visitor: 'Visitor'
+      visitor: 'Visitor',
     },
   },
 
@@ -201,7 +201,8 @@ export default {
   // Project Messages
   project: {
     // No Project Message
-    nothing: 'You have not yet created a project nor have you been assigned to a project as a member.',
+    nothing:
+      'You have not yet created a project nor have you been assigned to a project as a member.',
     // Labels
     label: {
       // No project selected
@@ -217,7 +218,7 @@ export default {
       // Project Name
       name: 'Project Name',
       // Role
-      role: 'Project Role'
+      role: 'Project Role',
     },
     // Editor Messages
     editor: {
@@ -250,7 +251,9 @@ export default {
       // Tooltip messages
       tooltip: {
         // Add Member
-        add: 'Add Member'
+        add: 'Add Member',
+        // Delete Member
+        delete: 'Remove Member',
       },
       // Error Messages
       error: {
@@ -259,7 +262,7 @@ export default {
         // Manager selected as member
         manager: 'The project manager cannot be a regular project member.',
         // Account is already member
-        member: 'This account is already a project member.'
+        member: 'This account is already a project member.',
       },
     },
   },
