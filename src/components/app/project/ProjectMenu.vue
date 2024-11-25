@@ -26,7 +26,11 @@
           "
         />
         <!-- Project Overview Item -->
-        <menu-item :label="$t('project.label.overview')" hide-icon />
+        <menu-item
+          :label="$t('project.label.overview')"
+          hide-icon
+          @click="routeTo('/project/overview')"
+        />
         <!-- Separator -->
         <q-separator v-if="hasProjects" />
         <!-- Project Items -->
@@ -70,7 +74,7 @@ import { EFirestoreDocumentType } from 'src/scripts/application/FirestoreDocumen
 // Get composable functions
 const comp = useComposables();
 // Get routing functions
-const { openEditor } = useRouting();
+const { openEditor, routeTo } = useRouting();
 
 // Defines the events that can be emitted by this component
 const emit = defineEmits<{

@@ -29,6 +29,8 @@ export default {
 
   // Common Labels
   label: {
+    // Altered
+    altered: 'Altered By / At',
     // Custom Attributes
     attributes: 'Custom Attributes',
     // Back
@@ -37,6 +39,8 @@ export default {
     cancel: 'Cancel',
     // Close
     close: 'Close',
+    // Created By / At
+    created: 'Created By / At',
     // Description
     description: 'Description (optional)',
     // Detail
@@ -244,6 +248,18 @@ export default {
       name: 'Project Name',
       // Role
       role: 'Project Role',
+      // Own Role
+      ownRole: 'Own Role',
+    },
+    // Overview Messages
+    overview: {
+      // Title
+      title: 'Project Overview',
+      // Message
+      message:
+        'Here you see an overview of all the projects you have created yourself or to which you have been assigned ' +
+        'as a project member. Depending on the role you have in the respective projects, you can also edit or even ' +
+        'delete them.',
     },
     // Editor Messages
     editor: {

@@ -23,6 +23,12 @@
                   ? comp.session.account.data.common.name
                   : ''
               }}
+              /
+              {{
+                comp.session.project
+                  ? $t(`enumeration.memberRole.${comp.session.project.getRole()}`)
+                  : ''
+              }}
             </div>
           </div>
           <!-- Project Menu Column -->

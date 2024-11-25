@@ -5,6 +5,8 @@ import { useSessionStore } from 'stores/session-store';
 import { inject, Ref, ref } from 'vue';
 import { getLanguageOptions } from 'src/scripts/utilities/options';
 import { EFirestoreDocumentType } from 'src/scripts/application/FirestoreDocument';
+import firebase from 'firebase/compat';
+import Timestamp = firebase.firestore.Timestamp;
 
 /**
  * Enumeration representing operations that can be performed on a document.
@@ -395,6 +397,8 @@ export function useRouting(): {
           async (value) => {
             // If user has confirmed, set editor state and open the editor
             if (value === 'okay') {
+              // Reset editor parameter
+              comp.session.editorParameter = null;
               // Route to the editor
               await comp.router.push({ path: path });
             }
@@ -468,4 +472,18 @@ export function toBoolean(value: any): boolean {
   } else {
     return false;
   }
+}
+
+/**
+ * Converts a Timestamp object to a locale-specific date and time string.
+ *
+ * @param {Timestamp} [time] - The time value to be converted. If not provided, an empty string is returned.
+ * @param {string} [locale] - An optional locale string to specify the formatting. Defaults to the runtime's default locale if not provided.
+ * @return {string} A string representing the date and time per the specified locale, or an empty string if no time is provided.
+ */
+export function toDateTimeString(time?: Timestamp, locale?: string): string {
+  if (time) {
+    return time.toDate().toLocaleString(locale);
+  }
+  return '';
 }

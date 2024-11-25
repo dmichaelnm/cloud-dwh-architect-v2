@@ -1,22 +1,22 @@
 <template>
   <!-- Page -->
-  <q-page class="editor-page">
+  <q-page class="container-page">
     <!-- Editor Form -->
     <q-form @submit="onSubmit">
-      <!-- Editor Frame -->
-      <div class="editor-frame q-col-gutter-y-lg">
-        <!-- Editor Header Row -->
+      <!-- Container Frame -->
+      <div class="container-frame q-col-gutter-y-lg">
+        <!-- Container Header Row -->
         <div class="row">
-          <!-- Editor Title Column -->
+          <!-- Container Title Column -->
           <div class="col-6">
-            <!-- Editor Title -->
-            <div class="editor-title">
+            <!-- Container Title -->
+            <div class="container-title">
               {{ $t(`${scope}.editor.${mode}.title`) }}
             </div>
-            <!-- Editor Message -->
+            <!-- Container Message -->
             <div>{{ $t(`${scope}.editor.${mode}.message`) }}</div>
           </div>
-          <!-- Editor Button Column -->
+          <!-- Container Button Column -->
           <div class="col-6 text-right q-gutter-x-sm">
             <!-- Save Button -->
             <button-push :label="$t('label.save')" type="submit" />
@@ -80,32 +80,6 @@
 
 <style scoped lang="scss">
 @import 'src/css/quasar.variables';
-
-.editor-page {
-  padding: 48px;
-}
-
-.editor-frame {
-  background-color: $background-container-light;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-  padding: 16px;
-}
-
-.body--dark .editor-frame {
-  background-color: $background-container-dark;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.8);
-}
-
-.editor-title {
-  color: $text-caption-light;
-  font-size: 14pt;
-  font-variant: small-caps;
-}
-
-.body--dark .editor-title {
-  color: $text-caption-dark;
-}
 </style>
 
 <script setup lang="ts">

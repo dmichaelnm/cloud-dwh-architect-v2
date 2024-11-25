@@ -6,7 +6,7 @@
       <!-- Empty Message Row -->
       <div class="row" v-if="_modelValue.length === 0 && emptyMessage">
         <!-- Empty Message Column -->
-        <div class="col empty-message">
+        <div class="col text-hint">
           <!-- Empty Message -->
           {{ emptyMessage }}
         </div>
@@ -147,15 +147,7 @@
   </message-component>
 </template>
 
-<style scoped lang="scss">
-@import 'src/css/quasar.variables';
-
-.empty-message {
-  color: $text-hint-light;
-  font-size: 9pt;
-  font-style: italic;
-}
-</style>
+<style scoped lang="scss"></style>
 
 <script setup lang="ts">
 import MessageComponent from 'components/common/MessageComponent.vue';
@@ -228,7 +220,7 @@ const computedColumns = computed(() => {
   // Add custom columns
   colArr.push(...props.columns);
   // Check last column for headerStyle attribute
-  if (colArr[colArr.length - 1].headerStyle) {
+  if (colArr.length > 0 && colArr[colArr.length - 1].headerStyle) {
     // Add empty column
     colArr.push({ name: 'lastEmptyColumn', label: '', field: '' });
   }

@@ -101,6 +101,11 @@ export type TFirestoreDocumentConfig = {
    * A Firestore document snapshot object.
    */
   document?: fs.DocumentSnapshot;
+
+  /**
+   * A Firestore document object.
+   */
+  obj?: FirestoreDocument<IFirestoreDocumentData>
 };
 
 export class FirestoreDocument<D extends IFirestoreDocumentData> {
@@ -152,6 +157,11 @@ export class FirestoreDocument<D extends IFirestoreDocumentData> {
       this.path = getPathFromReference(config.document.ref);
       this.id = config.document.id;
       this.data = config.document.data() as D;
+    } else if (config.obj) {
+      // Create object from another one
+      this.path = config.obj.path;
+      this.id = config.obj.id;
+      this.data = config.obj.data as D;
     } else {
       // Invalid configuration object
       throw new Error('Invalid Firestore document configuration');

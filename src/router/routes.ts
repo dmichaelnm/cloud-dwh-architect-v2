@@ -38,6 +38,11 @@ const routes: RouteRecordRaw[] = [
         path: 'project/none',
         component: () => import('pages/project/NoProjectPage.vue'),
       },
+      // Project Overview Page
+      {
+        path: 'project/overview',
+        component: () => import('pages/project/ProjectOverviewPage.vue'),
+      },
       // Project Editor Page
       {
         path: 'project/editor',

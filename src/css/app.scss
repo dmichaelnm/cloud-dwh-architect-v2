@@ -147,3 +147,39 @@ body.body--dark {
 .body--dark .q-table td  {
   color: $text-dark;
 }
+
+.container-page {
+  padding: 48px;
+}
+
+.container-frame {
+  background-color: $background-container-light;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.body--dark .container-frame {
+  background-color: $background-container-dark;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.8);
+}
+
+
+.container-title {
+  color: $text-caption-light;
+  font-size: 14pt;
+  font-variant: small-caps;
+}
+
+.body--dark .container-title {
+  color: $text-caption-dark;
+}
+
+.text-hint {
+  color: $text-hint-light;
+  font-size: 9pt;
+}
+
+.body--dark .text-hint {
+  color: $text-hint-dark;
+}

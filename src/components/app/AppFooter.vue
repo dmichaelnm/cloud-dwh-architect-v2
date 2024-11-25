@@ -6,7 +6,7 @@
       <!-- Footer Row -->
       <div class="row items-center">
         <!-- Footer Left Column -->
-        <div class="col-3 text-left">
+        <div class="col-3 text-left text-hint">
           <!-- Copyright Notice -->
           <span v-html="$t('application.copyright')" />
         </div>
@@ -63,7 +63,7 @@
           />
         </div>
         <!-- Footer Right Column -->
-        <div class="col-3 text-right">
+        <div class="col-3 text-right text-hint">
           <!-- Version Info -->
           {{
             $t('application.version', {
@@ -85,12 +85,6 @@
 .app-footer {
   padding: 4px 8px;
   background-color: transparent;
-  color: $text-hint-light;
-  font-size: 9pt;
-}
-
-.body--dark .app-footer {
-  color: $text-hint-dark;
 }
 </style>
 

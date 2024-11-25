@@ -51,7 +51,43 @@ export interface IProjectData extends fd.IFirestoreDocumentData {
 /**
  * Represents a Project document in Firestore.
  */
-export class Project extends fd.FirestoreDocument<IProjectData> {}
+export class Project extends fd.FirestoreDocument<IProjectData> {
+  /**
+   * Retrieves the project member who holds the role of Owner.
+   *
+   * @return {TProjectMember | null} The project member with the role of Owner, or null if no Owner is found.
+   */
+  getOwner(): TProjectMember | null {
+    return (
+      this.data.member.find((m) => m.role === EProjectMemberRole.Owner) ?? null
+    );
+  }
+
+  /**
+   * Retrieves the manager from the list of project members.
+   *
+   * @return {TProjectMember | null} The manager if found, otherwise null.
+   */
+  getManager(): TProjectMember | null {
+    return (
+      this.data.member.find((m) => m.role === EProjectMemberRole.Manager) ?? null
+    );
+  }
+
+  /**
+   * Retrieves the role of the current account member within the project.
+   *
+   * @return {EProjectMemberRole | null} The role of the member if found, otherwise null.
+   */
+  getRole(): EProjectMemberRole | null {
+    // Get current account ID
+    const id = getCurrentAccountId();
+    // Find member with that ID
+    const member = this.data.member.find((m) => m.id === id);
+    // Return role of the member
+    return member?.role ?? null;
+  }
+}
 
 /**
  * Loads project documents where the current user has access.
@@ -60,9 +96,16 @@ export class Project extends fd.FirestoreDocument<IProjectData> {}
  */
 export async function loadProjects(): Promise<Project[]> {
   // Load project documents where the current user has access
-  return await loadDocuments<IProjectData, Project>(
+  const documents = await loadDocuments(
     EFirestoreDocumentType.Project,
     null,
     where('access', 'array-contains', getCurrentAccountId())
   );
+  // Create projects array
+  const projects: Project[] = [];
+  for (const document of documents) {
+    projects.push(new Project({ obj: document }));
+  }
+  // Return the projects array
+  return projects;
 }

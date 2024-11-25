@@ -79,7 +79,7 @@ onBeforeMount(() => {
  */
 function onSaved(document: FirestoreDocument<IFirestoreDocumentData>): void {
   // Add project to session
-  comp.session.projects.push(document as Project);
+  comp.session.projects.push(new Project({obj: document}));
   // Sort projects
   comp.session.sortProjects();
   // Set new project as active on the account
