@@ -9,7 +9,9 @@ export enum ETableColumnInput {
   /** Text Input */
   Text = 'text',
   /** Select Input */
-  Select = 'select'
+  Select = 'select',
+  /** Checkbox Input */
+  Checkbox = 'checkbox',
 }
 
 /**
@@ -22,9 +24,9 @@ export enum ETableColumnInput {
  */
 export type TTableColumn = QTableColumn & {
   /** Input Type */
-  input?: ETableColumnInput;
+  input?: ETableColumnInput | ((row: any) => ETableColumnInput);
   /** Options for input type Select */
-  options?: TSelectOption[],
+  options?: TSelectOption[];
   /** Flag for translating the option labels */
   translate?: boolean;
   /** Flah for hiding the options icon */

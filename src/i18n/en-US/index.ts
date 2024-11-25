@@ -17,6 +17,16 @@ export default {
     german: 'German (DE)',
   },
 
+  // Common Messages
+  message: {
+    // Custom attributes table
+    customAttributes:
+      'Here you can define any custom attributes. These can later be used in script generation templates.',
+    // Message when no custom attributes exist
+    customAttributesEmpty:
+      'No custom attributes have been created yet.',
+  },
+
   // Common Labels
   label: {
     // Custom Attributes
@@ -35,14 +45,20 @@ export default {
     darkMode: 'Dark Mode',
     // General
     general: 'General',
+    // Key
+    key: 'Key',
     // Okay
     okay: 'Okay',
     // Light Mode
     lightMode: 'Light Mode',
     // Save
     save: 'Save',
+    // Type
+    type: 'Type',
     // Records per page
     recordsPerPage: 'Records per page',
+    // Value
+    value: 'Value',
   },
 
   // Tooltip Messages
@@ -114,6 +130,15 @@ export default {
       developer: 'Developer',
       // Visitor
       visitor: 'Visitor',
+    },
+    // Custom Attribute Types
+    customAttributeType: {
+      // String
+      string: 'String',
+      // Number
+      number: 'Numeric',
+      // Boolean
+      boolean: 'Boolean',
     },
   },
 

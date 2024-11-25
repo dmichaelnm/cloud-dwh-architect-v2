@@ -17,6 +17,17 @@ export default {
     german: 'Deutsch (DE)',
   },
 
+  // Common Messages
+  message: {
+    // Custom attributes table
+    customAttributes:
+      'Hier können Sie beliebige eigene Attribute definieren. Diese können später in Vorlagen zur Skriptgenerierung ' +
+      'verwendet werden.',
+    // Message when no custom attributes exist
+    customAttributesEmpty:
+      'Bisher wurden noch keine benutzerdefinierten Attribute erstellt.',
+  },
+
   // Common Labels
   label: {
     // Custom Attributes
@@ -35,14 +46,20 @@ export default {
     darkMode: 'Dunkler Modus',
     // General
     general: 'Allgemein',
+    // Key
+    key: 'Schlüssel',
     // Light Mode
     lightMode: 'Heller Modus',
     // Okay
     okay: 'Okay',
     // Save
     save: 'Speichern',
+    // Type
+    type: 'Typ',
     // Records per page
     recordsPerPage: 'Zeilen pro Seite',
+    // Value
+    value: 'Wert',
   },
 
   // Tooltip Messages
@@ -117,6 +134,15 @@ export default {
       developer: 'Entwickler',
       // Visitor
       visitor: 'Besucher',
+    },
+    // Custom Attribute Types
+    customAttributeType: {
+      // String
+      string: 'Zeichenkette',
+      // Number
+      number: 'Zahlenwert',
+      // Boolean
+      boolean: 'Wahrheitswert',
     },
   },
 

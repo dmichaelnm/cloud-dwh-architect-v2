@@ -1,7 +1,11 @@
 import { where } from 'firebase/firestore';
 import * as fd from 'src/scripts/application/FirestoreDocument';
-import { EFirestoreDocumentType, loadDocuments } from 'src/scripts/application/FirestoreDocument';
+import {
+  EFirestoreDocumentType,
+  loadDocuments,
+} from 'src/scripts/application/FirestoreDocument';
 import { getCurrentAccountId } from 'src/scripts/utilities/firebase';
+import { TCustomAttribute } from 'src/scripts/utilities/common';
 
 /**
  * Enumeration for project member roles.
@@ -40,6 +44,8 @@ export interface IProjectData extends fd.IFirestoreDocumentData {
   access: string[];
   /** Members of the project */
   member: TProjectMember[];
+  /** Custom Attributes */
+  attributes: TCustomAttribute[];
 }
 
 /**

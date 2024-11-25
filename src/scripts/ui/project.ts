@@ -5,6 +5,7 @@ import {
   TProjectMember,
 } from 'src/scripts/application/Project';
 import { EditorData } from 'src/scripts/ui/common';
+import { TCustomAttribute } from 'src/scripts/utilities/common';
 
 /**
  * Represents the general details of a project.
@@ -26,6 +27,9 @@ export class EditorProjectData extends EditorData<IProjectData> {
   /** Project members */
   member: TProjectMember[];
 
+  /** Custom attributes */
+  attributes: TCustomAttribute[];
+
   /**
    * Default constructor.
    */
@@ -36,6 +40,7 @@ export class EditorProjectData extends EditorData<IProjectData> {
       manager: null,
     };
     this.member = [];
+    this.attributes = [];
   }
 
   /**
@@ -67,7 +72,7 @@ export class EditorProjectData extends EditorData<IProjectData> {
     // Create access list
     const accessList: string[] = [];
     accessList.push(...new Set(member.map((m) => m.id)));
-
+    // Return final data object
     return {
       access: accessList,
       common: {
@@ -75,6 +80,7 @@ export class EditorProjectData extends EditorData<IProjectData> {
         description: this.description,
       },
       member: member,
+      attributes: this.attributes,
     };
   }
 }

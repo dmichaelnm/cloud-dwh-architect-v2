@@ -26,7 +26,9 @@
     </template>
 
     <!-- Template for Custom Attributes tab -->
-    <template v-slot:tab-attributes></template>
+    <template v-slot:tab-attributes>
+      <custom-attributes-table v-model="editorData.attributes" />
+    </template>
   </editor-container>
 </template>
 
@@ -49,6 +51,7 @@ import {
 } from 'src/scripts/application/FirestoreDocument';
 import { Project } from 'src/scripts/application/Project';
 import ProjectEditorMember from 'components/app/project/ProjectEditorMember.vue';
+import CustomAttributesTable from 'components/app/main/CustomAttributesTable.vue';
 
 // Get composable components
 const comp = useComposables();

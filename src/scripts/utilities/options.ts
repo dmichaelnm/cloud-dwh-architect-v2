@@ -1,4 +1,7 @@
-import { TSelectOption } from 'src/scripts/utilities/common';
+import {
+  ECustomAttributeType,
+  TSelectOption,
+} from 'src/scripts/utilities/common';
 import { flagDE, flagUS } from 'quasar-extras-svg-icons/country-flag-icons';
 import { EProjectMemberRole } from 'src/scripts/application/Project';
 
@@ -37,6 +40,28 @@ export function getProjectMemberRoles(): TSelectOption[] {
     {
       value: EProjectMemberRole.Visitor,
       label: 'enumeration.memberRole.visitor',
+    },
+  ];
+}
+
+/**
+ * Retrieves a list of custom attribute types.
+ *
+ * @return {TSelectOption[]} An array of custom attribute types, each with a value and label.
+ */
+export function getCustomAttributeTypes(): TSelectOption[] {
+  return [
+    {
+      value: ECustomAttributeType.String,
+      label: 'enumeration.customAttributeType.string',
+    },
+    {
+      value: ECustomAttributeType.Number,
+      label: 'enumeration.customAttributeType.number',
+    },
+    {
+      value: ECustomAttributeType.Boolean,
+      label: 'enumeration.customAttributeType.boolean',
     },
   ];
 }

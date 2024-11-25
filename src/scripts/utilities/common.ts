@@ -21,6 +21,34 @@ export enum EDocumentOperation {
 }
 
 /**
+ * Enumeration for custom attribute types.
+ */
+export enum ECustomAttributeType {
+  /** String Value */
+  String = 'string',
+  /** Numeric Value */
+  Number = 'number',
+  /** Boolean Value */
+  Boolean = 'boolean',
+}
+
+/**
+ * Represents a custom attribute with a key, type, and value.
+ *
+ * @property {string} key - The key of the attribute.
+ * @property {ECustomAttributeType} type - The type of the attribute.
+ * @property {string | number | boolean} value - The value of the attribute.
+ */
+export type TCustomAttribute = {
+  /** The key of the attribute */
+  key: string;
+  /** The type of the attribute */
+  type: ECustomAttributeType;
+  /** The value of the attribute */
+  value: string | number | boolean;
+};
+
+/**
  * Represents a dialog button with value and label properties.
  */
 export type TDialogButton = {
@@ -325,7 +353,7 @@ export function useRouting(): {
         comp.session.editorParameter = {
           scope: scope,
           operation: operation,
-          id: id ? id : null
+          id: id ? id : null,
         };
         // Route to the editor
         await comp.router.push({ path: `/${scope}/editor` });
@@ -401,4 +429,43 @@ export function getDefaultLanguage(): TSelectOption {
     option = getLanguageOptions()[0];
   }
   return option;
+}
+
+/**
+ * Converts a given value to a number if possible.
+ *
+ * @param {any} value - The value to be converted to a number.
+ * @return {number|null} The numeric value or null if conversion is not possible.
+ */
+export function toNumber(value: any): number | null {
+  if (typeof value === 'boolean') {
+    return value ? 1 : 0;
+  } else {
+    const nmbr = parseFloat(value);
+    if (!isNaN(nmbr) && isFinite(nmbr)) {
+      return nmbr;
+    }
+    return null;
+  }
+}
+
+/**
+ * Converts a value to a boolean.
+ *
+ * @param {any} value - The value to convert.
+ *
+ * @returns {boolean} The converted boolean value.
+ */
+export function toBoolean(value: any): boolean {
+  if (typeof value === 'boolean') {
+    return value as boolean;
+  } else if (typeof value === 'string') {
+    const str = (value as string).trim().toLowerCase();
+    return str === 'true' || str === '1';
+  } else if (typeof value === 'number') {
+    const nmbr = value as number;
+    return nmbr > 0;
+  } else {
+    return false;
+  }
 }

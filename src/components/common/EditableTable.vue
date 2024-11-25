@@ -51,13 +51,33 @@
               <slot :name="getSlotName(col)" :props="props">
                 <!-- Custom Column Cell -->
                 <q-td :props="props">
-                  <!-- Custom Column Value -->
-                  <div>{{ props.value }}</div>
+                  <!-- Custom String or Number Column Value -->
+                  <div
+                    v-if="
+                      getInputType(col, props.row) !==
+                      ETableColumnInput.Checkbox
+                    "
+                  >
+                    <!-- Value -->
+                    {{ props.value }}
+                  </div>
+                  <!-- Custom Boolean Column Value -->
+                  <div
+                    v-if="
+                      getInputType(col, props.row) ===
+                      ETableColumnInput.Checkbox
+                    "
+                  >
+                    <!-- Checkbox -->
+                    <q-checkbox v-model="props.row.value" size="xs" dense />
+                  </div>
                   <!-- Text input popup editor -->
                   <q-popup-edit
                     :ref="setEditorReference('pe', col, props.rowIndex)"
                     v-model="props.row[col.name]"
-                    v-if="col.input === ETableColumnInput.Text"
+                    v-if="
+                      getInputType(col, props.row) === ETableColumnInput.Text
+                    "
                     v-slot="scope"
                     anchor="center middle"
                     @show="select(col, props.rowIndex)"
@@ -77,7 +97,9 @@
                   <q-popup-edit
                     :ref="setEditorReference('pe', col, props.rowIndex)"
                     v-model="props.row[col.name]"
-                    v-if="col.input === ETableColumnInput.Select"
+                    v-if="
+                      getInputType(col, props.row) === ETableColumnInput.Select
+                    "
                     v-slot="scope"
                     anchor="center middle"
                     @show="showPopup(col, props.rowIndex)"
@@ -242,6 +264,29 @@ function deleteRow(): void {
   if (selectedRowIndex.value < 0 && _modelValue.value.length > 0) {
     selectedRowIndex.value = 0;
   }
+}
+
+/**
+ * Determines the input type for a given table column and row data.
+ *
+ * @param {TTableColumn} column - The table column definition.
+ * @param {any} row - The data for the current row.
+ * @return {ETableColumnInput | undefined} - The determined input type or undefined if not specified.
+ */
+function getInputType(
+  column: TTableColumn,
+  row: any
+): ETableColumnInput | undefined {
+  if (typeof column.input === 'function') {
+    // Input type is a function that evaluates the input type
+    return column.input(row);
+  }
+  if (column.input) {
+    // Return the static input type
+    return column.input;
+  }
+  // Return undefined as default input type
+  return undefined;
 }
 
 /**
