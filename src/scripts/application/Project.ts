@@ -70,7 +70,8 @@ export class Project extends fd.FirestoreDocument<IProjectData> {
    */
   getManager(): TProjectMember | null {
     return (
-      this.data.member.find((m) => m.role === EProjectMemberRole.Manager) ?? null
+      this.data.member.find((m) => m.role === EProjectMemberRole.Manager) ??
+      null
     );
   }
 
@@ -86,6 +87,27 @@ export class Project extends fd.FirestoreDocument<IProjectData> {
     const member = this.data.member.find((m) => m.id === id);
     // Return role of the member
     return member?.role ?? null;
+  }
+
+  /**
+   * Determines whether the current user has the required permission level.
+   *
+   * @param {EProjectMemberRole} leastRole - The minimum role required to pass the check.
+   * @return {boolean} Returns true if the current user's role level is equal to or higher than the required role level, false otherwise.
+   */
+  hasPermission(leastRole: EProjectMemberRole): boolean {
+    // Get own role
+    const role = this.getRole();
+    if (role) {
+      // Get own level
+      const ownLevel = getRoleLevel(role);
+      // Get the least level
+      const leastLevel = getRoleLevel(leastRole);
+      // Return permission
+      return ownLevel >= leastLevel;
+    }
+    // No permission
+    return false;
   }
 }
 
@@ -108,4 +130,25 @@ export async function loadProjects(): Promise<Project[]> {
   }
   // Return the projects array
   return projects;
+}
+
+/**
+ * Retrieves the numerical level corresponding to a given project member role.
+ *
+ * @param {EProjectMemberRole} role - The role of the project member.
+ * @return {number} The level associated with the specified role.
+ */
+function getRoleLevel(role: EProjectMemberRole): number {
+  switch (role) {
+    case EProjectMemberRole.Owner:
+      return 100;
+    case EProjectMemberRole.Manager:
+      return 75;
+    case EProjectMemberRole.Developer:
+      return 50;
+    case EProjectMemberRole.Visitor:
+      return 25;
+    default:
+      return 0;
+  }
 }

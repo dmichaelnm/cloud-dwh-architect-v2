@@ -203,3 +203,16 @@ export async function findAccount(email: string): Promise<Account | null> {
   // Exactly one document is expected, if not return null
   return documents.length === 1 ? documents[0] : null;
 }
+
+/**
+ * Retrieves an account by its unique identifier.
+ *
+ * @param {string} id - The unique identifier of the account.
+ * @return {Promise<Account|null>} A promise that resolves to the account object if found, otherwise null.
+ */
+export async function getAccount(id: string): Promise<Account | null> {
+  // Load account document
+  const document = await fd.loadDocument(fd.EFirestoreDocumentType.Account, id);
+  // Return account object
+  return document ? new Account({ obj: document }) : null;
+}

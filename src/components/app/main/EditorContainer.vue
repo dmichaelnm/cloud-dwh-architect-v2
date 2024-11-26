@@ -97,6 +97,7 @@ import {
   EFirestoreDocumentType,
   FirestoreDocument,
   IFirestoreDocumentData,
+  updateDocument,
 } from 'src/scripts/application/FirestoreDocument';
 import { EditorData } from 'src/scripts/ui/common';
 
@@ -120,8 +121,10 @@ const props = defineProps<{
 const emit = defineEmits<{
   /** Model update event */
   (event: 'update:modelValue', value: EditorData<IFirestoreDocumentData>): void;
-  /** Save event */
-  (event: 'save', value: FirestoreDocument<IFirestoreDocumentData>): void;
+  /** Create event */
+  (event: 'created', value: FirestoreDocument<IFirestoreDocumentData>): void;
+  /** Update event */
+  (event: 'updated', value: FirestoreDocument<IFirestoreDocumentData>): void;
 }>();
 
 // Current tab key
@@ -144,6 +147,11 @@ function leaveEditor(): void {
   comp.session.editorParameter = null;
 }
 
+/**
+ * Handles the submission process. Resets validation messages and validates the editor data.
+ * Depending on the document operation type (create or edit), it creates or updates a Firestore document.
+ * Upon successful creation or update, it emits corresponding events and exits the editor.
+ */
 function onSubmit(): void {
   // Reset validation messages
   _modelValue.value.resetValidation();
@@ -163,12 +171,24 @@ function onSubmit(): void {
     if (op === EDocumentOperation.Create) {
       // Create Firestore document
       const document = await createDocument(type, data);
-      // Emit save event
-      emit('save', document);
-      // Leave editor
-      leaveEditor()
+      // Emit created event
+      emit('created', document);
     } else if (op === EDocumentOperation.Edit) {
+      // Get attached Firestore document
+      const document = _modelValue.value.document;
+      if (document) {
+        // Apply metadata of document to created data
+        data.common.meta = document.data.common.meta;
+        // Apply new data to document
+        document.data = data;
+        // Update the Firestore document
+        await updateDocument(document);
+        // Emit updated event
+        emit('updated', document);
+      }
     }
+    // Leave editor
+    leaveEditor();
   });
 }
 </script>

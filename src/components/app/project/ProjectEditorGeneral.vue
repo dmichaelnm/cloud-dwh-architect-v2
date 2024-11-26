@@ -20,7 +20,10 @@
             v-model="_modelValue.general.manager"
             :label="$t('enumeration.memberRole.manager')"
             :validate="validate"
-            @update:modelValue="(value) => (_modelValue.general.manager = value)"
+            :read-only="!isManagerEditable"
+            @update:modelValue="
+              (value) => (_modelValue.general.manager = value)
+            "
           />
         </div>
       </div>
@@ -37,6 +40,7 @@ import SelectAccount from 'components/app/account/SelectAccount.vue';
 import { EditorProjectData } from 'src/scripts/ui/project';
 import { Account } from 'src/scripts/application/Account';
 import { useComposables } from 'src/scripts/utilities/common';
+import { EProjectMemberRole, Project } from 'src/scripts/application/Project';
 
 // Get composable components
 const comp = useComposables();
@@ -59,6 +63,19 @@ const _modelValue = computed({
   set: (value: EditorProjectData) => emit('update:modelValue', value),
 });
 
+// Checks if the manager field is editable by verifying if the project is new
+// or if the current user has Owner permissions.
+const isManagerEditable = computed(() => {
+  if (!_modelValue.value.document) {
+    // It is a new project
+    return true;
+  }
+  // Check role
+  return (_modelValue.value.document as Project).hasPermission(
+    EProjectMemberRole.Owner
+  );
+});
+
 /**
  * Validates if a given account can be added as a manager.
  *
@@ -67,7 +84,7 @@ const _modelValue = computed({
  */
 function validate(account: Account): string | null {
   // Check if manager account is not in member list
-  if (_modelValue.value.member.some(member => member.id === account.id)) {
+  if (_modelValue.value.member.some((member) => member.id === account.id)) {
     // Selected account as already a normal project member
     return comp.i18n.t('project.member.error.member');
   }

@@ -260,6 +260,11 @@ export default {
         'Here you see an overview of all the projects you have created yourself or to which you have been assigned ' +
         'as a project member. Depending on the role you have in the respective projects, you can also edit or even ' +
         'delete them.',
+      // Tooltip Messages
+      tooltip: {
+        // Edit Project
+        edit: 'Edit Project',
+      }
     },
     // Editor Messages
     editor: {
@@ -272,6 +277,15 @@ export default {
           'Start a new project by specifying the basic properties such as name and description here. In addition, ' +
           'you can add more members to your project and assign them different roles. Please note that they must have ' +
           'a registered account for this application.',
+      },
+      // Edit Project Messages
+      edit: {
+        // Editor Title
+        title: 'Edit Project',
+        // Editor Message
+        message:
+          'Here you can edit the properties of the project and manage the members of the project. If you are the ' +
+          'project owner, you can change the project leader.',
       },
     },
     // General Tab Messages

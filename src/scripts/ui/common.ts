@@ -1,4 +1,7 @@
-import { IFirestoreDocumentData } from 'src/scripts/application/FirestoreDocument';
+import {
+  FirestoreDocument,
+  IFirestoreDocumentData,
+} from 'src/scripts/application/FirestoreDocument';
 import { QTableColumn } from 'quasar';
 import { TSelectOption } from 'src/scripts/utilities/common';
 
@@ -39,6 +42,9 @@ export type TTableColumn = QTableColumn & {
  * and data creation.
  */
 export abstract class EditorData<D extends IFirestoreDocumentData> {
+  /** Attached Firestore document */
+  document?: FirestoreDocument<D>;
+
   /** The name of the object */
   name: string;
 
@@ -78,4 +84,12 @@ export abstract class EditorData<D extends IFirestoreDocumentData> {
    * @return {D} The newly created data object.
    */
   abstract createData(): D;
+
+  /**
+   * Initializes the editor with data from the given Firestore document.
+   * Retrieves the necessary fields from the document and sets up the editor instance accordingly.
+   *
+   * @param {FirestoreDocument<D>} document - The Firestore document containing the data to be loaded into the editor.
+   */
+  abstract initEditorData(document: FirestoreDocument<D>): void | Promise<void>;
 }

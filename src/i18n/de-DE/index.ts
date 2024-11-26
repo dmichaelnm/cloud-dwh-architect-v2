@@ -268,6 +268,11 @@ export default {
         'Hier sehen Sie eine Übersicht über alle Projekte, die Sie selbst erstellt haben oder denen Sie als ' +
         'Projektmitglied zugeordnet wurden. Je nach dem, welche Rolle Sie in den jeweiligen Projekten haben, können ' +
         'Sie diese auch bearbeiten oder sogar löschen.',
+      // Tooltip Messages
+      tooltip: {
+        // Edit Project
+        edit: 'Projekt bearbeiten',
+      },
     },
     // Editor Messages
     editor: {
@@ -281,6 +286,15 @@ export default {
           'Beschreibung angeben. Außerdem können Sie weitere Mitglieder Ihrem Projekt hinzufügen und Ihnen ' +
           'verschiedene Rollen zuweisen. Beachten Sie dabei jedoch, dass diese ein registriertes Konto für diese ' +
           'Anwendung besitzen müssen.',
+      },
+      // Edit Project Messages
+      edit: {
+        // Editor Title
+        title: 'Projekt bearbeiten',
+        // Editor Message
+        message:
+          'Hier können Sie die Eigenschaften des Projekts bearbeiten sowie die Mitglieder des Projekts ' +
+          'verwalten. Falls Sie der Projekteigentümer sind, können Sie den Projektleiter austauschen.',
       },
     },
     // General Tab Messages

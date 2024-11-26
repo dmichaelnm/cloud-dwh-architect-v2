@@ -21,7 +21,24 @@
         </div>
       </div>
       <!-- Overview Table -->
-      <editable-table :model-value="projects" :columns="computedColumns">
+      <editable-table :model-value="items" :columns="computedColumns">
+        <!-- Template for actions -->
+        <template v-slot:body-cell-action="{ props }">
+          <!-- Table Cell -->
+          <q-td :props="props">
+            <div class="action-button">
+              <!-- Edit Button -->
+              <button-icon
+                v-if="permission(EDocumentOperation.Edit, props.row)"
+                :tooltip="$t(`${scope}.overview.tooltip.edit`)"
+                icon="edit"
+                @click="
+                  openEditor(scope, EDocumentOperation.Edit, props.row.id)
+                "
+              />
+            </div>
+          </q-td>
+        </template>
         <!-- Template for Name & Description column -->
         <template v-slot:body-cell-name="{ props }">
           <!-- Table Cell -->
@@ -73,35 +90,58 @@
   </q-page>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+@import 'src/css/quasar.variables';
+
+.action-button {
+  color: $primary;
+}
+</style>
 
 <script setup lang="ts">
 import ButtonPush from 'components/common/ButtonPush.vue';
 import { EFirestoreDocumentType } from 'src/scripts/application/FirestoreDocument';
 import EditableTable from 'components/common/EditableTable.vue';
-import { toDateTimeString, useComposables } from 'src/scripts/utilities/common';
+import {
+  EDocumentOperation,
+  toDateTimeString,
+  useComposables,
+  useRouting,
+} from 'src/scripts/utilities/common';
 import { computed } from 'vue';
 import { TTableColumn } from 'src/scripts/ui/common';
+import ButtonIcon from 'components/common/ButtonIcon.vue';
 
 // Get composable components
 const comp = useComposables();
+// Get routing composable functions
+const { openEditor } = useRouting();
 
 // Defines the properties of this component
 const props = defineProps<{
   /** Document type of the editor */
   scope: EFirestoreDocumentType;
+  /** The items array to be shown in the overview */
+  items: any[];
   /** Custom columns */
   columns?: TTableColumn[];
+  /** Permission handler */
+  permission: (operation: EDocumentOperation, row: any) => boolean;
 }>();
-
-// The projects to be displayed in the overview
-const projects = computed(() => (comp.session ? comp.session.projects : []));
 
 // Computes and returns an array of table columns, including default
 // and custom columns, using internationalization for labels.
 const computedColumns = computed(() => {
   // Create columns array
   const colArr: TTableColumn[] = [];
+  // Add action column
+  colArr.push({
+    name: 'action',
+    label: '',
+    align: 'left',
+    headerStyle: 'width: 75px',
+    field: '',
+  });
   // Add name column
   colArr.push({
     name: 'name',

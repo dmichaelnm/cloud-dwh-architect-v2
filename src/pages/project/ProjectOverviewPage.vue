@@ -2,6 +2,8 @@
   <!-- Overview Container -->
   <overview-container
     :scope="EFirestoreDocumentType.Project"
+    :items="projects"
+    :permission="getPermission"
     :columns="[
       {
         name: 'owner',
@@ -33,5 +35,34 @@
 <script setup lang="ts">
 import OverviewContainer from 'components/app/main/OverviewContainer.vue';
 import { EFirestoreDocumentType } from 'src/scripts/application/FirestoreDocument';
-import { Project } from 'src/scripts/application/Project';
+import { EProjectMemberRole, Project } from 'src/scripts/application/Project';
+import { computed } from 'vue';
+import {
+  EDocumentOperation,
+  useComposables,
+} from 'src/scripts/utilities/common';
+
+// Get composable components
+const comp = useComposables();
+
+// The projects to be displayed in the overview
+const projects = computed(() => (comp.session ? comp.session.projects : []));
+
+/**
+ * Checks if the current user has permission to perform a specified operation on a project.
+ *
+ * @param {EDocumentOperation} operation - The operation to be performed (e.g., Edit).
+ * @param {any} row - The current row, expected to be a project instance.
+ * @return {boolean} - Returns true if the user has the necessary permission; otherwise, false.
+ */
+function getPermission(operation: EDocumentOperation, row: any): boolean {
+  // Get project instance
+  const project = row as Project;
+  // Check for edit operation
+  if (operation === EDocumentOperation.Edit) {
+    return project.hasPermission(EProjectMemberRole.Manager);
+  }
+  // No permission
+  return false;
+}
 </script>

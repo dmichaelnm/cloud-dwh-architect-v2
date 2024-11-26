@@ -13,7 +13,7 @@
       { key: 'member', label: 'project.label.member' },
       { key: 'attributes', label: 'label.attributes' },
     ]"
-    @save="onSaved"
+    @created="onCreated"
   >
     <!-- Template for General tab -->
     <template v-slot:tab-general>
@@ -60,7 +60,7 @@ const comp = useComposables();
 const editorData = ref<EditorProjectData>(new EditorProjectData());
 
 // Lifecycle method that is called before this component is mounted
-onBeforeMount(() => {
+onBeforeMount(async () => {
   // Check editor mode
   if (comp.session.editorParameter?.operation === EDocumentOperation.Create) {
     // Initialize general properties
@@ -68,18 +68,29 @@ onBeforeMount(() => {
       owner: comp.session.account,
       manager: comp.session.account,
     };
+  } else if (comp.session.editorParameter?.operation === EDocumentOperation.Edit) {
+    // Get the selected project
+    const projectId = comp.session.editorParameter.id;
+    const project = comp.session.getProject(projectId);
+    if (project) {
+      // Initialize editor data
+      await editorData.value.initEditorData(project);
+    }
   }
 });
 
 /**
- * Handles the event when a document is saved to Firestore. This function adds the saved document
- * to the session's projects list and sorts the projects.
+ * This method is called when a Firestore document is created. It handles the creation
+ * of a new project based on the received document, adds the project to the current session,
+ * sorts the list of projects, and updates the account with the new project set as the current one.
  *
- * @param {FirestoreDocument<IFirestoreDocumentData>} document - The Firestore document that has been saved.
+ * @param {FirestoreDocument<IFirestoreDocumentData>} document - The Firestore document based on which the new project is created.
  */
-function onSaved(document: FirestoreDocument<IFirestoreDocumentData>): void {
+function onCreated(document: FirestoreDocument<IFirestoreDocumentData>): void {
+  // Create project
+  const project = new Project({obj: document});
   // Add project to session
-  comp.session.projects.push(new Project({obj: document}));
+  comp.session.projects.push(project);
   // Sort projects
   comp.session.sortProjects();
   // Set new project as active on the account
@@ -88,6 +99,6 @@ function onSaved(document: FirestoreDocument<IFirestoreDocumentData>): void {
     updateDocument(comp.session.account);
   }
   // Set current project
-  comp.session.project = document as Project;
+  comp.session.project = project;
 }
 </script>
