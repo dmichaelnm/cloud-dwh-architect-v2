@@ -29,27 +29,31 @@
             <div class="action-button">
               <!-- View Button -->
               <button-icon
-                v-if="permission(EDocumentOperation.View, props.row)"
+                v-if="permission(cm.EDocumentOperation.View, props.row)"
                 :tooltip="$t(`${scope}.overview.tooltip.view`)"
                 icon="visibility"
                 @click="
-                  openEditor(scope, EDocumentOperation.View, props.row.id)
+                  openEditor(scope, cm.EDocumentOperation.View, props.row.id)
                 "
               />
               <!-- Edit Button -->
               <button-icon
-                v-if="permission(EDocumentOperation.Edit, props.row)"
+                v-if="permission(cm.EDocumentOperation.Edit, props.row)"
                 :tooltip="$t(`${scope}.overview.tooltip.edit`)"
                 icon="edit"
                 @click="
-                  openEditor(scope, EDocumentOperation.Edit, props.row.id)
+                  openEditor(scope, cm.EDocumentOperation.Edit, props.row.id)
                 "
               />
               <!-- Delete Button -->
               <button-icon
-                v-if="permission(EDocumentOperation.Delete, props.row)"
+                v-if="
+                  permission(cm.EDocumentOperation.Delete, props.row) &&
+                  deleteHandler
+                "
                 :tooltip="$t(`${scope}.overview.tooltip.delete`)"
                 icon="delete"
+                @click="confirmDeletion(props.row)"
               />
             </div>
           </q-td>
@@ -75,7 +79,7 @@
             <!-- Created At -->
             <div>
               {{
-                toDateTimeString(
+                cm.toDateTimeString(
                   props.row.data.common.meta.created.at,
                   comp.session.account?.data.preference.language
                 )
@@ -92,7 +96,7 @@
             <!-- Altered At -->
             <div>
               {{
-                toDateTimeString(
+                cm.toDateTimeString(
                   props.row.data.common.meta.altered?.at,
                   comp.session.account?.data.preference.language
                 )
@@ -114,34 +118,41 @@
 </style>
 
 <script setup lang="ts">
+import * as fd from 'src/scripts/application/FirestoreDocument';
+import * as cm from 'src/scripts/utilities/common';
 import ButtonPush from 'components/common/ButtonPush.vue';
-import { EFirestoreDocumentType } from 'src/scripts/application/FirestoreDocument';
+import ButtonIcon from 'components/common/ButtonIcon.vue';
 import EditableTable from 'components/common/EditableTable.vue';
-import {
-  EDocumentOperation,
-  toDateTimeString,
-  useComposables,
-  useRouting,
-} from 'src/scripts/utilities/common';
 import { computed } from 'vue';
 import { TTableColumn } from 'src/scripts/ui/common';
-import ButtonIcon from 'components/common/ButtonIcon.vue';
+import { useMessageDialog, useRunTask } from 'src/scripts/utilities/common';
 
 // Get composable components
-const comp = useComposables();
+const comp = cm.useComposables();
 // Get routing composable functions
-const { openEditor } = useRouting();
+const { openEditor } = cm.useRouting();
+// Get message dialog composable functions
+const { showConfirmationDialog } = useMessageDialog();
+// Get run task composable function
+const runTask = useRunTask();
 
 // Defines the properties of this component
 const props = defineProps<{
   /** Document type of the editor */
-  scope: EFirestoreDocumentType;
+  scope: fd.EFirestoreDocumentType;
   /** The items array to be shown in the overview */
-  items: any[];
+  items: fd.FirestoreDocument<fd.IFirestoreDocumentData>[];
   /** Custom columns */
   columns?: TTableColumn[];
   /** Permission handler */
-  permission: (operation: EDocumentOperation, row: any) => boolean;
+  permission: (
+    operation: cm.EDocumentOperation,
+    row: fd.FirestoreDocument<fd.IFirestoreDocumentData>
+  ) => boolean;
+  /** Delete handler */
+  deleteHandler?: (
+    document: fd.FirestoreDocument<fd.IFirestoreDocumentData>
+  ) => void | Promise<void>;
 }>();
 
 // Computes and returns an array of table columns, including default
@@ -187,4 +198,39 @@ const computedColumns = computed(() => {
   // Return columns array
   return colArr;
 });
+
+/**
+ * Displays a confirmation dialog to the user for deleting a Firestore document.
+ * Based on the user's confirmation, it either executes the delete handler or cancels the operation.
+ *
+ * @param {fd.FirestoreDocument<fd.IFirestoreDocumentData>} document - The Firestore document to be deleted.
+ */
+function confirmDeletion(
+  document: fd.FirestoreDocument<fd.IFirestoreDocumentData>
+): void {
+  showConfirmationDialog(
+    comp.i18n.t('dialog.delete.title', {
+      object: comp.i18n.t(`${props.scope}.object`),
+    }),
+    comp.i18n.t('dialog.delete.message', {
+      article: comp.i18n.t(`${props.scope}.article`),
+      object: comp.i18n.t(`${props.scope}.object`),
+      name: document.data.common.name,
+    }),
+    'warning',
+    undefined,
+    (value) => {
+      // Check user decision
+      if (value === 'okay') {
+        // Start deletion process
+        runTask(async () => {
+          // Run deletion handler if specified
+          if (props.deleteHandler) {
+            props.deleteHandler(document);
+          }
+        });
+      }
+    }
+  );
+}
 </script>

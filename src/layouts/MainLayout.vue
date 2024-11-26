@@ -25,9 +25,7 @@
               }}
               /
               {{
-                comp.session.project
-                  ? $t(`enumeration.memberRole.${comp.session.project.getRole()}`)
-                  : ''
+                project ? $t(`enumeration.memberRole.${project.getRole()}`) : ''
               }}
             </div>
           </div>
@@ -93,11 +91,10 @@
 </style>
 
 <script setup lang="ts">
-import { onBeforeMount } from 'vue';
+import { computed, onBeforeMount, watch } from 'vue';
 import {
   useComposables,
   useMessageDialog,
-  useRouting,
   useRunTask,
 } from 'src/scripts/utilities/common';
 import { onAccountStateChanged } from 'src/scripts/application/Account';
@@ -114,8 +111,6 @@ const comp = useComposables();
 const { messageDialogOptions } = useMessageDialog();
 // Get run task composable function
 const runTask = useRunTask();
-// Get routing composable function
-const { routeTo } = useRouting();
 
 // Lifecycle method that is called before this component is mounted
 onBeforeMount(() => {
@@ -140,14 +135,25 @@ onBeforeMount(() => {
       comp.session.sortProjects();
       // Set active project
       await switchProject();
-      // If no project is selected, show the No Project page
-      if (comp.session.project === null) {
-        routeTo('/project/none');
-      }
       // Unlock the screen
       comp.quasar.loading.hide();
     }
   });
+});
+
+// Reference to the current project
+const project = computed(() => comp.session.project);
+
+// Watch the current project for being removed
+watch(project, (newValue, oldValue) => {
+  if (newValue === null && oldValue !== null) {
+    // Reset account project
+    if (comp.session.account) {
+      comp.session.account.data.state.currentProject = null;
+      // Switch project
+      switchProject();
+    }
+  }
 });
 
 /**

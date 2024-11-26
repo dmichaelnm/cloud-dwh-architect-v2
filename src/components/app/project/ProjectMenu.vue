@@ -27,6 +27,7 @@
         />
         <!-- Project Overview Item -->
         <menu-item
+          v-if="comp.session.projects.length > 0"
           :label="$t('project.label.overview')"
           hide-icon
           @click="routeTo('/project/overview')"

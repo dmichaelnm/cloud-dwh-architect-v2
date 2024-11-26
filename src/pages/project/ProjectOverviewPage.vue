@@ -4,6 +4,7 @@
     :scope="EFirestoreDocumentType.Project"
     :items="projects"
     :permission="getPermission"
+    :delete-handler="_deleteProject"
     :columns="[
       {
         name: 'owner',
@@ -34,8 +35,12 @@
 
 <script setup lang="ts">
 import OverviewContainer from 'components/app/main/OverviewContainer.vue';
-import { EFirestoreDocumentType } from 'src/scripts/application/FirestoreDocument';
-import { EProjectMemberRole, Project } from 'src/scripts/application/Project';
+import {
+  EFirestoreDocumentType,
+  FirestoreDocument,
+  IFirestoreDocumentData,
+} from 'src/scripts/application/FirestoreDocument';
+import { deleteProject, EProjectMemberRole, Project } from 'src/scripts/application/Project';
 import { computed } from 'vue';
 import {
   EDocumentOperation,
@@ -72,5 +77,24 @@ function getPermission(operation: EDocumentOperation, row: any): boolean {
   }
   // No permission
   return false;
+}
+
+/**
+ * Deletes a project from Firestore and removes it from the session store.
+ *
+ * @param {FirestoreDocument<IFirestoreDocumentData>} document - The Firestore document representing the project to be deleted.
+ */
+async function _deleteProject(
+  document: FirestoreDocument<IFirestoreDocumentData>
+): Promise<void> {
+  // Delete the Firestore project
+  await deleteProject(document as Project);
+  // Remove project from the session store
+  comp.session.removeProject(document.id);
+  // Check if the deleted project was the current project
+  if (document.id === comp.session.project?.id) {
+    // Set current project to null
+    comp.session.project = null;
+  }
 }
 </script>

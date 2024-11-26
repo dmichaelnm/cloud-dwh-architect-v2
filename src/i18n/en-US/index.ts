@@ -23,8 +23,7 @@ export default {
     customAttributes:
       'Here you can define any custom attributes. These can later be used in script generation templates.',
     // Message when no custom attributes exist
-    customAttributesEmpty:
-      'No custom attributes have been created yet.',
+    customAttributesEmpty: 'No custom attributes have been created yet.',
   },
 
   // Common Labels
@@ -95,6 +94,15 @@ export default {
       // Message
       message:
         'If you leave the current editor, all changes made so far will be lost. Are you sure you want to do this?',
+    },
+    // Delete Dialog
+    delete: {
+      // Title
+      title: 'Delete {object}?',
+      // Message
+      message:
+        'Are you sure you want to delete {article} {object} "{name}"? This operation cannot be undone. All corresponding data will ' +
+        'be lost irrevocably.',
     },
     // Select Account Dialog
     selectAccount: {
@@ -233,6 +241,10 @@ export default {
 
   // Project Messages
   project: {
+    // Article
+    article: 'the',
+    // Object Name
+    object: 'Project',
     // No Project Message
     nothing:
       'You have not yet created a project nor have you been assigned to a project as a member.',
@@ -271,8 +283,8 @@ export default {
         // Edit Project
         edit: 'Edit Project',
         // Delete Project
-        delete: 'Delete Project'
-      }
+        delete: 'Delete Project',
+      },
     },
     // Editor Messages
     editor: {

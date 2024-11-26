@@ -1,9 +1,5 @@
-import { where } from 'firebase/firestore';
 import * as fd from 'src/scripts/application/FirestoreDocument';
-import {
-  EFirestoreDocumentType,
-  loadDocuments,
-} from 'src/scripts/application/FirestoreDocument';
+import { where } from 'firebase/firestore';
 import { getCurrentAccountId } from 'src/scripts/utilities/firebase';
 import { TCustomAttribute } from 'src/scripts/utilities/common';
 
@@ -143,8 +139,8 @@ export class Project extends fd.FirestoreDocument<IProjectData> {
  */
 export async function loadProjects(): Promise<Project[]> {
   // Load project documents where the current user has access
-  const documents = await loadDocuments(
-    EFirestoreDocumentType.Project,
+  const documents = await fd.loadDocuments(
+    fd.EFirestoreDocumentType.Project,
     null,
     where('access', 'array-contains', getCurrentAccountId())
   );
@@ -155,6 +151,16 @@ export async function loadProjects(): Promise<Project[]> {
   }
   // Return the projects array
   return projects;
+}
+
+/**
+ * Deletes the specified project and all related documents from the database.
+ *
+ * @param {Project} project - The project instance to be deleted.
+ */
+export async function deleteProject(project: Project): Promise<void> {
+  // Delete the Firestore document of the project
+  await fd.deleteDocument(project);
 }
 
 /**

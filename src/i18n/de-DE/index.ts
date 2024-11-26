@@ -98,6 +98,15 @@ export default {
         'Wenn Sie den aktuellen Editor verlassen, gehen alles bisher gemachten Änderungen verloren. Sind Sie' +
         ' sicher, dass Sie das wollen?',
     },
+    // Delete Dialog
+    delete: {
+      // Title
+      title: '{object} löschen?',
+      // Message
+      message:
+        'Sind Sie sicher, dass Sie {article} {object} "{name}" löschen wollen? Diese Operation lässt sich nicht rückgängig ' +
+        'machen. Alle entsprechenden Daten gehen unwiderruflich verloren.',
+    },
     // Select Account Dialog
     selectAccount: {
       // Title
@@ -241,6 +250,10 @@ export default {
 
   // Project Messages
   project: {
+    // Article
+    article: 'das',
+    // Object Name
+    object: 'Projekt',
     // No Project Message
     nothing:
       'Bisher haben Sie weder ein Projekt erstellt noch wurden Sie einem Projekt als Mitglied zugeordnet.',

@@ -27,6 +27,19 @@ export const useSessionStore = defineStore('session', {
       return project ?? null;
     },
     /**
+     * Removes a project from the list based on the provided project ID.
+     *
+     * @param {string} id - The unique identifier of the project to be removed.
+     */
+    removeProject(id: string): void {
+      // Find the index of the project in the array
+      const index = this.projects.findIndex((project) => project.id === id);
+      if (index > -1) {
+        // Remove the project from the array
+        this.projects.splice(index, 1);
+      }
+    },
+    /**
      * Sorts the list of projects by their common name in alphabetical order.
      */
     sortProjects(): void {

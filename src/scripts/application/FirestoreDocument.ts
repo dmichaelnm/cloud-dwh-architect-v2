@@ -105,7 +105,7 @@ export type TFirestoreDocumentConfig = {
   /**
    * A Firestore document object.
    */
-  obj?: FirestoreDocument<IFirestoreDocumentData>
+  obj?: FirestoreDocument<IFirestoreDocumentData>;
 };
 
 export class FirestoreDocument<D extends IFirestoreDocumentData> {
@@ -325,6 +325,21 @@ export async function updateDocument<
   const ref = fs.doc(firebaseStore, document.path, document.id);
   // Update the Firestore document
   await fs.updateDoc(ref, document.data as fs.UpdateData<never>);
+}
+
+/**
+ * Deletes a Firestore document.
+ *
+ * @param {FirestoreDocument} document - The Firestore document to be deleted.
+ */
+export async function deleteDocument<
+  D extends IFirestoreDocumentData,
+  R extends FirestoreDocument<D>
+>(document: R): Promise<void> {
+  // Create document reference
+  const ref = fs.doc(firebaseStore, document.path, document.id);
+  // Delete the Firestore document
+  await fs.deleteDoc(ref);
 }
 
 /**

@@ -72,14 +72,14 @@ body.body--dark {
 }
 
 .dialog-frame {
-  background-color: $background-container-light;
+  background-color: $background-dialog-light;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 8px;
 }
 
 .body--dark .dialog-frame {
-  background-color: $background-container-dark;
+  background-color: $background-dialog-dark;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
