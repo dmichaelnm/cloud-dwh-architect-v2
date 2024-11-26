@@ -14,6 +14,7 @@
     :add-row-handler="openAccountDialog"
     :add-tooltip="$t('project.member.tooltip.add')"
     :delete-tooltip="$t('project.member.tooltip.delete')"
+    :read-only="readOnly"
     :columns="[
       {
         name: 'name',
@@ -69,6 +70,8 @@ const comp = useComposables();
 const props = defineProps<{
   /** Model value */
   modelValue: EditorProjectData;
+  /** Flag for marking this component as read only */
+  readOnly?: boolean;
 }>();
 
 // Defines the events that can be emitted by this component

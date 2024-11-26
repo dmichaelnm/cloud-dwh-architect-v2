@@ -36,6 +36,7 @@
             <input-value
               v-model="_modelValue.name"
               :label="$t(`${scope}.label.name`)"
+              :read-only="readOnly"
               auto-focus
               mandatory
             />
@@ -46,6 +47,7 @@
             <input-value
               v-model="_modelValue.description"
               :label="$t('label.description')"
+              :read-only="readOnly"
             />
           </div>
         </div>
@@ -116,6 +118,8 @@ const props = defineProps<{
   mode: EDocumentOperation;
   /** Tab definition array */
   tabs: TEditorTab[];
+  /** Flag for marking this component as read only */
+  readOnly?: boolean;
 }>();
 
 const emit = defineEmits<{

@@ -29,7 +29,7 @@
             wrap-cells
           >
             <!-- Template for selection column -->
-            <template v-slot:body-cell-select="props">
+            <template v-slot:body-cell-select="props" v-if="!readOnly">
               <!-- Table Cell -->
               <q-td :props="props">
                 <!-- Radio Buttun -->
@@ -68,15 +68,29 @@
                       ETableColumnInput.Checkbox
                     "
                   >
+                    <!-- Readonly Icon -->
+                    <q-icon
+                      v-if="readOnly"
+                      :name="
+                        props.value ? 'check_box' : 'check_box_outline_blank'
+                      "
+                      size="xs"
+                    />
                     <!-- Checkbox -->
-                    <q-checkbox v-model="props.row.value" size="xs" dense />
+                    <q-checkbox
+                      v-if="!readOnly"
+                      v-model="props.row.value"
+                      size="xs"
+                      dense
+                    />
                   </div>
                   <!-- Text input popup editor -->
                   <q-popup-edit
                     :ref="setEditorReference('pe', col, props.rowIndex)"
                     v-model="props.row[col.name]"
                     v-if="
-                      getInputType(col, props.row) === ETableColumnInput.Text
+                      getInputType(col, props.row) === ETableColumnInput.Text &&
+                      !readOnly
                     "
                     v-slot="scope"
                     anchor="center middle"
@@ -98,7 +112,8 @@
                     :ref="setEditorReference('pe', col, props.rowIndex)"
                     v-model="props.row[col.name]"
                     v-if="
-                      getInputType(col, props.row) === ETableColumnInput.Select
+                      getInputType(col, props.row) ===
+                        ETableColumnInput.Select && !readOnly
                     "
                     v-slot="scope"
                     anchor="center middle"
@@ -124,7 +139,7 @@
         </div>
       </div>
       <!-- Button Row -->
-      <div class="row">
+      <div class="row" v-if="!readOnly">
         <!-- Button Column -->
         <div class="col">
           <!-- Add Row Button -->
@@ -189,6 +204,8 @@ const props = defineProps<{
   deleteTooltip?: string;
   /** Flag for the possibility of moving rows */
   moveable?: boolean;
+  /** Flag for marking this component as read only */
+  readOnly?: boolean;
 }>();
 
 // Defines the events that can be emitted by this component

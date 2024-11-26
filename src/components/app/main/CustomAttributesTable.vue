@@ -6,6 +6,7 @@
     :empty-message="$t('message.customAttributesEmpty')"
     :add-row-handler="addAttribute"
     :validate="validate"
+    :read-only="readOnly"
     :columns="[
       {
         name: 'key',
@@ -57,6 +58,8 @@ import { getCustomAttributeTypes } from 'src/scripts/utilities/options';
 const props = defineProps<{
   /** Model value */
   modelValue: TCustomAttribute[];
+  /** Flag for marking this component as read only */
+  readOnly?: boolean;
 }>();
 
 // Defines the events that can be emitted by this component

@@ -16,6 +16,10 @@ export enum EProjectMemberRole {
   Owner = 'owner',
   /** Manager */
   Manager = 'manager',
+  /** Maintainer */
+  Maintainer = 'maintainer',
+  /** Deployer */
+  Deployer = 'deployer',
   /** Developer */
   Developer = 'developer',
   /** Visitor */
@@ -92,19 +96,40 @@ export class Project extends fd.FirestoreDocument<IProjectData> {
   /**
    * Determines whether the current user has the required permission level.
    *
-   * @param {EProjectMemberRole} leastRole - The minimum role required to pass the check.
+   * @param {EProjectMemberRole} minRole - The minimum role required to pass the check.
    * @return {boolean} Returns true if the current user's role level is equal to or higher than the required role level, false otherwise.
    */
-  hasPermission(leastRole: EProjectMemberRole): boolean {
+  isRoleGreaterOrEqualTo(minRole: EProjectMemberRole): boolean {
     // Get own role
     const role = this.getRole();
     if (role) {
       // Get own level
       const ownLevel = getRoleLevel(role);
       // Get the least level
-      const leastLevel = getRoleLevel(leastRole);
+      const leastLevel = getRoleLevel(minRole);
       // Return permission
       return ownLevel >= leastLevel;
+    }
+    // No permission
+    return false;
+  }
+
+  /**
+   * Checks if the role of the current user is less than or equal to the specified maximum role.
+   *
+   * @param {EProjectMemberRole} maxRole - The maximum role to compare against.
+   * @return {boolean} True if the current user's role is less than or equal to the specified role, otherwise false.
+   */
+  isRoleLessOrEqualTo(maxRole: EProjectMemberRole): boolean {
+    // Get own role
+    const role = this.getRole();
+    if (role) {
+      // Get own level
+      const ownLevel = getRoleLevel(role);
+      // Get the least level
+      const leastLevel = getRoleLevel(maxRole);
+      // Return permission
+      return ownLevel <= leastLevel;
     }
     // No permission
     return false;
@@ -143,11 +168,15 @@ function getRoleLevel(role: EProjectMemberRole): number {
     case EProjectMemberRole.Owner:
       return 100;
     case EProjectMemberRole.Manager:
-      return 75;
+      return 90;
+    case EProjectMemberRole.Maintainer:
+      return 80;
+    case EProjectMemberRole.Deployer:
+      return 70;
     case EProjectMemberRole.Developer:
-      return 50;
+      return 60;
     case EProjectMemberRole.Visitor:
-      return 25;
+      return 50;
     default:
       return 0;
   }

@@ -11,6 +11,7 @@
     :error="errorMessage !== undefined && errorMessage.length > 0"
     :error-message="errorMessage"
     :hide-bottom-space="hideBottomSpace"
+    :readonly="readOnly"
     lazy-rules="ondemand"
     spellcheck="false"
     no-error-icon
@@ -48,6 +49,8 @@ const props = defineProps<{
   errorMessage?: string;
   /** Flag for hiding the bottom space */
   hideBottomSpace?: boolean;
+  /** Flag for marking the input field as read only */
+  readOnly?: boolean;
 }>();
 
 // Defines the events that can be emitted by this component

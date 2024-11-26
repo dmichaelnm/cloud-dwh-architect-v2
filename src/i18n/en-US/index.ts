@@ -130,6 +130,10 @@ export default {
       owner: 'Project Owner',
       // Project Manager
       manager: 'Project Manager',
+      // Maintainer
+      maintainer: 'Maintainer',
+      // Deployer
+      deployer: 'Deployer',
       // Developer
       developer: 'Developer',
       // Visitor
@@ -262,8 +266,12 @@ export default {
         'delete them.',
       // Tooltip Messages
       tooltip: {
+        // View Project
+        view: 'View Project',
         // Edit Project
         edit: 'Edit Project',
+        // Delete Project
+        delete: 'Delete Project'
       }
     },
     // Editor Messages
@@ -277,6 +285,15 @@ export default {
           'Start a new project by specifying the basic properties such as name and description here. In addition, ' +
           'you can add more members to your project and assign them different roles. Please note that they must have ' +
           'a registered account for this application.',
+      },
+      // View Project Messages
+      view: {
+        // Editor Title
+        title: 'View Project',
+        // Editor Message
+        message:
+          'Here you can view the properties of the project as well as the project members. However, you do not' +
+          ' have permissions to make changes to the project.',
       },
       // Edit Project Messages
       edit: {

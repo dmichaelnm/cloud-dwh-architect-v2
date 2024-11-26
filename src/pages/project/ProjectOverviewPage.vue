@@ -58,9 +58,17 @@ const projects = computed(() => (comp.session ? comp.session.projects : []));
 function getPermission(operation: EDocumentOperation, row: any): boolean {
   // Get project instance
   const project = row as Project;
+  // Check for view operation
+  if (operation === EDocumentOperation.View) {
+    return project.isRoleLessOrEqualTo(EProjectMemberRole.Maintainer);
+  }
   // Check for edit operation
   if (operation === EDocumentOperation.Edit) {
-    return project.hasPermission(EProjectMemberRole.Manager);
+    return project.isRoleGreaterOrEqualTo(EProjectMemberRole.Manager);
+  }
+  // Check for delete operation
+  if (operation === EDocumentOperation.Delete) {
+    return project.isRoleGreaterOrEqualTo(EProjectMemberRole.Owner);
   }
   // No permission
   return false;

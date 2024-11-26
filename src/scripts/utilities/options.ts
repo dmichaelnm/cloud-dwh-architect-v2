@@ -34,6 +34,14 @@ export function getLanguageOptions(): TSelectOption[] {
 export function getProjectMemberRoles(): TSelectOption[] {
   return [
     {
+      value: EProjectMemberRole.Maintainer,
+      label: 'enumeration.memberRole.maintainer',
+    },
+    {
+      value: EProjectMemberRole.Deployer,
+      label: 'enumeration.memberRole.deployer',
+    },
+    {
       value: EProjectMemberRole.Developer,
       label: 'enumeration.memberRole.developer',
     },

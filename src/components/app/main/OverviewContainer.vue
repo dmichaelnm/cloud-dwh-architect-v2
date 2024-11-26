@@ -27,6 +27,15 @@
           <!-- Table Cell -->
           <q-td :props="props">
             <div class="action-button">
+              <!-- View Button -->
+              <button-icon
+                v-if="permission(EDocumentOperation.View, props.row)"
+                :tooltip="$t(`${scope}.overview.tooltip.view`)"
+                icon="visibility"
+                @click="
+                  openEditor(scope, EDocumentOperation.View, props.row.id)
+                "
+              />
               <!-- Edit Button -->
               <button-icon
                 v-if="permission(EDocumentOperation.Edit, props.row)"
@@ -35,6 +44,12 @@
                 @click="
                   openEditor(scope, EDocumentOperation.Edit, props.row.id)
                 "
+              />
+              <!-- Delete Button -->
+              <button-icon
+                v-if="permission(EDocumentOperation.Delete, props.row)"
+                :tooltip="$t(`${scope}.overview.tooltip.delete`)"
+                icon="delete"
               />
             </div>
           </q-td>
@@ -139,7 +154,7 @@ const computedColumns = computed(() => {
     name: 'action',
     label: '',
     align: 'left',
-    headerStyle: 'width: 75px',
+    headerStyle: 'width: 100px',
     field: '',
   });
   // Add name column

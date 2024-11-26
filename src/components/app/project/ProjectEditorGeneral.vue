@@ -71,7 +71,7 @@ const isManagerEditable = computed(() => {
     return true;
   }
   // Check role
-  return (_modelValue.value.document as Project).hasPermission(
+  return (_modelValue.value.document as Project).isRoleGreaterOrEqualTo(
     EProjectMemberRole.Owner
   );
 });

@@ -3,6 +3,7 @@
   <editor-container
     v-model="editorData"
     :scope="EFirestoreDocumentType.Project"
+    :read-only="readOnly"
     :mode="
       comp.session.editorParameter
         ? comp.session.editorParameter.operation
@@ -22,12 +23,15 @@
 
     <!-- Template for Member tab -->
     <template v-slot:tab-member>
-      <project-editor-member v-model="editorData" />
+      <project-editor-member v-model="editorData" :read-only="readOnly" />
     </template>
 
     <!-- Template for Custom Attributes tab -->
     <template v-slot:tab-attributes>
-      <custom-attributes-table v-model="editorData.attributes" />
+      <custom-attributes-table
+        v-model="editorData.attributes"
+        :read-only="readOnly"
+      />
     </template>
   </editor-container>
 </template>
@@ -37,7 +41,7 @@
 <script setup lang="ts">
 import EditorContainer from 'components/app/main/EditorContainer.vue';
 import ProjectEditorGeneral from 'components/app/project/ProjectEditorGeneral.vue';
-import { onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import {
   EDocumentOperation,
   useComposables,
@@ -59,6 +63,14 @@ const comp = useComposables();
 // General project properties
 const editorData = ref<EditorProjectData>(new EditorProjectData());
 
+// Computes the readOnly state based on the editor parameters;
+// it returns true if the operation is "View" or if there are no editor parameters.
+const readOnly = computed(() =>
+  comp.session.editorParameter
+    ? comp.session.editorParameter.operation === EDocumentOperation.View
+    : true
+);
+
 // Lifecycle method that is called before this component is mounted
 onBeforeMount(async () => {
   // Check editor mode
@@ -68,7 +80,10 @@ onBeforeMount(async () => {
       owner: comp.session.account,
       manager: comp.session.account,
     };
-  } else if (comp.session.editorParameter?.operation === EDocumentOperation.Edit) {
+  } else if (
+    comp.session.editorParameter?.operation === EDocumentOperation.Edit ||
+    comp.session.editorParameter?.operation === EDocumentOperation.View
+  ) {
     // Get the selected project
     const projectId = comp.session.editorParameter.id;
     const project = comp.session.getProject(projectId);
@@ -88,7 +103,7 @@ onBeforeMount(async () => {
  */
 function onCreated(document: FirestoreDocument<IFirestoreDocumentData>): void {
   // Create project
-  const project = new Project({obj: document});
+  const project = new Project({ obj: document });
   // Add project to session
   comp.session.projects.push(project);
   // Sort projects

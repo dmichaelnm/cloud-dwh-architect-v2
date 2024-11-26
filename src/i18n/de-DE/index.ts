@@ -134,6 +134,10 @@ export default {
       owner: 'Projekteigentümer',
       // Project Manager
       manager: 'Projektleiter',
+      // Maintainer
+      maintainer: 'Betreuer',
+      // Deployer
+      deployer: 'Bereitsteller',
       // Developer
       developer: 'Entwickler',
       // Visitor
@@ -270,8 +274,12 @@ export default {
         'Sie diese auch bearbeiten oder sogar löschen.',
       // Tooltip Messages
       tooltip: {
+        // View Project
+        view: 'Projekt anzeigen',
         // Edit Project
         edit: 'Projekt bearbeiten',
+        // Delete Project
+        delete: 'Projekt löschen',
       },
     },
     // Editor Messages
@@ -286,6 +294,15 @@ export default {
           'Beschreibung angeben. Außerdem können Sie weitere Mitglieder Ihrem Projekt hinzufügen und Ihnen ' +
           'verschiedene Rollen zuweisen. Beachten Sie dabei jedoch, dass diese ein registriertes Konto für diese ' +
           'Anwendung besitzen müssen.',
+      },
+      // View Project Messages
+      view: {
+        // Editor Title
+        title: 'Projekt anzeigen',
+        // Editor Message
+        message:
+          'Hier können Sie sich die Eigenschaften des Projekts sowie die Projektmitglieder ansehen. Allerdings ' +
+          'haben Sie keine Berechtigungen, Änderungen am Projekt vorzunehmen.',
       },
       // Edit Project Messages
       edit: {
