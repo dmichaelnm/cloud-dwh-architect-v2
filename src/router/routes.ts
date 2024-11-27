@@ -43,6 +43,11 @@ const routes: RouteRecordRaw[] = [
         path: 'project/editor',
         component: () => import('pages/project/ProjectEditorPage.vue'),
       },
+      // External Application Overview Page
+      {
+        path: 'externalApp/overview',
+        component: () => import('pages/extapp/ExternalAppOverviewPage.vue'),
+      },
     ],
   },
 

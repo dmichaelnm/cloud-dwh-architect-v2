@@ -16,12 +16,26 @@
         </div>
         <!-- Container Button Column -->
         <div class="col-6 text-right q-gutter-x-sm">
+          <!-- Create Button -->
+          <button-push
+            v-if="permission(cm.EDocumentOperation.Create)"
+            :label="$t('label.create')"
+            @click="openEditor(scope, cm.EDocumentOperation.Create)"
+          />
           <!-- Cancel Button -->
-          <button-push :label="$t('label.close')" route-to="/" />
+          <button-push
+            :label="$t('label.close')"
+            route-to="/"
+            look="secondary"
+          />
         </div>
       </div>
       <!-- Overview Table -->
-      <editable-table :model-value="items" :columns="computedColumns">
+      <editable-table
+        :model-value="items"
+        :columns="computedColumns"
+        :empty-message="$t(`${scope}.overview.messageEmpty`)"
+      >
         <!-- Template for actions -->
         <template v-slot:body-cell-action="{ props }">
           <!-- Table Cell -->
@@ -125,16 +139,15 @@ import ButtonIcon from 'components/common/ButtonIcon.vue';
 import EditableTable from 'components/common/EditableTable.vue';
 import { computed } from 'vue';
 import { TTableColumn } from 'src/scripts/ui/common';
-import { useMessageDialog, useRunTask } from 'src/scripts/utilities/common';
 
 // Get composable components
 const comp = cm.useComposables();
 // Get routing composable functions
 const { openEditor } = cm.useRouting();
 // Get message dialog composable functions
-const { showConfirmationDialog } = useMessageDialog();
+const { showConfirmationDialog } = cm.useMessageDialog();
 // Get run task composable function
-const runTask = useRunTask();
+const runTask = cm.useRunTask();
 
 // Defines the properties of this component
 const props = defineProps<{
@@ -147,7 +160,7 @@ const props = defineProps<{
   /** Permission handler */
   permission: (
     operation: cm.EDocumentOperation,
-    row: fd.FirestoreDocument<fd.IFirestoreDocumentData>
+    row?: fd.FirestoreDocument<fd.IFirestoreDocumentData>
   ) => boolean;
   /** Delete handler */
   deleteHandler?: (

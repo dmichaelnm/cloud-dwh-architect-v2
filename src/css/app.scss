@@ -14,6 +14,7 @@ body.body--dark {
 }
 
 .q-dark {
+  background-color: $background-body-dark;
   color: $text-dark;
 }
 
@@ -182,4 +183,28 @@ body.body--dark {
 
 .body--dark .text-hint {
   color: $text-hint-dark;
+}
+
+.q-drawer {
+  background-color: $background-container-light;
+}
+
+.body--dark .q-drawer {
+  background-color: $background-container-dark;
+}
+
+.q-drawer--left.q-drawer--bordered {
+  border-right: 1px solid $frame-light;
+}
+
+.body--dark .q-drawer--left.q-drawer--bordered {
+  border-right: 1px solid $frame-dark;
+}
+
+.q-expansion-item .q-item__label {
+  color: $text-light;
+}
+
+.body--dark .q-expansion-item .q-item__label {
+  color: $text-dark;
 }

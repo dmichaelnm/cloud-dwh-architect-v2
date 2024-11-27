@@ -4,6 +4,7 @@ import {
   getCurrentAccountName,
 } from 'src/scripts/utilities/firebase';
 import * as fs from 'firebase/firestore';
+import { ProjectDocument } from 'src/scripts/application/ProjectDocument';
 
 /**
  * An enumeration representing different Firestore document types.
@@ -17,6 +18,10 @@ export enum EFirestoreDocumentType {
    * A Firestore document containing a project.
    */
   Project = 'project',
+  /**
+   * A Firestore document containing information about an external applicatin.
+   */
+  ExternalApp = 'externalApp',
 }
 
 /**
@@ -130,6 +135,12 @@ export class FirestoreDocument<D extends IFirestoreDocumentData> {
    */
   data: D;
 
+  /** Child documents of this document. */
+  children: Map<
+    EFirestoreDocumentType,
+    Map<string, FirestoreDocument<IFirestoreDocumentData>>
+  >;
+
   /**
    * Creates an instance of a Firestore document using the given configuration.
    *
@@ -168,6 +179,36 @@ export class FirestoreDocument<D extends IFirestoreDocumentData> {
     }
     // Infer document type from path
     this.type = getTypeFromPath(this.path);
+    // Init children
+    this.children = new Map<
+      EFirestoreDocumentType,
+      Map<string, FirestoreDocument<IFirestoreDocumentData>>
+    >();
+  }
+
+  /**
+   * Retrieves documents of the specified Firestore document type.
+   *
+   * @param {EFirestoreDocumentType} type - The type of Firestore document to retrieve.
+   * @return {R[]} An array of project documents of the specified type.
+   *
+   * @template D - The type of the specific data interface.
+   * @template R - The type of the specific document class.
+   */
+  getDocuments<D extends IFirestoreDocumentData, R extends ProjectDocument<D>>(
+    type: EFirestoreDocumentType
+  ): R[] {
+    // Create result array
+    const result: R[] = [];
+    // Get the documents map for the specified type
+    const documents = this.children.get(type);
+    if (documents) {
+      for (const document of documents.values()) {
+        result.push(document as R);
+      }
+    }
+    // Nothing found
+    return result;
   }
 
   /**

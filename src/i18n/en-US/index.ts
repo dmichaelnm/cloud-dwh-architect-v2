@@ -38,6 +38,8 @@ export default {
     cancel: 'Cancel',
     // Close
     close: 'Close',
+    // Create
+    create: 'Create',
     // Created By / At
     created: 'Created By / At',
     // Description
@@ -54,6 +56,8 @@ export default {
     okay: 'Okay',
     // Light Mode
     lightMode: 'Light Mode',
+    // Management
+    management: 'Management',
     // Save
     save: 'Save',
     // Type
@@ -245,9 +249,6 @@ export default {
     article: 'the',
     // Object Name
     object: 'Project',
-    // No Project Message
-    nothing:
-      'You have not yet created a project nor have you been assigned to a project as a member.',
     // Labels
     label: {
       // No project selected
@@ -276,6 +277,9 @@ export default {
         'Here you see an overview of all the projects you have created yourself or to which you have been assigned ' +
         'as a project member. Depending on the role you have in the respective projects, you can also edit or even ' +
         'delete them.',
+      // Empty Message
+      messageEmpty:
+        'You have not yet created a project nor have you been assigned to a project as a member.',
       // Tooltip Messages
       tooltip: {
         // View Project
@@ -348,6 +352,28 @@ export default {
         // Account is already member
         member: 'This account is already a project member.',
       },
+    },
+  },
+
+  // External Applications
+  externalApp: {
+    // Labels
+    label: {
+      // Drawer Item
+      drawerItem: 'External Applications',
+    },
+    // Overview Messages
+    overview: {
+      // Title
+      title: 'External Applications',
+      // Message
+      message:
+        'The following overview shows all external applications created for this project. These are ' +
+        'essentially the platforms on which your data warehouse is based. External applications can be used as a ' +
+        'source for the reverse engineering of model artifacts as well as a target for the deployment of the same.',
+      // Empty Message
+      messageEmpty:
+        'No external applications have been defined for this project yet.',
     },
   },
 };

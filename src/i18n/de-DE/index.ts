@@ -40,6 +40,8 @@ export default {
     cancel: 'Abbrechen',
     // Close
     close: 'Schließen',
+    // Create
+    create: 'Erstellen',
     // Created By / At
     created: 'Erstellt von / am',
     // Detail
@@ -54,6 +56,8 @@ export default {
     key: 'Schlüssel',
     // Light Mode
     lightMode: 'Heller Modus',
+    // Management
+    management: 'Verwaltung',
     // Okay
     okay: 'Okay',
     // Save
@@ -254,9 +258,6 @@ export default {
     article: 'das',
     // Object Name
     object: 'Projekt',
-    // No Project Message
-    nothing:
-      'Bisher haben Sie weder ein Projekt erstellt noch wurden Sie einem Projekt als Mitglied zugeordnet.',
     // Labels
     label: {
       // No project selected
@@ -285,6 +286,9 @@ export default {
         'Hier sehen Sie eine Übersicht über alle Projekte, die Sie selbst erstellt haben oder denen Sie als ' +
         'Projektmitglied zugeordnet wurden. Je nach dem, welche Rolle Sie in den jeweiligen Projekten haben, können ' +
         'Sie diese auch bearbeiten oder sogar löschen.',
+      // Empty Message
+      messageEmpty:
+        'Bisher haben Sie weder ein Projekt erstellt noch wurden Sie einem Projekt als Mitglied zugeordnet.',
       // Tooltip Messages
       tooltip: {
         // View Project
@@ -362,5 +366,26 @@ export default {
         member: 'Dieses Konto ist bereits ein Projektmitglied.',
       },
     },
+  },
+
+  // External Applications
+  externalApp: {
+    // Labels
+    label: {
+      // Drawer Item
+      drawerItem: 'Externe Applikationen',
+    },
+    // Overview Messages
+    overview: {
+      // Title
+      title: 'Externe Applikationen',
+      // Message
+      message: 'Die folgende Übersicht zeigt alle für dieses Projekt erstellten externen Applikationen. Diese sind im ' +
+        'Wesentlichen die Plattformen, auf denen Ihr Data Warehouse basiert. Externe Applikationen können als Quelle ' +
+        'für das Reverse Engineering von Modellartefakten sowie auch als Ziel für das Deployment derselben verwendet ' +
+        'werden.',
+      // Empty Message
+      messageEmpty: 'Bisher wurden für dieses Projekt noch keine externen Applikationen definiert.'
+    }
   },
 };

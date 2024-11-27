@@ -63,6 +63,10 @@ const projects = computed(() => (comp.session ? comp.session.projects : []));
 function getPermission(operation: EDocumentOperation, row: any): boolean {
   // Get project instance
   const project = row as Project;
+  // Create permission is always granted
+  if (operation === EDocumentOperation.Create) {
+    return true;
+  }
   // Check for view operation
   if (operation === EDocumentOperation.View) {
     return project.isRoleLessOrEqualTo(EProjectMemberRole.Maintainer);

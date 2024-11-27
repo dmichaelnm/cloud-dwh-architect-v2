@@ -1,7 +1,12 @@
 import * as fd from 'src/scripts/application/FirestoreDocument';
+import { EFirestoreDocumentType } from 'src/scripts/application/FirestoreDocument';
 import { where } from 'firebase/firestore';
 import { getCurrentAccountId } from 'src/scripts/utilities/firebase';
 import { TCustomAttribute } from 'src/scripts/utilities/common';
+import {
+  ExternalApp,
+  IExternalAppData,
+} from 'src/scripts/application/ExternalApp';
 
 /**
  * Enumeration for project member roles.
@@ -52,6 +57,17 @@ export interface IProjectData extends fd.IFirestoreDocumentData {
  * Represents a Project document in Firestore.
  */
 export class Project extends fd.FirestoreDocument<IProjectData> {
+  /**
+   * Retrieves a list of external applications from the database.
+   *
+   * @return {ExternalApp[]} An array of external application instances.
+   */
+  getExternalApplications(): ExternalApp[] {
+    return this.getDocuments<IExternalAppData, ExternalApp>(
+      EFirestoreDocumentType.ExternalApp
+    );
+  }
+
   /**
    * Retrieves the project member who holds the role of Owner.
    *
