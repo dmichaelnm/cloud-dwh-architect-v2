@@ -114,14 +114,13 @@ const props = defineProps<{
   modelValue: EditorData<IFirestoreDocumentData>;
   /** Document type of the editor */
   scope: EFirestoreDocumentType;
-  /** Editor mode */
-  mode: EDocumentOperation;
   /** Tab definition array */
   tabs: TEditorTab[];
   /** Flag for marking this component as read only */
   readOnly?: boolean;
 }>();
 
+// Defines the events that can be emitted by this component
 const emit = defineEmits<{
   /** Model update event */
   (event: 'update:modelValue', value: EditorData<IFirestoreDocumentData>): void;
@@ -131,14 +130,22 @@ const emit = defineEmits<{
   (event: 'updated', value: FirestoreDocument<IFirestoreDocumentData>): void;
 }>();
 
-// Current tab key
-const tabKey = ref(props.tabs.length > 0 ? props.tabs[0].key : '');
-
+// The internal model value of this component
 const _modelValue = computed({
   get: () => props.modelValue,
   set: (value: EditorData<IFirestoreDocumentData>) =>
     emit('update:modelValue', value),
 });
+
+// The editor mode
+const mode = computed(() =>
+  comp.session.editorParameter
+    ? comp.session.editorParameter?.operation
+    : EDocumentOperation.Create
+);
+
+// Current tab key
+const tabKey = ref(props.tabs.length > 0 ? props.tabs[0].key : '');
 
 /**
  * Handles the process to leave the editor view. This method resets the editor

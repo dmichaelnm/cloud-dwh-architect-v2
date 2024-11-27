@@ -374,18 +374,36 @@ export default {
     label: {
       // Drawer Item
       drawerItem: 'Externe Applikationen',
+      // Name
+      name: 'Name der externen Applikation'
     },
     // Overview Messages
     overview: {
       // Title
       title: 'Externe Applikationen',
       // Message
-      message: 'Die folgende Übersicht zeigt alle für dieses Projekt erstellten externen Applikationen. Diese sind im ' +
+      message:
+        'Die folgende Übersicht zeigt alle für dieses Projekt erstellten externen Applikationen. Diese sind im ' +
         'Wesentlichen die Plattformen, auf denen Ihr Data Warehouse basiert. Externe Applikationen können als Quelle ' +
         'für das Reverse Engineering von Modellartefakten sowie auch als Ziel für das Deployment derselben verwendet ' +
         'werden.',
       // Empty Message
-      messageEmpty: 'Bisher wurden für dieses Projekt noch keine externen Applikationen definiert.'
-    }
+      messageEmpty:
+        'Bisher wurden für dieses Projekt noch keine externen Applikationen definiert.',
+    },
+    // Editor Messages
+    editor: {
+      // Create Messages
+      create: {
+        // Title
+        title: 'Neue externe Applikation anbinden',
+        // Message
+        message:
+          'Hier können Sie eine neue externe Applikation anbinden. Wählen Sie dazu den Anbieter der externen ' +
+          'Applikation aus und geben die entsprechenden Anmeldeinformationen ein. Eine externe Applikation dient ' +
+          'als Plattform für bestimmte Aspekte Ihres Data Warehouse. Sie können per Reverse Engineering ' +
+          'Modellartefakte erstellen und diese später auch dorthin deployen.',
+      },
+    },
   },
 };

@@ -361,6 +361,8 @@ export default {
     label: {
       // Drawer Item
       drawerItem: 'External Applications',
+      // Name
+      name: 'External Application Name',
     },
     // Overview Messages
     overview: {
@@ -374,6 +376,20 @@ export default {
       // Empty Message
       messageEmpty:
         'No external applications have been defined for this project yet.',
+    },
+    // Editor Messages
+    editor: {
+      // Create Messages
+      create: {
+        // Title
+        title: 'Connect To External Application',
+        // Message
+        message:
+          'Here you can connect a new external application. To do this, select the provider of the external ' +
+          'application and enter the corresponding login information. An external application serves as a ' +
+          'platform for certain aspects of your data warehouse. You can create model artifacts via reverse ' +
+          'engineering and later deploy them there as well.',
+      },
     },
   },
 };
