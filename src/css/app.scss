@@ -201,10 +201,6 @@ body.body--dark {
   border-right: 1px solid $frame-dark;
 }
 
-.q-expansion-item .q-item__label {
-  color: $text-light;
-}
-
-.body--dark .q-expansion-item .q-item__label {
+.q-list--dark, .q-item--dark {
   color: $text-dark;
 }

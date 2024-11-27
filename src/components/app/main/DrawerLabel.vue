@@ -10,9 +10,17 @@
 </template>
 
 <style scoped lang="scss">
+@import "src/css/quasar.variables";
+
 .drawer-label {
+  color: $text-caption-light;
   font-weight: bold;
 }
+
+.body--dark .drawer-label {
+  color: $text-caption-dark;
+}
+
 </style>
 
 <script setup lang="ts">
