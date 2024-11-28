@@ -19,10 +19,10 @@
           <!-- Container Button Column -->
           <div class="col-6 text-right q-gutter-x-sm">
             <!-- Save Button -->
-            <button-push :label="$t('label.save')" type="submit" />
+            <button-push  v-if="!readOnly" :label="$t('label.save')" type="submit" />
             <!-- Cancel Button -->
             <button-push
-              :label="$t('label.cancel')"
+              :label="readOnly ? $t('label.close') : $t('label.cancel')"
               look="secondary"
               @click="leaveEditor"
             />
@@ -116,8 +116,8 @@ const props = defineProps<{
   scope: EFirestoreDocumentType;
   /** Tab definition array */
   tabs: TEditorTab[];
-  /** Flag for marking this component as read only */
-  readOnly?: boolean;
+  /** Parent Firestore document */
+  parent?: FirestoreDocument<IFirestoreDocumentData>;
 }>();
 
 // Defines the events that can be emitted by this component
@@ -146,6 +146,14 @@ const mode = computed(() =>
 
 // Current tab key
 const tabKey = ref(props.tabs.length > 0 ? props.tabs[0].key : '');
+
+// Computes the readOnly state based on the editor parameters;
+// it returns true if the operation is "View" or if there are no editor parameters.
+const readOnly = computed(() =>
+  comp.session.editorParameter
+    ? comp.session.editorParameter.operation === EDocumentOperation.View
+    : true
+);
 
 /**
  * Handles the process to leave the editor view. This method resets the editor
@@ -181,7 +189,12 @@ function onSubmit(): void {
     const type = comp.session.editorParameter?.scope as EFirestoreDocumentType;
     if (op === EDocumentOperation.Create) {
       // Create Firestore document
-      const document = await createDocument(type, data);
+      const document = await createDocument(
+        type,
+        data,
+        undefined,
+        props.parent
+      );
       // Emit created event
       emit('created', document);
     } else if (op === EDocumentOperation.Edit) {

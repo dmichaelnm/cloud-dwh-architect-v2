@@ -4,7 +4,7 @@
     :scope="EFirestoreDocumentType.Project"
     :items="projects"
     :permission="getPermission"
-    :delete-handler="_deleteProject"
+    :delete-handler="deleteItem"
     :columns="[
       {
         name: 'owner',
@@ -88,7 +88,7 @@ function getPermission(operation: EDocumentOperation, row: any): boolean {
  *
  * @param {FirestoreDocument<IFirestoreDocumentData>} document - The Firestore document representing the project to be deleted.
  */
-async function _deleteProject(
+async function deleteItem(
   document: FirestoreDocument<IFirestoreDocumentData>
 ): Promise<void> {
   // Delete the Firestore project

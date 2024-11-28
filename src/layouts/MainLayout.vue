@@ -141,13 +141,13 @@ import DrawerItem from 'components/app/main/DrawerItem.vue';
 import DrawerLabel from 'components/app/main/DrawerLabel.vue';
 import { computed, onBeforeMount, ref, watch } from 'vue';
 import { onAccountStateChanged } from 'src/scripts/application/Account';
-import { loadProjects } from 'src/scripts/application/Project';
+import { loadProject, loadProjects } from 'src/scripts/application/Project';
 import { updateDocument } from 'src/scripts/application/FirestoreDocument';
 
 // Get composable components
 const comp = cm.useComposables();
 // Get message dialog options
-const { messageDialogOptions } = cm.useMessageDialog();
+const { messageDialogOptions, showConfirmationDialog } = cm.useMessageDialog();
 // Get run task composable function
 const runTask = cm.useRunTask();
 
@@ -210,37 +210,61 @@ watch(project, (newValue, oldValue) => {
  * If no valid project is found, it sets the session's project to null.
  */
 async function switchProject(): Promise<void> {
-  // Start switch process
-  await runTask(async () => {
-    // Get current project ID from account
-    const projectId = comp.session.account
-      ? comp.session.account?.data.state.currentProject
-      : null;
-    // Do nothing, if project is already active
-    if (projectId !== comp.session.project?.id) {
-      // Check, if project ID is in projects array
-      const project = comp.session.getProject(projectId);
-      // If project was found, current ID on account is valid
-      if (project) {
-        // Set current project
-        comp.session.project = project;
-        // TODO load project details
-      } else if (comp.session.projects.length > 0) {
-        // Set the first project in the list as active
-        comp.session.project = comp.session.projects[0];
-        // TODO load project details
-      } else {
-        // No project found
-        comp.session.project = null;
+  // Check for an open editor
+  if (comp.session.editorParameter) {
+    // Show confirmation dialog
+    showConfirmationDialog(
+      comp.i18n.t('dialog.discard.title'),
+      comp.i18n.t('dialog.discard.message'),
+      'warning',
+      undefined,
+      async (value) => {
+        // If user has confirmed, set editor state and open the editor
+        if (value === 'okay') {
+          // Reset editor parameter
+          comp.session.editorParameter = null;
+          // Switch project again
+          await switchProject();
+        }
       }
-      // Update account
-      if (comp.session.account) {
-        comp.session.account.data.state.currentProject = comp.session.project
-          ? comp.session.project.id
-          : null;
-        await updateDocument(comp.session.account);
+    );
+  } else {
+    // Start switch process
+    await runTask(async () => {
+      // Get current project ID from account
+      const projectId = comp.session.account
+        ? comp.session.account?.data.state.currentProject
+        : null;
+      // Do nothing, if project is already active
+      if (projectId !== comp.session.project?.id) {
+        // Check, if project ID is in projects array
+        const project = comp.session.getProject(projectId);
+        // If project was found, current ID on account is valid
+        if (project) {
+          // Set current project
+          comp.session.project = project;
+          // Load project details
+          await loadProject(project);
+        } else if (comp.session.projects.length > 0) {
+          // Set the first project in the list as active
+          comp.session.project = comp.session.projects[0];
+          // Load project details
+          await loadProject(comp.session.project);
+        } else {
+          // No project found
+          comp.session.project = null;
+        }
+        // Update account
+        if (comp.session.account) {
+          comp.session.account.data.state.currentProject = comp.session.project
+            ? comp.session.project.id
+            : null;
+          await updateDocument(comp.session.account);
+        }
+        // Route to main page
+        await comp.router.push({ path: '/' });
       }
-    }
-  });
+    });
+  }
 }
 </script>

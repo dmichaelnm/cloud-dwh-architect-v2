@@ -370,12 +370,16 @@ export default {
 
   // External Applications
   externalApp: {
+    // Object name
+    object: 'Externe Applikation',
+    // Article
+    article: 'die',
     // Labels
     label: {
       // Drawer Item
       drawerItem: 'Externe Applikationen',
       // Name
-      name: 'Name der externen Applikation'
+      name: 'Name der externen Applikation',
     },
     // Overview Messages
     overview: {
@@ -390,9 +394,25 @@ export default {
       // Empty Message
       messageEmpty:
         'Bisher wurden für dieses Projekt noch keine externen Applikationen definiert.',
+      // Tooltip Messages
+      tooltip: {
+        // View Tooltip
+        view: 'Externe Applikation anzeigen',
+        // Edit Tooltip
+        edit: 'Externe Applikation bearbeiten',
+      },
     },
     // Editor Messages
     editor: {
+      // View Messages
+      view: {
+        // Title
+        title: 'Externe Applikation anzeigen',
+        // Message
+        message:
+          'Hier können Sie die Eigenschaften der externen Applikation betrachten. Ihr aktuelle Rolle verbietet Ihnen ' +
+          'jedoch das Bearbeiten dieser Eigenschaften.',
+      },
       // Create Messages
       create: {
         // Title
@@ -403,6 +423,15 @@ export default {
           'Applikation aus und geben die entsprechenden Anmeldeinformationen ein. Eine externe Applikation dient ' +
           'als Plattform für bestimmte Aspekte Ihres Data Warehouse. Sie können per Reverse Engineering ' +
           'Modellartefakte erstellen und diese später auch dorthin deployen.',
+      },
+      // Edit Messages
+      edit: {
+        // Title
+        title: 'Externe Applikation bearbeiten',
+        // Message
+        message:
+          'Hier können Sie die Eigenschaften der externen Applikation bearbeiten sowie die Anmeldeinformationen ' +
+          'aktualisieren, falls dies nötig ist.',
       },
     },
   },

@@ -32,6 +32,10 @@
 .label-disabled {
   color: $text-hint-light;
 }
+
+.body--dark .label-disabled {
+  color: $text-hint-dark;
+}
 </style>
 
 <script setup lang="ts">

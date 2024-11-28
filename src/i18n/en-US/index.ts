@@ -357,6 +357,10 @@ export default {
 
   // External Applications
   externalApp: {
+    // Object name
+    object: 'External Application',
+    // Article
+    article: 'the',
     // Labels
     label: {
       // Drawer Item
@@ -376,9 +380,25 @@ export default {
       // Empty Message
       messageEmpty:
         'No external applications have been defined for this project yet.',
+      // Tooltip Messages
+      tooltip: {
+        // View Tooltip
+        view: 'View External Application',
+        // Edit Tooltip
+        edit: 'Edit External Application',
+      }
     },
     // Editor Messages
     editor: {
+      // View Messages
+      view: {
+        // Title
+        title: 'View External Application',
+        // Message
+        message:
+          'Here you can view the properties of the external application. However, your current role prohibits you ' +
+          'from editing these properties.',
+      },
       // Create Messages
       create: {
         // Title
@@ -389,6 +409,14 @@ export default {
           'application and enter the corresponding login information. An external application serves as a ' +
           'platform for certain aspects of your data warehouse. You can create model artifacts via reverse ' +
           'engineering and later deploy them there as well.',
+      },
+      // Edit Messages
+      edit: {
+        // Title
+        title: 'Edit External Application',
+        // Message
+        message:
+          'Here you can edit the properties of the external application and update the login credentials if necessary.',
       },
     },
   },

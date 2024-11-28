@@ -3,7 +3,6 @@
   <editor-container
     v-model="editorData"
     :scope="EFirestoreDocumentType.Project"
-    :read-only="readOnly"
     :tabs="[
       { key: 'general', label: 'label.general' },
       { key: 'member', label: 'project.label.member' },
