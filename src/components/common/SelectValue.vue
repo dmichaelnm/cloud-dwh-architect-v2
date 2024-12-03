@@ -8,10 +8,13 @@
     :outlined="!borderless"
     :label="label"
     :autocomplete="autoComplete"
+    :readonly="readOnly"
+    :hide-dropdown-icon="readOnly"
     dense
     options-dense
     emit-value
     map-options
+    stack-label
     @update:modelValue="(value) => (_modelValue = value)"
   >
     <!-- Template for Icon -->
@@ -31,21 +34,23 @@
     </template>
     <!-- Template for label options -->
     <template v-slot:option="props">
-      <!-- Option Item -->
-      <q-item clickable v-close-popup dense v-bind="props.itemProps">
-        <!-- Icon Section -->
-        <q-item-section avatar v-if="props.opt.icon">
-          <!-- Icon -->
-          <q-icon :name="props.opt.icon" size="xs" />
-        </q-item-section>
-        <!-- Label Section -->
-        <q-item-section>
-          <!-- Label -->
-          <q-item-label
-            >{{ translate ? $t(props.opt.label) : props.opt.label }}
-          </q-item-label>
-        </q-item-section>
-      </q-item>
+      <slot name="option" v-bind="props">
+        <!-- Option Item -->
+        <q-item clickable v-close-popup dense v-bind="props.itemProps">
+          <!-- Icon Section -->
+          <q-item-section side v-if="props.opt.icon">
+            <!-- Icon -->
+            <q-icon :name="props.opt.icon" size="xs" />
+          </q-item-section>
+          <!-- Label Section -->
+          <q-item-section>
+            <!-- Label -->
+            <q-item-label
+              >{{ translate ? $t(props.opt.label) : props.opt.label }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+      </slot>
     </template>
   </q-select>
 </template>
@@ -75,7 +80,9 @@ const props = defineProps<{
   /** Flag for hiding the options icon */
   hideIcon?: boolean;
   /** Auto complete attribute */
-  autoComplete?: string
+  autoComplete?: string;
+  /** Read Only flag */
+  readOnly?: boolean;
 }>();
 
 // Defines the events that can be emitted by this component

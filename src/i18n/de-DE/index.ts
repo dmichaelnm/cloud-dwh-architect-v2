@@ -165,6 +165,13 @@ export default {
       // Boolean
       boolean: 'Wahrheitswert',
     },
+    // External Application Provider Labels
+    externalAppProvider: {
+      // Amazon AWS S3 Bucket
+      s3: 'Amazon AWS S3 Bucket',
+      // Snowflake Database
+      snowflake: 'Snowflake Database',
+    },
   },
 
   // Authentication Messages
@@ -380,6 +387,59 @@ export default {
       drawerItem: 'Externe Applikationen',
       // Name
       name: 'Name der externen Applikation',
+      // Provider
+      provider: 'Anbieter',
+      // Test Connection
+      testConnection: 'Verbindung testen',
+    },
+    // Provider Messages
+    provider: {
+      // General Message
+      message:
+        'Wählen Sie hier den Anbieter der externen Applikation aus der untenstehenden Liste aus, mit der Sie ' +
+        'sich verbinden möchten.',
+      // S3
+      s3: {
+        // General Message
+        message:
+          'Um auf ein Amazon AWS S3-Bucket zuzugreifen, benötigen Sie Ihre Zugangsschlüssel, bestehend aus dem ' +
+          'Access Key ID und dem Secret Access Key. Bitte stellen Sie sicher, dass diese Informationen korrekt ' +
+          'eingegeben werden, um eine erfolgreiche Verbindung zum S3-Service herzustellen. Falls Sie Unterstützung ' +
+          'benötigen, finden Sie die erforderlichen Zugangsdaten in den Anmeldeinformationen Ihres AWS-Kontos ' +
+          'oder wenden Sie sich an den Administrator.',
+        // Region
+        region: 'Region',
+        // Bucket Name
+        bucket: 'Name des Buckets',
+        // Access Key ID
+        accessKeyId: 'ID des Zugriffsschlüssels',
+        // Secret Access Key
+        secretAccessKey: 'Geheimer Zugriffsschlüssel',
+      },
+      // Snowflake
+      snowflake: {
+        // General Message
+        message:
+          'Um sich mit einer Snowflake-Datenbank zu verbinden, benötigen Sie bestimmte Anmeldeinformationen, ' +
+          'wie den Account-Namen, den Benutzernamen und das Passwort. Bitte stellen Sie sicher, dass diese Daten ' +
+          'korrekt eingegeben werden, um eine erfolgreiche Verbindung herstellen zu können. Wenn Sie Unterstützung ' +
+          'bei der Eingabe benötigen, finden Sie alle relevanten Informationen in den Anmeldeunterlagen Ihres ' +
+          'Unternehmens oder wenden Sie sich an den Administrator.',
+        // Account
+        account: 'Konto',
+        // Username
+        username: 'Benutzername',
+        // Password
+        password: 'Kennwort',
+        // Database
+        database: 'Datenbank',
+        // Warehouse
+        warehouse: 'Warehouse',
+        // Role
+        role: 'Rolle',
+        // Schema
+        schema: 'Schema',
+      },
     },
     // Overview Messages
     overview: {
@@ -400,6 +460,8 @@ export default {
         view: 'Externe Applikation anzeigen',
         // Edit Tooltip
         edit: 'Externe Applikation bearbeiten',
+        // Delete Tooltip
+        delete: 'Externe Applikation löschen',
       },
     },
     // Editor Messages

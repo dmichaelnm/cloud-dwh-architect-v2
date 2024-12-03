@@ -5,6 +5,17 @@
     :items="externalApps"
     :permission="getPermission"
     :delete-handler="deleteItem"
+    :columns="[
+      {
+        name: 'provider',
+        label: $t('externalApp.label.provider'),
+        align: 'left',
+        headerStyle: 'width: 250px',
+        icon: (row) => `img:icons/${row.data.provider}.png`,
+        field: (row) =>
+          $t(`enumeration.externalAppProvider.${row.data.provider}`),
+      },
+    ]"
   >
   </overview-container>
 </template>
@@ -20,11 +31,6 @@ import {
 } from 'src/scripts/utilities/common';
 import { computed } from 'vue';
 import { EProjectMemberRole, Project } from 'src/scripts/application/Project';
-import {
-  deleteDocument,
-  FirestoreDocument,
-  IFirestoreDocumentData
-} from 'src/scripts/application/FirestoreDocument';
 
 // Get composable components
 const comp = useComposables();
@@ -65,14 +71,19 @@ function getPermission(operation: EDocumentOperation): boolean {
   return false;
 }
 
+/**
+ * Deletes a specified Firestore document and removes it from the current project session if applicable.
+ *
+ * @param {fd.FirestoreDocument<fd.IFirestoreDocumentData>} document - The Firestore document to be deleted.
+ */
 async function deleteItem(
-  document: FirestoreDocument<IFirestoreDocumentData>
+  document: fd.FirestoreDocument<fd.IFirestoreDocumentData>
 ): Promise<void> {
   // Get current project
   const project = comp.session.project;
   if (project) {
     // Delete the document
-    await deleteDocument(document);
+    await fd.deleteDocument(document);
     // Remove the document from the current project
     (project as Project).removeDocument(document);
   }

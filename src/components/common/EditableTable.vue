@@ -20,7 +20,11 @@
             :rows="_modelValue"
             :columns="computedColumns"
             :pagination-label="(f, e, t) => f + ' - ' + e + ' / ' + t"
-            :pagination="{ rowsPerPage: 10 }"
+            :pagination="{
+              rowsPerPage: 10,
+              sortBy: sortBy,
+              descending: sortOrder === 'desc',
+            }"
             :rows-per-page-label="$t('label.recordsPerPage')"
             :rows-per-page-options="[10, 20, 50, 100, 0]"
             hide-no-data
@@ -58,8 +62,16 @@
                       ETableColumnInput.Checkbox
                     "
                   >
-                    <!-- Value -->
-                    {{ props.value }}
+                    <!-- Value DIV -->
+                    <div class="flex q-gutter-x-sm">
+                      <!-- Optional Icon DIV -->
+                      <div v-if="getIcon(col, props.row)">
+                        <!-- Optional Icon -->
+                        <q-icon :name="getIcon(col, props.row)" size="xs" />
+                      </div>
+                      <!-- Value -->
+                      <div>{{ props.value }}</div>
+                    </div>
                   </div>
                   <!-- Custom Boolean Column Value -->
                   <div
@@ -126,7 +138,7 @@
                       :label="col.label"
                       :options="col.options as TSelectOption[]"
                       :translate="col.translate"
-                      :hide-icon="col.hideIcon"
+                      :hide-icon="col.selectHideIcon"
                       @update:model-value="
                         updateValue(props.rowIndex, col, scope.value, true)
                       "
@@ -206,6 +218,10 @@ const props = defineProps<{
   moveable?: boolean;
   /** Flag for marking this component as read only */
   readOnly?: boolean;
+  /** Name of column to be sorted */
+  sortBy?: string;
+  /** Sort order */
+  sortOrder?: 'asc' | 'desc';
 }>();
 
 // Defines the events that can be emitted by this component
@@ -295,6 +311,26 @@ function getInputType(
     return column.input;
   }
   // Return undefined as default input type
+  return undefined;
+}
+
+/**
+ * Retrieves the icon associated with a specific column and row.
+ *
+ * @param {TTableColumn} column - The column definition that may contain an icon or a function to determine an icon.
+ * @param {any} row - The row data used to determine the icon when the column icon is a function.
+ * @return {string | undefined} The icon name as a string if available, or undefined if no icon is determined.
+ */
+function getIcon(column: TTableColumn, row: any): string | undefined {
+  if (typeof column.icon === 'function') {
+    // Icon is determined from a function call
+    return column.icon(row);
+  }
+  if (column.icon) {
+    // Icon name is static
+    return column.icon;
+  }
+  // No icon
   return undefined;
 }
 

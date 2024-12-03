@@ -24,7 +24,7 @@
         field: (row) => $t(`enumeration.customAttributeType.${row.type}`),
         input: ETableColumnInput.Select,
         options: getCustomAttributeTypes(),
-        hideIcon: true,
+        selectHideIcon: true,
         translate: true,
       },
       {

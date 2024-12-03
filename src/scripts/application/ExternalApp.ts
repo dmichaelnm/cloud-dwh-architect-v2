@@ -4,9 +4,24 @@ import {
 } from 'src/scripts/application/FirestoreDocument';
 import { ProjectDocument } from 'src/scripts/application/ProjectDocument';
 import { loadChildDocuments, Project } from 'src/scripts/application/Project';
+import { EExternalAppProvider, TProviderCredentials } from 'src/scripts/utilities/provider';
+import { TCustomAttribute } from 'src/scripts/utilities/common';
 
-export interface IExternalAppData extends IFirestoreDocumentData {}
+/**
+ * Represents the external application data associated with a provider.
+ */
+export interface IExternalAppData extends IFirestoreDocumentData {
+  /** Provider */
+  provider: EExternalAppProvider;
+  /** Credentials */
+  credentials: TProviderCredentials;
+  /** Custom Attributes */
+  attributes: TCustomAttribute[];
+}
 
+/**
+ * Represents an external application within the project environment.
+ */
 export class ExternalApp extends ProjectDocument<IExternalAppData> {}
 
 /**

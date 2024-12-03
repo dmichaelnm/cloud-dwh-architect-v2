@@ -35,6 +35,7 @@
         :model-value="items"
         :columns="computedColumns"
         :empty-message="$t(`${scope}.overview.messageEmpty`)"
+        sort-by="name"
       >
         <!-- Template for actions -->
         <template v-slot:body-cell-action="{ props }">
@@ -186,6 +187,7 @@ const computedColumns = computed(() => {
     name: 'name',
     label: comp.i18n.t(`${props.scope}.label.name`),
     align: 'left',
+    sortable: true,
     field: (row) => row.data.common.name,
   });
   // Add custom columns

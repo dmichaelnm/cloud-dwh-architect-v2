@@ -23,17 +23,19 @@ export enum ETableColumnInput {
  * @property {ETableColumnInput} [input] - Input Type.
  * @property {TSelectOption[]} [options] - Options for input type Select.
  * @property {boolean} [translate] - Flag for translating the option labels.
- * @property {boolean} [hideIcon] - Flag for hiding the options icon.
+ * @property {boolean} [selectHideIcon] - Flag for hiding the options icon in a select editor.
  */
 export type TTableColumn = QTableColumn & {
   /** Input Type */
   input?: ETableColumnInput | ((row: any) => ETableColumnInput);
+  /** Optional icon to be shown */
+  icon?: string | ((row: any) => string);
   /** Options for input type Select */
   options?: TSelectOption[];
   /** Flag for translating the option labels */
   translate?: boolean;
-  /** Flah for hiding the options icon */
-  hideIcon?: boolean;
+  /** Flag for hiding the options icon */
+  selectHideIcon?: boolean;
 };
 
 /**
@@ -86,10 +88,10 @@ export abstract class EditorData<D extends IFirestoreDocumentData> {
   abstract createData(): D;
 
   /**
-   * Initializes the editor with data from the given Firestore document.
-   * Retrieves the necessary fields from the document and sets up the editor instance accordingly.
+   * Initializes the editor with data from the provided Firestore document.
    *
-   * @param {FirestoreDocument<D>} document - The Firestore document containing the data to be loaded into the editor.
+   * @param document A FirestoreDocument object containing the data to be initialized.
+   * @return A Promise that resolves when the initialization is complete or void if the operation is synchronous.
    */
   abstract initEditorData(document: FirestoreDocument<D>): void | Promise<void>;
 }

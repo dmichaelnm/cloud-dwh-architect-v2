@@ -160,6 +160,13 @@ export default {
       // Boolean
       boolean: 'Boolean',
     },
+    // External Application Provider Labels
+    externalAppProvider: {
+      // Amazon AWS S3 Bucket
+      s3: 'Amazon AWS S3 Bucket',
+      // Snowflake Database
+      snowflake: 'Snowflake Database',
+    },
   },
 
   // Authentication Messages
@@ -367,6 +374,56 @@ export default {
       drawerItem: 'External Applications',
       // Name
       name: 'External Application Name',
+      // Provider
+      provider: 'Provider',
+      // Test Connection
+      testConnection: 'Test Connection',
+    },
+    // Provider Messages
+    provider: {
+      // General Message
+      message:
+        'Select here the provider of the external application from the list below that you want to connect with.',
+      // S3
+      s3: {
+        // General Message
+        message:
+          'To access an Amazon AWS S3 bucket, you will need your access keys, which consist of the Access Key ID ' +
+          'and Secret Access Key. Please ensure that these details are entered correctly to establish a successful ' +
+          'connection to the S3 service. If you need assistance, you can find the necessary credentials in your ' +
+          'AWS account login details or contact your administrator.',
+        // Region
+        region: 'Region',
+        // Bucket Name
+        bucket: 'Bucket Name',
+        // Access Key ID
+        accessKeyId: 'Access Key ID',
+        // Secret Access Key
+        secretAccessKey: 'Secret Access Key',
+      },
+      // Snowflake
+      snowflake: {
+        // General Message
+        message:
+          'To connect to a Snowflake database, you will need certain credentials, such as the account name, username, ' +
+          'and password. Please ensure that these details are entered correctly to establish a successful connection. ' +
+          'If you need assistance with entering, you can find all relevant information in your company\'s login ' +
+          'documents or contact the administrator.',
+        // Account
+        account: 'Account',
+        // Username
+        username: 'Username',
+        // Password
+        password: 'Password',
+        // Database
+        database: 'Database',
+        // Warehouse
+        warehouse: 'Warehouse',
+        // Role
+        role: 'Role',
+        // Schema
+        schema: 'Schema'
+      },
     },
     // Overview Messages
     overview: {
@@ -386,7 +443,9 @@ export default {
         view: 'View External Application',
         // Edit Tooltip
         edit: 'Edit External Application',
-      }
+        // Delete Tooltip
+        delete: 'Delet External Application',
+      },
     },
     // Editor Messages
     editor: {
