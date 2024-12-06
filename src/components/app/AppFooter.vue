@@ -11,7 +11,7 @@
           <span v-html="$t('application.copyright')" />
         </div>
         <!-- Footer Center Column -->
-        <div class="col-6 text-center">
+        <div class="col-6 text-center social-media-button">
           <!-- Email Button -->
           <button-icon
             icon="bi-envelope-fill"
@@ -85,6 +85,14 @@
 .app-footer {
   padding: 4px 8px;
   background-color: transparent;
+}
+
+.social-media-button {
+  color: $text-hint-light;
+}
+
+.body--dark .social-media-button {
+  color: $text-hint-dark;
 }
 </style>
 

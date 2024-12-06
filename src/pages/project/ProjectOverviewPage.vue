@@ -4,7 +4,7 @@
     :scope="EFirestoreDocumentType.Project"
     :items="projects"
     :permission="getPermission"
-    :delete-handler="_deleteProject"
+    :delete-handler="deleteItem"
     :columns="[
       {
         name: 'owner',
@@ -63,6 +63,10 @@ const projects = computed(() => (comp.session ? comp.session.projects : []));
 function getPermission(operation: EDocumentOperation, row: any): boolean {
   // Get project instance
   const project = row as Project;
+  // Create permission is always granted
+  if (operation === EDocumentOperation.Create) {
+    return true;
+  }
   // Check for view operation
   if (operation === EDocumentOperation.View) {
     return project.isRoleLessOrEqualTo(EProjectMemberRole.Maintainer);
@@ -84,7 +88,7 @@ function getPermission(operation: EDocumentOperation, row: any): boolean {
  *
  * @param {FirestoreDocument<IFirestoreDocumentData>} document - The Firestore document representing the project to be deleted.
  */
-async function _deleteProject(
+async function deleteItem(
   document: FirestoreDocument<IFirestoreDocumentData>
 ): Promise<void> {
   // Delete the Firestore project

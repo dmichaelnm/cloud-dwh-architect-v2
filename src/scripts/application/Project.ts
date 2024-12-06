@@ -1,7 +1,18 @@
 import * as fd from 'src/scripts/application/FirestoreDocument';
+import {
+  EFirestoreDocumentType,
+  FirestoreDocument,
+  IFirestoreDocumentData,
+  loadDocuments,
+} from 'src/scripts/application/FirestoreDocument';
 import { where } from 'firebase/firestore';
 import { getCurrentAccountId } from 'src/scripts/utilities/firebase';
 import { TCustomAttribute } from 'src/scripts/utilities/common';
+import {
+  ExternalApp,
+  IExternalAppData,
+  loadExternalApps,
+} from 'src/scripts/application/ExternalApp';
 
 /**
  * Enumeration for project member roles.
@@ -52,6 +63,31 @@ export interface IProjectData extends fd.IFirestoreDocumentData {
  * Represents a Project document in Firestore.
  */
 export class Project extends fd.FirestoreDocument<IProjectData> {
+
+  /**
+   * Retrieves an external application based on the provided ID.
+   *
+   * @param {string} id - The unique identifier of the external application.
+   * @return {ExternalApp | undefined} The external application corresponding to the given ID, or undefined if not found.
+   */
+  getExternalApplication(id: string): ExternalApp | undefined {
+    return this.getDocument<IExternalAppData, ExternalApp>(
+      EFirestoreDocumentType.ExternalApp,
+      id
+    );
+  }
+
+  /**
+   * Retrieves a list of external applications from the database.
+   *
+   * @return {ExternalApp[]} An array of external application instances.
+   */
+  getExternalApplications(): ExternalApp[] {
+    return this.getDocuments<IExternalAppData, ExternalApp>(
+      EFirestoreDocumentType.ExternalApp
+    );
+  }
+
   /**
    * Retrieves the project member who holds the role of Owner.
    *
@@ -154,11 +190,58 @@ export async function loadProjects(): Promise<Project[]> {
 }
 
 /**
+ * Loads child documents of a specific type for a given project and updates the project's children map.
+ *
+ * @param {Project} project - The project for which child documents are to be loaded.
+ * @param {EFirestoreDocumentType} type - The type of the Firestore documents to load.
+ * @param {Function} factory - A factory function that creates a new FirestoreDocument instance.
+ * @param {FirestoreDocument<IFirestoreDocumentData>} [parent] - An optional parent document.
+ */
+export async function loadChildDocuments(
+  project: Project,
+  type: EFirestoreDocumentType,
+  factory: (
+    document: FirestoreDocument<IFirestoreDocumentData>
+  ) => FirestoreDocument<IFirestoreDocumentData>,
+  parent?: FirestoreDocument<IFirestoreDocumentData>
+): Promise<void> {
+  // Remove all external application documents
+  project.children.delete(type);
+  // Create new map for external applications and add it to the project
+  const children = new Map<string, FirestoreDocument<IFirestoreDocumentData>>();
+  project.children.set(type, children);
+  // Load all documents
+  const documents = await loadDocuments(type, parent ? parent : project);
+  // Add the external application documents to the project
+  for (const document of documents) {
+    children.set(document.id, factory(document));
+  }
+}
+
+/**
+ * Asynchronously loads a project by clearing its children documents
+ * and loading all child documents associated with the project.
+ *
+ * @param {Project} project - The project instance to be loaded.
+ * @return {Promise<void>} A promise that resolves when the project is loaded.
+ */
+export async function loadProject(project: Project): Promise<void> {
+  // Clear all children documents
+  project.children.clear();
+  // Load external applications
+  await loadExternalApps(project);
+}
+
+/**
  * Deletes the specified project and all related documents from the database.
  *
  * @param {Project} project - The project instance to be deleted.
  */
 export async function deleteProject(project: Project): Promise<void> {
+  // Load the entire project
+  await loadProject(project);
+  // Delete all child documents
+  await project.deleteAllDocuments();
   // Delete the Firestore document of the project
   await fd.deleteDocument(project);
 }

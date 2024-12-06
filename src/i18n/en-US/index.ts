@@ -38,6 +38,8 @@ export default {
     cancel: 'Cancel',
     // Close
     close: 'Close',
+    // Create
+    create: 'Create',
     // Created By / At
     created: 'Created By / At',
     // Description
@@ -54,6 +56,8 @@ export default {
     okay: 'Okay',
     // Light Mode
     lightMode: 'Light Mode',
+    // Management
+    management: 'Management',
     // Save
     save: 'Save',
     // Type
@@ -156,6 +160,13 @@ export default {
       // Boolean
       boolean: 'Boolean',
     },
+    // External Application Provider Labels
+    externalAppProvider: {
+      // Amazon AWS S3 Bucket
+      s3: 'Amazon AWS S3 Bucket',
+      // Snowflake Database
+      snowflake: 'Snowflake Database',
+    },
   },
 
   // Authentication Messages
@@ -245,9 +256,6 @@ export default {
     article: 'the',
     // Object Name
     object: 'Project',
-    // No Project Message
-    nothing:
-      'You have not yet created a project nor have you been assigned to a project as a member.',
     // Labels
     label: {
       // No project selected
@@ -276,6 +284,9 @@ export default {
         'Here you see an overview of all the projects you have created yourself or to which you have been assigned ' +
         'as a project member. Depending on the role you have in the respective projects, you can also edit or even ' +
         'delete them.',
+      // Empty Message
+      messageEmpty:
+        'You have not yet created a project nor have you been assigned to a project as a member.',
       // Tooltip Messages
       tooltip: {
         // View Project
@@ -347,6 +358,146 @@ export default {
         manager: 'The project manager cannot be a regular project member.',
         // Account is already member
         member: 'This account is already a project member.',
+      },
+    },
+  },
+
+  // External Applications
+  externalApp: {
+    // Object name
+    object: 'External Application',
+    // Article
+    article: 'the',
+    // Labels
+    label: {
+      // Drawer Item
+      drawerItem: 'External Applications',
+      // Name
+      name: 'External Application Name',
+      // Provider
+      provider: 'Provider',
+      // Test Connection
+      testConnection: 'Test Connection',
+    },
+    // Provider Messages
+    provider: {
+      // General Message
+      message:
+        'Select here the provider of the external application from the list below that you want to connect with.',
+      // S3
+      s3: {
+        // General Message
+        message:
+          'To access an Amazon AWS S3 bucket, you will need your access keys, which consist of the Access Key ID ' +
+          'and Secret Access Key. Please ensure that these details are entered correctly to establish a successful ' +
+          'connection to the S3 service. If you need assistance, you can find the necessary credentials in your ' +
+          'AWS account login details or contact your administrator.',
+        // Region
+        region: 'Region',
+        // Bucket Name
+        bucket: 'Bucket Name',
+        // Access Key ID
+        accessKeyId: 'Access Key ID',
+        // Secret Access Key
+        secretAccessKey: 'Secret Access Key',
+      },
+      // Snowflake
+      snowflake: {
+        // General Message
+        message:
+          'To connect to a Snowflake database, you will need certain credentials, such as the account name, username, ' +
+          'and password. Please ensure that these details are entered correctly to establish a successful connection. ' +
+          "If you need assistance with entering, you can find all relevant information in your company's login " +
+          'documents or contact the administrator.',
+        // Account
+        account: 'Account',
+        // Username
+        username: 'Username',
+        // Password
+        password: 'Password',
+        // Database
+        database: 'Database',
+        // Warehouse
+        warehouse: 'Warehouse',
+        // Role
+        role: 'Role',
+        // Schema
+        schema: 'Schema',
+      },
+    },
+    // Overview Messages
+    overview: {
+      // Title
+      title: 'External Applications',
+      // Message
+      message:
+        'The following overview shows all external applications created for this project. These are ' +
+        'essentially the platforms on which your data warehouse is based. External applications can be used as a ' +
+        'source for the reverse engineering of model artifacts as well as a target for the deployment of the same.',
+      // Empty Message
+      messageEmpty:
+        'No external applications have been defined for this project yet.',
+      // Tooltip Messages
+      tooltip: {
+        // View Tooltip
+        view: 'View External Application',
+        // Edit Tooltip
+        edit: 'Edit External Application',
+        // Delete Tooltip
+        delete: 'Delet External Application',
+      },
+    },
+    // Editor Messages
+    editor: {
+      // View Messages
+      view: {
+        // Title
+        title: 'View External Application',
+        // Message
+        message:
+          'Here you can view the properties of the external application. However, your current role prohibits you ' +
+          'from editing these properties.',
+      },
+      // Create Messages
+      create: {
+        // Title
+        title: 'Connect To External Application',
+        // Message
+        message:
+          'Here you can connect a new external application. To do this, select the provider of the external ' +
+          'application and enter the corresponding login information. An external application serves as a ' +
+          'platform for certain aspects of your data warehouse. You can create model artifacts via reverse ' +
+          'engineering and later deploy them there as well.',
+      },
+      // Edit Messages
+      edit: {
+        // Title
+        title: 'Edit External Application',
+        // Message
+        message:
+          'Here you can edit the properties of the external application and update the login credentials if necessary.',
+      },
+    },
+    // Dialog Messages
+    dialog: {
+      // Test Connection Messages
+      testConnection: {
+        // Success Message
+        success: {
+          // Title
+          title: 'Connection Successful',
+          // Message
+          message:
+            'The connection was successfully established. The provided information seems to be correct.',
+        },
+        // Failure Message
+        failure: {
+          // Title
+          title: 'Connection failed',
+          // Message
+          message:
+            'Unfortunately, no connection could be established. You can find more detailed information in the details.',
+        },
       },
     },
   },

@@ -32,7 +32,7 @@
         input: ETableColumnInput.Select,
         options: getProjectMemberRoles(),
         translate: true,
-        hideIcon: true
+        selectHideIcon: true
       },
       {
         name: 'description',

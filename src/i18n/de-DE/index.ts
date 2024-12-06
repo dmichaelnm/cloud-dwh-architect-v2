@@ -40,6 +40,8 @@ export default {
     cancel: 'Abbrechen',
     // Close
     close: 'Schließen',
+    // Create
+    create: 'Erstellen',
     // Created By / At
     created: 'Erstellt von / am',
     // Detail
@@ -54,6 +56,8 @@ export default {
     key: 'Schlüssel',
     // Light Mode
     lightMode: 'Heller Modus',
+    // Management
+    management: 'Verwaltung',
     // Okay
     okay: 'Okay',
     // Save
@@ -161,6 +165,13 @@ export default {
       // Boolean
       boolean: 'Wahrheitswert',
     },
+    // External Application Provider Labels
+    externalAppProvider: {
+      // Amazon AWS S3 Bucket
+      s3: 'Amazon AWS S3 Bucket',
+      // Snowflake Database
+      snowflake: 'Snowflake Database',
+    },
   },
 
   // Authentication Messages
@@ -254,9 +265,6 @@ export default {
     article: 'das',
     // Object Name
     object: 'Projekt',
-    // No Project Message
-    nothing:
-      'Bisher haben Sie weder ein Projekt erstellt noch wurden Sie einem Projekt als Mitglied zugeordnet.',
     // Labels
     label: {
       // No project selected
@@ -285,6 +293,9 @@ export default {
         'Hier sehen Sie eine Übersicht über alle Projekte, die Sie selbst erstellt haben oder denen Sie als ' +
         'Projektmitglied zugeordnet wurden. Je nach dem, welche Rolle Sie in den jeweiligen Projekten haben, können ' +
         'Sie diese auch bearbeiten oder sogar löschen.',
+      // Empty Message
+      messageEmpty:
+        'Bisher haben Sie weder ein Projekt erstellt noch wurden Sie einem Projekt als Mitglied zugeordnet.',
       // Tooltip Messages
       tooltip: {
         // View Project
@@ -360,6 +371,153 @@ export default {
         manager: 'Der Projektleiter kann kein normales Projektmitglied sein.',
         // Account is already member
         member: 'Dieses Konto ist bereits ein Projektmitglied.',
+      },
+    },
+  },
+
+  // External Applications
+  externalApp: {
+    // Object name
+    object: 'Externe Applikation',
+    // Article
+    article: 'die',
+    // Labels
+    label: {
+      // Drawer Item
+      drawerItem: 'Externe Applikationen',
+      // Name
+      name: 'Name der externen Applikation',
+      // Provider
+      provider: 'Anbieter',
+      // Test Connection
+      testConnection: 'Verbindung testen',
+    },
+    // Provider Messages
+    provider: {
+      // General Message
+      message:
+        'Wählen Sie hier den Anbieter der externen Applikation aus der untenstehenden Liste aus, mit der Sie ' +
+        'sich verbinden möchten.',
+      // S3
+      s3: {
+        // General Message
+        message:
+          'Um auf ein Amazon AWS S3-Bucket zuzugreifen, benötigen Sie Ihre Zugangsschlüssel, bestehend aus dem ' +
+          'Access Key ID und dem Secret Access Key. Bitte stellen Sie sicher, dass diese Informationen korrekt ' +
+          'eingegeben werden, um eine erfolgreiche Verbindung zum S3-Service herzustellen. Falls Sie Unterstützung ' +
+          'benötigen, finden Sie die erforderlichen Zugangsdaten in den Anmeldeinformationen Ihres AWS-Kontos ' +
+          'oder wenden Sie sich an den Administrator.',
+        // Region
+        region: 'Region',
+        // Bucket Name
+        bucket: 'Name des Buckets',
+        // Access Key ID
+        accessKeyId: 'ID des Zugriffsschlüssels',
+        // Secret Access Key
+        secretAccessKey: 'Geheimer Zugriffsschlüssel',
+      },
+      // Snowflake
+      snowflake: {
+        // General Message
+        message:
+          'Um sich mit einer Snowflake-Datenbank zu verbinden, benötigen Sie bestimmte Anmeldeinformationen, ' +
+          'wie den Account-Namen, den Benutzernamen und das Passwort. Bitte stellen Sie sicher, dass diese Daten ' +
+          'korrekt eingegeben werden, um eine erfolgreiche Verbindung herstellen zu können. Wenn Sie Unterstützung ' +
+          'bei der Eingabe benötigen, finden Sie alle relevanten Informationen in den Anmeldeunterlagen Ihres ' +
+          'Unternehmens oder wenden Sie sich an den Administrator.',
+        // Account
+        account: 'Konto',
+        // Username
+        username: 'Benutzername',
+        // Password
+        password: 'Kennwort',
+        // Database
+        database: 'Datenbank',
+        // Warehouse
+        warehouse: 'Warehouse',
+        // Role
+        role: 'Rolle',
+        // Schema
+        schema: 'Schema',
+      },
+    },
+    // Overview Messages
+    overview: {
+      // Title
+      title: 'Externe Applikationen',
+      // Message
+      message:
+        'Die folgende Übersicht zeigt alle für dieses Projekt erstellten externen Applikationen. Diese sind im ' +
+        'Wesentlichen die Plattformen, auf denen Ihr Data Warehouse basiert. Externe Applikationen können als Quelle ' +
+        'für das Reverse Engineering von Modellartefakten sowie auch als Ziel für das Deployment derselben verwendet ' +
+        'werden.',
+      // Empty Message
+      messageEmpty:
+        'Bisher wurden für dieses Projekt noch keine externen Applikationen definiert.',
+      // Tooltip Messages
+      tooltip: {
+        // View Tooltip
+        view: 'Externe Applikation anzeigen',
+        // Edit Tooltip
+        edit: 'Externe Applikation bearbeiten',
+        // Delete Tooltip
+        delete: 'Externe Applikation löschen',
+      },
+    },
+    // Editor Messages
+    editor: {
+      // View Messages
+      view: {
+        // Title
+        title: 'Externe Applikation anzeigen',
+        // Message
+        message:
+          'Hier können Sie die Eigenschaften der externen Applikation betrachten. Ihr aktuelle Rolle verbietet Ihnen ' +
+          'jedoch das Bearbeiten dieser Eigenschaften.',
+      },
+      // Create Messages
+      create: {
+        // Title
+        title: 'Neue externe Applikation anbinden',
+        // Message
+        message:
+          'Hier können Sie eine neue externe Applikation anbinden. Wählen Sie dazu den Anbieter der externen ' +
+          'Applikation aus und geben die entsprechenden Anmeldeinformationen ein. Eine externe Applikation dient ' +
+          'als Plattform für bestimmte Aspekte Ihres Data Warehouse. Sie können per Reverse Engineering ' +
+          'Modellartefakte erstellen und diese später auch dorthin deployen.',
+      },
+      // Edit Messages
+      edit: {
+        // Title
+        title: 'Externe Applikation bearbeiten',
+        // Message
+        message:
+          'Hier können Sie die Eigenschaften der externen Applikation bearbeiten sowie die Anmeldeinformationen ' +
+          'aktualisieren, falls dies nötig ist.',
+      },
+    },
+    // Dialog Messages
+    dialog: {
+      // Test Connection Messages
+      testConnection: {
+        // Success Message
+        success: {
+          // Title
+          title: 'Verbindung erfolgreich',
+          // Message
+          message:
+            'Die Verbindung konnte erfolgreich hergestellt werden. Die angegebenen Informationen scheinen ' +
+            'korrekt zu sein.',
+        },
+        // Failure Message
+        failure: {
+          // Title
+          title: 'Verbindung fehlgeschlagen',
+          // Message
+          message:
+            'Leider konnte keine Verbindung hergestellt werden. Genauere Informatin können Sie den Details ' +
+            'entnehmen.',
+        },
       },
     },
   },

@@ -1,9 +1,7 @@
 import { capitalize } from 'src/scripts/utilities/common';
-import {
-  firebaseStore,
-  getCurrentAccountName,
-} from 'src/scripts/utilities/firebase';
+import { firebaseStore, getCurrentAccountName } from 'src/scripts/utilities/firebase';
 import * as fs from 'firebase/firestore';
+import { ProjectDocument } from 'src/scripts/application/ProjectDocument';
 
 /**
  * An enumeration representing different Firestore document types.
@@ -17,6 +15,10 @@ export enum EFirestoreDocumentType {
    * A Firestore document containing a project.
    */
   Project = 'project',
+  /**
+   * A Firestore document containing information about an external applicatin.
+   */
+  ExternalApp = 'externalApp',
 }
 
 /**
@@ -130,6 +132,12 @@ export class FirestoreDocument<D extends IFirestoreDocumentData> {
    */
   data: D;
 
+  /** Child documents of this document. */
+  children: Map<
+    EFirestoreDocumentType,
+    Map<string, FirestoreDocument<IFirestoreDocumentData>>
+  >;
+
   /**
    * Creates an instance of a Firestore document using the given configuration.
    *
@@ -168,6 +176,113 @@ export class FirestoreDocument<D extends IFirestoreDocumentData> {
     }
     // Infer document type from path
     this.type = getTypeFromPath(this.path);
+    // Init children
+    this.children = new Map<
+      EFirestoreDocumentType,
+      Map<string, FirestoreDocument<IFirestoreDocumentData>>
+    >();
+  }
+
+  /**
+   * Adds a document to the Firestore collection.
+   *
+   * @param {FirestoreDocument<IFirestoreDocumentData>} document - The Firestore document to be added.
+   *
+   * @return {void} This method does not return a value.
+   */
+  addDocument(document: FirestoreDocument<IFirestoreDocumentData>): void {
+    // Get document type
+    const type = document.type;
+    // Get map for the document type
+    let map = this.children.get(type);
+    if (!map) {
+      // Add new map
+      map = new Map<string, FirestoreDocument<IFirestoreDocumentData>>();
+      this.children.set(type, map);
+    }
+    // Add document to map
+    map.set(document.id, document);
+  }
+
+  /**
+   * Retrieves a document from the Firestore based on the specified type and ID.
+   *
+   * @param {EFirestoreDocumentType} type - The type of the document to retrieve.
+   * @param {string} id - The ID of the document to retrieve.
+   * @returns {R | undefined} The document of type R if found, otherwise undefined.
+   *
+   * @template D - The type of the specific data interface.
+   * @template R - The type of the specific document class.
+   */
+  getDocument<D extends IFirestoreDocumentData, R extends FirestoreDocument<D>>(
+    type: EFirestoreDocumentType,
+    id: string
+  ): R | undefined {
+    // Get map for the specified type
+    const map = this.children.get(type);
+    if (map) {
+      // Get document from the map for specified ID
+      const document = map.get(id);
+      // Return document
+      return document as R;
+    }
+    // Not found
+    return undefined;
+  }
+
+  /**
+   * Retrieves documents of the specified Firestore document type.
+   *
+   * @param {EFirestoreDocumentType} type - The type of Firestore document to retrieve.
+   * @return {R[]} An array of project documents of the specified type.
+   *
+   * @template D - The type of the specific data interface.
+   * @template R - The type of the specific document class.
+   */
+  getDocuments<D extends IFirestoreDocumentData, R extends ProjectDocument<D>>(
+    type: EFirestoreDocumentType
+  ): R[] {
+    // Create result array
+    const result: R[] = [];
+    // Get the documents map for the specified type
+    const documents = this.children.get(type);
+    if (documents) {
+      for (const document of documents.values()) {
+        result.push(document as R);
+      }
+    }
+    // Nothing found
+    return result;
+  }
+
+  /**
+   * Removes the specified document from the internal map of documents.
+   *
+   * @param {FirestoreDocument<IFirestoreDocumentData>} document - The document to be removed.
+   */
+  removeDocument(document: FirestoreDocument<IFirestoreDocumentData>): void {
+    // Get map for the specified type
+    const map = this.children.get(document.type);
+    if (map) {
+      // Remove the document from the map
+      map.delete(document.id);
+    }
+  }
+
+  /**
+   * Deletes all documents recursively, including their children documents.
+   */
+  async deleteAllDocuments(): Promise<void> {
+    // Iterate over all document types
+    for (const children of this.children.values()) {
+      // Iterate over all documents
+      for (const child of children.values()) {
+        // Delete document of the child
+        await child.deleteAllDocuments();
+        // Delete the document itself
+        await deleteDocument(child);
+      }
+    }
   }
 
   /**
@@ -199,7 +314,7 @@ export async function createDocument<
   type: EFirestoreDocumentType,
   data: D,
   id?: string,
-  parent?: FirestoreDocument<never>
+  parent?: FirestoreDocument<IFirestoreDocumentData>,
 ): Promise<R> {
   // Set meta information on data object, if not specified yet
   if (data.common.meta === undefined) {
@@ -211,7 +326,7 @@ export async function createDocument<
     };
   }
   // Create path
-  const path = parent ? parent.path + '/' + type : type;
+  const path = parent ? parent.path + '/' + parent.id + '/' + type : type;
   // Create document
   if (id) {
     // Create document reference for specified ID.
@@ -249,7 +364,7 @@ export async function loadDocument<
   parent?: FirestoreDocument<never>
 ): Promise<R | undefined> {
   // Create path
-  const path = parent ? parent.path + '/' + type : type;
+  const path = parent ? parent.path + '/' + parent.id + '/' + type : type;
   // Create document reference
   const ref = fs.doc(firebaseStore, path, id);
   // Load the document from Firebase
@@ -276,11 +391,11 @@ export async function loadDocuments<
   R extends FirestoreDocument<D>
 >(
   type: EFirestoreDocumentType,
-  parent: FirestoreDocument<never> | null,
+  parent: FirestoreDocument<IFirestoreDocumentData> | null,
   ...constraints: fs.QueryConstraint[]
 ): Promise<R[]> {
   // Create path to the documents
-  const path = parent ? parent.path + '/' + type : type;
+  const path = parent ? parent.path + '/' + parent.id + '/' + type : type;
   // Create collection
   const coll = fs.collection(firebaseStore, path);
   // Create query
@@ -305,7 +420,6 @@ export async function loadDocuments<
  *
  * @param {R} document - The Firestore document reference to update.
  * @param {boolean} [updateMeta=true] - Flag to indicate whether to update metadata (e.g., timestamp, account name).
- * @return {Promise<void>} - A promise that resolves when the document is successfully updated.
  *
  * @template D - The type of the specific data interface.
  * @template R - The type of the specific document class.
@@ -313,7 +427,10 @@ export async function loadDocuments<
 export async function updateDocument<
   D extends IFirestoreDocumentData,
   R extends FirestoreDocument<D>
->(document: R, updateMeta: boolean = true): Promise<void> {
+>(
+  document: R,
+  updateMeta: boolean = true,
+): Promise<void> {
   // Update metadata if necessary
   if (updateMeta && document.data.common.meta) {
     document.data.common.meta.altered = {

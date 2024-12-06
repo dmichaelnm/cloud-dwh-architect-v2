@@ -3,12 +3,6 @@
   <editor-container
     v-model="editorData"
     :scope="EFirestoreDocumentType.Project"
-    :read-only="readOnly"
-    :mode="
-      comp.session.editorParameter
-        ? comp.session.editorParameter.operation
-        : EDocumentOperation.Create
-    "
     :tabs="[
       { key: 'general', label: 'label.general' },
       { key: 'member', label: 'project.label.member' },

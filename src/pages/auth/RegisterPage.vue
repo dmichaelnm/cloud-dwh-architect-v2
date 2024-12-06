@@ -1,6 +1,6 @@
 <template>
   <!-- Authentication Container -->
-  <authentication-container :message="$t('auth.message.register')">
+  <authentication-container :message="$t('auth.message.register')" v-if="buildOptions.enableAccountRegistering">
     <!-- Form -->
     <q-form ref="registerForm" @submit="onSubmit">
       <!-- Form DIV -->
@@ -108,6 +108,7 @@ import {
 import { QForm } from 'quasar';
 import { createAccount } from 'src/scripts/application/Account';
 import { processFirebaseError } from 'src/scripts/utilities/firebase';
+import { buildOptions} from 'src/scripts/config/options';
 
 // Get composable components
 const comp = useComposables();

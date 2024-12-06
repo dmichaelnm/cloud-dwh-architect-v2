@@ -13,6 +13,15 @@
       <div class="header-bar">
         <!-- Header Row -->
         <div class="row items-center">
+          <!-- Left Drawer Button Column -->
+          <div class="col-auto left-drawer-button">
+            <!-- Left Drawer Button -->
+            <button-icon
+              :icon="leftDrawerIcon"
+              @click="leftDrawer = !leftDrawer"
+              size="md"
+            />
+          </div>
           <!-- Application Title Column -->
           <div class="col-auto">
             <!-- Application Title -->
@@ -51,6 +60,25 @@
       <app-footer />
     </q-footer>
 
+    <!-- Left Drawer -->
+    <q-drawer v-model="leftDrawer" show-if-above :width="300" bordered>
+      <!-- Drawer DIV -->
+      <div class="left-drawer-list">
+        <!-- List of drawer items -->
+        <q-list>
+          <!-- Management -->
+          <drawer-label :label="$t('label.management')" />
+          <!-- External Applications -->
+          <drawer-item
+            :label="$t('externalApp.label.drawerItem')"
+            :disable="project === null"
+            icon="apps"
+            route-to-page="/externalApp/overview"
+          />
+        </q-list>
+      </div>
+    </q-drawer>
+
     <!-- Page Container -->
     <q-page-container>
       <!-- Router View -->
@@ -88,29 +116,43 @@
   font-weight: normal;
   font-size: 9pt;
 }
+
+.left-drawer {
+  background-color: transparent;
+}
+
+.left-drawer-button {
+  padding: 0 16px 0 0;
+}
+
+.left-drawer-list {
+  padding: 32px 0;
+}
 </style>
 
 <script setup lang="ts">
-import { computed, onBeforeMount, watch } from 'vue';
-import {
-  useComposables,
-  useMessageDialog,
-  useRunTask,
-} from 'src/scripts/utilities/common';
-import { onAccountStateChanged } from 'src/scripts/application/Account';
+import * as cm from 'src/scripts/utilities/common';
 import AppFooter from 'components/app/AppFooter.vue';
 import AccountMenu from 'components/app/main/AccountMenu.vue';
 import ProjectMenu from 'components/app/project/ProjectMenu.vue';
 import MessageDialog from 'components/common/MessageDialog.vue';
-import { loadProjects } from 'src/scripts/application/Project';
+import ButtonIcon from 'components/common/ButtonIcon.vue';
+import DrawerItem from 'components/app/main/DrawerItem.vue';
+import DrawerLabel from 'components/app/main/DrawerLabel.vue';
+import { computed, onBeforeMount, ref, watch } from 'vue';
+import { onAccountStateChanged } from 'src/scripts/application/Account';
+import { loadProject, loadProjects } from 'src/scripts/application/Project';
 import { updateDocument } from 'src/scripts/application/FirestoreDocument';
 
 // Get composable components
-const comp = useComposables();
+const comp = cm.useComposables();
 // Get message dialog options
-const { messageDialogOptions } = useMessageDialog();
+const { messageDialogOptions, showConfirmationDialog } = cm.useMessageDialog();
 // Get run task composable function
-const runTask = useRunTask();
+const runTask = cm.useRunTask();
+
+// Left drawer state
+const leftDrawer = ref(false);
 
 // Lifecycle method that is called before this component is mounted
 onBeforeMount(() => {
@@ -141,6 +183,11 @@ onBeforeMount(() => {
   });
 });
 
+// Drawer Icon Name
+const leftDrawerIcon = computed(() =>
+  leftDrawer.value ? 'chevron_left' : 'chevron_right'
+);
+
 // Reference to the current project
 const project = computed(() => comp.session.project);
 
@@ -163,37 +210,61 @@ watch(project, (newValue, oldValue) => {
  * If no valid project is found, it sets the session's project to null.
  */
 async function switchProject(): Promise<void> {
-  // Start switch process
-  await runTask(async () => {
-    // Get current project ID from account
-    const projectId = comp.session.account
-      ? comp.session.account?.data.state.currentProject
-      : null;
-    // Do nothing, if project is already active
-    if (projectId !== comp.session.project?.id) {
-      // Check, if project ID is in projects array
-      const project = comp.session.getProject(projectId);
-      // If project was found, current ID on account is valid
-      if (project) {
-        // Set current project
-        comp.session.project = project;
-        // TODO load project details
-      } else if (comp.session.projects.length > 0) {
-        // Set the first project in the list as active
-        comp.session.project = comp.session.projects[0];
-        // TODO load project details
-      } else {
-        // No project found
-        comp.session.project = null;
+  // Check for an open editor
+  if (comp.session.editorParameter) {
+    // Show confirmation dialog
+    showConfirmationDialog(
+      comp.i18n.t('dialog.discard.title'),
+      comp.i18n.t('dialog.discard.message'),
+      'warning',
+      undefined,
+      async (value) => {
+        // If user has confirmed, set editor state and open the editor
+        if (value === 'okay') {
+          // Reset editor parameter
+          comp.session.editorParameter = null;
+          // Switch project again
+          await switchProject();
+        }
       }
-      // Update account
-      if (comp.session.account) {
-        comp.session.account.data.state.currentProject = comp.session.project
-          ? comp.session.project.id
-          : null;
-        await updateDocument(comp.session.account);
+    );
+  } else {
+    // Start switch process
+    await runTask(async () => {
+      // Get current project ID from account
+      const projectId = comp.session.account
+        ? comp.session.account?.data.state.currentProject
+        : null;
+      // Do nothing, if project is already active
+      if (projectId !== comp.session.project?.id) {
+        // Check, if project ID is in projects array
+        const project = comp.session.getProject(projectId);
+        // If project was found, current ID on account is valid
+        if (project) {
+          // Set current project
+          comp.session.project = project;
+          // Load project details
+          await loadProject(project);
+        } else if (comp.session.projects.length > 0) {
+          // Set the first project in the list as active
+          comp.session.project = comp.session.projects[0];
+          // Load project details
+          await loadProject(comp.session.project);
+        } else {
+          // No project found
+          comp.session.project = null;
+        }
+        // Update account
+        if (comp.session.account) {
+          comp.session.account.data.state.currentProject = comp.session.project
+            ? comp.session.project.id
+            : null;
+          await updateDocument(comp.session.account);
+        }
+        // Route to main page
+        await comp.router.push({ path: '/' });
       }
-    }
-  });
+    });
+  }
 }
 </script>

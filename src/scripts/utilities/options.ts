@@ -4,6 +4,7 @@ import {
 } from 'src/scripts/utilities/common';
 import { flagDE, flagUS } from 'quasar-extras-svg-icons/country-flag-icons';
 import { EProjectMemberRole } from 'src/scripts/application/Project';
+import { EExternalAppProvider } from 'src/scripts/provider/common';
 
 /**
  * Retrieves the options for language selection.
@@ -70,6 +71,26 @@ export function getCustomAttributeTypes(): TSelectOption[] {
     {
       value: ECustomAttributeType.Boolean,
       label: 'enumeration.customAttributeType.boolean',
+    },
+  ];
+}
+
+/**
+ * Retrieves a list of external application providers.
+ *
+ * @return {TSelectOption[]} An array of objects, each containing the value and label of an external application provider.
+ */
+export function getExternalApplicationProviders(): TSelectOption[] {
+  return [
+    {
+      value: EExternalAppProvider.S3,
+      label: 'enumeration.externalAppProvider.s3',
+      icon: 'img:icons/s3.png',
+    },
+    {
+      value: EExternalAppProvider.Snowflake,
+      label: 'enumeration.externalAppProvider.snowflake',
+      icon: 'img:icons/snowflake.png',
     },
   ];
 }
