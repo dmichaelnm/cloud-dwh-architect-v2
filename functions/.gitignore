@@ -12,3 +12,4 @@ node_modules/
 # Logfiles
 snowflake.log
 ui-debug.log
+firebase-debug.log
