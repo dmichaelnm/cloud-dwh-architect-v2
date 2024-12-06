@@ -45,6 +45,14 @@ jobs:
           echo "};" >> firebase.ts
           cd ../../..
 
+      - name: Generate Firebase Functions Configuration
+        run: |
+          cd src/scripts/config
+          echo "export const functionsPreferences = {" > functions.ts
+          echo "  baseUrl: '${{vars.FIREBASE_FUNCTIONS_URL}}'," >> functions.ts
+          echo "};" >> functions.ts
+          cd ../../..
+
       - name: Build Quasar Application
         run: npx quasar build
 
@@ -64,3 +72,4 @@ jobs:
           rm google-application-credentials.json
           rm src/scripts/config/firebase.ts
           rm src/scripts/config/version.ts
+          rm src/scripts/config/functions.ts
