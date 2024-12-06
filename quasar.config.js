@@ -93,6 +93,13 @@ module.exports = configure(function (/* ctx */) {
           { server: false },
         ],
       ],
+
+      viteVuePluginOptions: {
+        exclude: ['./functions']
+      },
+      rollupOptions: {
+        external: ['functions'],
+      }
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
