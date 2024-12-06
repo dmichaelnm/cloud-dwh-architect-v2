@@ -28,6 +28,8 @@ export default {
 
   // Common Labels
   label: {
+    // Architecture
+    architecture: 'Architecture',
     // Altered
     altered: 'Altered By / At',
     // Custom Attributes
@@ -362,7 +364,7 @@ export default {
     },
   },
 
-  // External Applications
+  // External Application Messages
   externalApp: {
     // Object name
     object: 'External Application',
@@ -499,6 +501,15 @@ export default {
             'Unfortunately, no connection could be established. You can find more detailed information in the details.',
         },
       },
+    },
+  },
+
+  // Storage Location Messages
+  storageLocation: {
+    // Label Messages
+    label: {
+      // Drawer Item
+      drawerItem: 'File Storage Locations',
     },
   },
 };

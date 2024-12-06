@@ -1,5 +1,8 @@
 import { capitalize } from 'src/scripts/utilities/common';
-import { firebaseStore, getCurrentAccountName } from 'src/scripts/utilities/firebase';
+import {
+  firebaseStore,
+  getCurrentAccountName,
+} from 'src/scripts/utilities/firebase';
 import * as fs from 'firebase/firestore';
 import { ProjectDocument } from 'src/scripts/application/ProjectDocument';
 
@@ -19,6 +22,10 @@ export enum EFirestoreDocumentType {
    * A Firestore document containing information about an external applicatin.
    */
   ExternalApp = 'externalApp',
+  /**
+   * A Firestore document containing information about a file storage location.
+   */
+  StorageLoc = 'storageLoc',
 }
 
 /**
@@ -145,8 +152,8 @@ export class FirestoreDocument<D extends IFirestoreDocumentData> {
    * @param {string} config.path - Path of the Firestore document.
    * @param {string} config.id - Document ID.
    * @param {D} config.data - Document data.
-   * @param {FirebaseFirestore.DocumentReference} config.reference - Firestore document reference.
-   * @param {FirebaseFirestore.DocumentSnapshot} config.document - Firestore document snapshot.
+   * @param {DocumentReference} config.reference - Firestore document reference.
+   * @param {DocumentSnapshot} config.document - Firestore document snapshot.
    * @throws {Error} Throws error if the configuration is invalid.
    */
   constructor(config: TFirestoreDocumentConfig) {
@@ -314,7 +321,7 @@ export async function createDocument<
   type: EFirestoreDocumentType,
   data: D,
   id?: string,
-  parent?: FirestoreDocument<IFirestoreDocumentData>,
+  parent?: FirestoreDocument<IFirestoreDocumentData>
 ): Promise<R> {
   // Set meta information on data object, if not specified yet
   if (data.common.meta === undefined) {
@@ -427,10 +434,7 @@ export async function loadDocuments<
 export async function updateDocument<
   D extends IFirestoreDocumentData,
   R extends FirestoreDocument<D>
->(
-  document: R,
-  updateMeta: boolean = true,
-): Promise<void> {
+>(document: R, updateMeta: boolean = true): Promise<void> {
   // Update metadata if necessary
   if (updateMeta && document.data.common.meta) {
     document.data.common.meta.altered = {

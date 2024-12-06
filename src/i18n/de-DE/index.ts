@@ -30,6 +30,8 @@ export default {
 
   // Common Labels
   label: {
+    // Architecture
+    architecture: 'Architektur',
     // Altered
     altered: 'Geändert von / am',
     // Custom Attributes
@@ -375,7 +377,7 @@ export default {
     },
   },
 
-  // External Applications
+  // External Application Messages
   externalApp: {
     // Object name
     object: 'Externe Applikation',
@@ -519,6 +521,15 @@ export default {
             'entnehmen.',
         },
       },
+    },
+  },
+
+  // Storage Location Messages
+  storageLocation: {
+    // Label Messages
+    label: {
+      // Drawer Item
+      drawerItem: 'Datei-Ablageorte',
     },
   },
 };

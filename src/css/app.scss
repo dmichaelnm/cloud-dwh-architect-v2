@@ -165,7 +165,6 @@ body.body--dark {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.8);
 }
 
-
 .container-title {
   color: $text-caption-light;
   font-size: 14pt;
@@ -202,5 +201,13 @@ body.body--dark {
 }
 
 .q-list--dark, .q-item--dark {
+  color: $text-dark;
+}
+
+.q-expansion-item .q-item__label {
+  color: $text-light;
+}
+
+.body--dark .q-expansion-item .q-item__label {
   color: $text-dark;
 }

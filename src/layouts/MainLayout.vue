@@ -75,6 +75,15 @@
             icon="apps"
             route-to-page="/externalApp/overview"
           />
+          <!-- Architecture -->
+          <drawer-label :label="$t('label.architecture')" />
+          <!-- Storage Locations -->
+          <drawer-item
+            :label="$t('storageLocation.label.drawerItem')"
+            :disable="project === null"
+            icon="storage"
+            route-to-page="/storageLoc/overview"
+          />
         </q-list>
       </div>
     </q-drawer>

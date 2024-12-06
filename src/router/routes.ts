@@ -53,6 +53,11 @@ const routes: RouteRecordRaw[] = [
         path: 'externalApp/editor',
         component: () => import('pages/extapp/ExternalAppEditorPage.vue'),
       },
+      // Storage Location Overview Page
+      {
+        path: 'storageLoc/overview',
+        component: () => import('pages/storageloc/StorageLocationOverviewPage.vue'),
+      }
     ],
   },
 
