@@ -1,9 +1,8 @@
 import { EditorData } from 'src/scripts/ui/common';
 import { IExternalAppData } from 'src/scripts/application/ExternalApp';
 import { FirestoreDocument } from 'src/scripts/application/FirestoreDocument';
-import { TProviderCredentials } from 'src/scripts/provider/common';
 import { TCustomAttribute } from 'src/scripts/utilities/common';
-import { EExternalAppProvider } from 'src/scripts/provider/common';
+import * as pc from 'src/scripts/provider/common';
 import * as s3 from 'src/scripts/provider/s3';
 import * as snflk from 'src/scripts/provider/snowflake';
 
@@ -14,10 +13,10 @@ import * as snflk from 'src/scripts/provider/snowflake';
  */
 export class EditorExternalAppData extends EditorData<IExternalAppData> {
   /** Provider */
-  provider: EExternalAppProvider;
+  provider: pc.EExternalAppProvider;
 
   /** Credentials */
-  credentials: TProviderCredentials;
+  credentials: pc.TProviderCredentials;
 
   /** Custom Attributes */
   attributes: TCustomAttribute[];
@@ -27,7 +26,7 @@ export class EditorExternalAppData extends EditorData<IExternalAppData> {
    */
   constructor() {
     super();
-    this.provider = EExternalAppProvider.S3;
+    this.provider = pc.EExternalAppProvider.S3;
     this.credentials = {
       region: 'us-east-1',
       bucket: '',
@@ -45,13 +44,16 @@ export class EditorExternalAppData extends EditorData<IExternalAppData> {
    */
   createData(): IExternalAppData {
     // Create credentials object
-    let credentials: TProviderCredentials = {};
-    if (this.provider === EExternalAppProvider.S3) {
+    let credentials:pc. TProviderCredentials = {};
+    let locationType: pc.ELocationType = pc.ELocationType.file;
+    if (this.provider === pc.EExternalAppProvider.S3) {
       // Amazon S3 credentials
       credentials = s3.createCredentials(this.credentials);
-    } else if (this.provider == EExternalAppProvider.Snowflake) {
+      locationType = pc.ELocationType.file;
+    } else if (this.provider == pc.EExternalAppProvider.Snowflake) {
       // Snowflake credentials
       credentials = snflk.createCredentials(this.credentials);
+      locationType = pc.ELocationType.relational;
     }
     // Return data object
     return {
@@ -59,6 +61,7 @@ export class EditorExternalAppData extends EditorData<IExternalAppData> {
         name: this.name,
         description: this.description,
       },
+      locationType: locationType,
       provider: this.provider,
       credentials: credentials,
       attributes: this.attributes,
