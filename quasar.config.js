@@ -95,10 +95,11 @@ module.exports = configure(function (/* ctx */) {
       ],
 
       viteVuePluginOptions: {
-        exclude: ['./functions']
+        exclude: ['./functions/**']
       },
+
       rollupOptions: {
-        external: ['functions'],
+        external: ['functions/**'],
       }
     },
 
