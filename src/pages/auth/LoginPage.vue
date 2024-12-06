@@ -46,6 +46,7 @@
           <div class="col">
             <!-- Register Account Button -->
             <button-push
+              v-if="buildOptions.enableAccountRegistering"
               :label="$t('auth.label.register')"
               look="link"
               route-to="/auth/register"
@@ -77,6 +78,7 @@ import { useComposables, useRunTask } from 'src/scripts/utilities/common';
 import { QForm } from 'quasar';
 import { processFirebaseError } from 'src/scripts/utilities/firebase';
 import { login } from 'src/scripts/application/Account';
+import { buildOptions} from 'src/scripts/config/options';
 
 // Get composable components
 const comp = useComposables();

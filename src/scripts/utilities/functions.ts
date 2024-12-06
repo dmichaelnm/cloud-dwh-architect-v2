@@ -1,4 +1,4 @@
-import { functionsPreferences } from 'src/scripts/config/functions';
+import { buildOptions } from 'src/scripts/config/options';
 import { firebaseAuth } from 'src/scripts/utilities/firebase';
 import { api } from 'boot/axios';
 import { FirebaseError } from 'firebase/app';
@@ -33,7 +33,7 @@ export async function post<P, R>(functionName: string, payload: P): Promise<R> {
     // Check for active current user
     if (firebaseAuth.currentUser) {
       // Create URL with specified function name
-      const url = functionsPreferences.baseUrl.replace(
+      const url = buildOptions.functionsUrl.replace(
         ':function:',
         functionName
       );
