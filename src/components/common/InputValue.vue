@@ -64,6 +64,11 @@ const emit = defineEmits<{
 // The internal model value of this component
 const _modelValue = computed({
   get: () => {
+    // Hide passwords in read only mode
+    if (props.readOnly && props.type === 'password') {
+      return '';
+    }
+    // Process upper case flag
     if (props.upperCase && typeof props.modelValue === 'string') {
       return props.modelValue.toUpperCase();
     }
