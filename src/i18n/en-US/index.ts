@@ -407,7 +407,7 @@ export default {
         message:
           'To connect to a Snowflake database, you will need certain credentials, such as the account name, username, ' +
           'and password. Please ensure that these details are entered correctly to establish a successful connection. ' +
-          'If you need assistance with entering, you can find all relevant information in your company\'s login ' +
+          "If you need assistance with entering, you can find all relevant information in your company's login " +
           'documents or contact the administrator.',
         // Account
         account: 'Account',
@@ -422,7 +422,7 @@ export default {
         // Role
         role: 'Role',
         // Schema
-        schema: 'Schema'
+        schema: 'Schema',
       },
     },
     // Overview Messages
@@ -476,6 +476,28 @@ export default {
         // Message
         message:
           'Here you can edit the properties of the external application and update the login credentials if necessary.',
+      },
+    },
+    // Dialog Messages
+    dialog: {
+      // Test Connection Messages
+      testConnection: {
+        // Success Message
+        success: {
+          // Title
+          title: 'Connection Successful',
+          // Message
+          message:
+            'The connection was successfully established. The provided information seems to be correct.',
+        },
+        // Failure Message
+        failure: {
+          // Title
+          title: 'Connection failed',
+          // Message
+          message:
+            'Unfortunately, no connection could be established. You can find more detailed information in the details.',
+        },
       },
     },
   },

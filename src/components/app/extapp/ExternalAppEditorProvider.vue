@@ -18,7 +18,7 @@
         </div>
       </div>
       <!-- Amazon S3 Credentials Row -->
-      <div class="row" v-if="_modelValue.provider === pv.EExternalAppProvider.S3">
+      <div class="row" v-if="_modelValue.provider === EExternalAppProvider.S3">
         <!-- Amazon S3 Credentials Column -->
         <div class="col">
           <!-- Amazon S3 Message Component -->
@@ -31,8 +31,8 @@
                 <div class="col-3">
                   <!-- Region Select -->
                   <select-value
-                    v-model="(_modelValue.credentials as pv.TProviderCredentialsS3).region"
-                    :options="pv.getAWSRegions()"
+                    v-model="(_modelValue.credentials as s3.TProviderCredentialsS3).region"
+                    :options="s3.getAWSRegions()"
                     :label="$t('externalApp.provider.s3.region')"
                     :read-only="isReadOnly"
                   >
@@ -59,7 +59,7 @@
                 <div class="col-3">
                   <!-- Bucket Name -->
                   <input-value
-                    v-model="(_modelValue.credentials as pv.TProviderCredentialsS3).bucket"
+                    v-model="(_modelValue.credentials as s3.TProviderCredentialsS3).bucket"
                     :label="$t('externalApp.provider.s3.bucket')"
                     :read-only="isReadOnly"
                     mandatory
@@ -69,7 +69,7 @@
                 <div class="col-3">
                   <!-- Access Key Id -->
                   <input-value
-                    v-model="(_modelValue.credentials as pv.TProviderCredentialsS3).accessKeyId"
+                    v-model="(_modelValue.credentials as s3.TProviderCredentialsS3).accessKeyId"
                     :label="$t('externalApp.provider.s3.accessKeyId')"
                     :read-only="isReadOnly"
                     type="password"
@@ -80,7 +80,7 @@
                 <div class="col-3">
                   <!-- Secret Access Key -->
                   <input-value
-                    v-model="(_modelValue.credentials as pv.TProviderCredentialsS3).secretAccessKey"
+                    v-model="(_modelValue.credentials as s3.TProviderCredentialsS3).secretAccessKey"
                     :label="$t('externalApp.provider.s3.secretAccessKey')"
                     :read-only="isReadOnly"
                     type="password"
@@ -95,7 +95,7 @@
       <!-- Snowflake Credentials Row-->
       <div
         class="row"
-        v-if="_modelValue.provider === pv.EExternalAppProvider.Snowflake"
+        v-if="_modelValue.provider === EExternalAppProvider.Snowflake"
       >
         <!-- Snowflake Credentials Column -->
         <div class="col">
@@ -111,7 +111,7 @@
                 <div class="col-3">
                   <!-- Account -->
                   <input-value
-                    v-model="(_modelValue.credentials as pv.TProviderCredentialsSnowflake).account"
+                    v-model="(_modelValue.credentials as snflk.TProviderCredentialsSnowflake).account"
                     :label="$t('externalApp.provider.snowflake.account')"
                     :read-only="isReadOnly"
                     mandatory
@@ -121,17 +121,18 @@
                 <div class="col-3">
                   <!-- Username -->
                   <input-value
-                    v-model="(_modelValue.credentials as pv.TProviderCredentialsSnowflake).username"
+                    v-model="(_modelValue.credentials as snflk.TProviderCredentialsSnowflake).username"
                     :label="$t('externalApp.provider.snowflake.username')"
                     :read-only="isReadOnly"
                     mandatory
+                    upper-case
                   />
                 </div>
                 <!-- Password Column -->
                 <div class="col-3">
                   <!-- Password -->
                   <input-value
-                    v-model="(_modelValue.credentials as pv.TProviderCredentialsSnowflake).password"
+                    v-model="(_modelValue.credentials as snflk.TProviderCredentialsSnowflake).password"
                     :label="$t('externalApp.provider.snowflake.password')"
                     :read-only="isReadOnly"
                     type="password"
@@ -145,36 +146,40 @@
                 <div class="col-3">
                   <!-- Database -->
                   <input-value
-                    v-model="(_modelValue.credentials as pv.TProviderCredentialsSnowflake).database"
+                    v-model="(_modelValue.credentials as snflk.TProviderCredentialsSnowflake).database"
                     :label="$t('externalApp.provider.snowflake.database')"
                     :read-only="isReadOnly"
+                    upper-case
                   />
                 </div>
                 <!-- Warehouse Column -->
                 <div class="col-3">
                   <!-- Warehouse -->
                   <input-value
-                    v-model="(_modelValue.credentials as pv.TProviderCredentialsSnowflake).warehouse"
+                    v-model="(_modelValue.credentials as snflk.TProviderCredentialsSnowflake).warehouse"
                     :label="$t('externalApp.provider.snowflake.warehouse')"
                     :read-only="isReadOnly"
+                    upper-case
                   />
                 </div>
                 <!-- Role Column -->
                 <div class="col-3">
                   <!-- Role -->
                   <input-value
-                    v-model="(_modelValue.credentials as pv.TProviderCredentialsSnowflake).role"
+                    v-model="(_modelValue.credentials as snflk.TProviderCredentialsSnowflake).role"
                     :label="$t('externalApp.provider.snowflake.role')"
                     :read-only="isReadOnly"
+                    upper-case
                   />
                 </div>
                 <!-- Schema Column -->
                 <div class="col-3">
                   <!-- Schema -->
                   <input-value
-                    v-model="(_modelValue.credentials as pv.TProviderCredentialsSnowflake).schema"
+                    v-model="(_modelValue.credentials as snflk.TProviderCredentialsSnowflake).schema"
                     :label="$t('externalApp.provider.snowflake.schema')"
                     :read-only="isReadOnly"
+                    upper-case
                   />
                 </div>
               </div>
@@ -187,7 +192,10 @@
         <!-- Test Button Column -->
         <div class="col text-right">
           <!-- Test Button -->
-          <button-push :label="$t('externalApp.label.testConnection')" />
+          <button-push
+            :label="$t('externalApp.label.testConnection')"
+            @click="testConnection"
+          />
         </div>
       </div>
     </div>
@@ -203,7 +211,9 @@
 </style>
 
 <script setup lang="ts">
-import * as pv from 'src/scripts/utilities/provider';
+import * as cm from 'src/scripts/utilities/common';
+import * as s3 from 'src/scripts/provider/s3';
+import * as snflk from 'src/scripts/provider/snowflake';
 import MessageComponent from 'components/common/MessageComponent.vue';
 import SelectValue from 'components/common/SelectValue.vue';
 import InputValue from 'components/common/InputValue.vue';
@@ -211,10 +221,15 @@ import ButtonPush from 'components/common/ButtonPush.vue';
 import { computed } from 'vue';
 import { getExternalApplicationProviders } from 'src/scripts/utilities/options';
 import { EditorExternalAppData } from 'src/scripts/ui/externalApp';
-import { EDocumentOperation, useComposables } from 'src/scripts/utilities/common';
+import { EExternalAppProvider } from 'src/scripts/provider/common';
+import { post } from 'src/scripts/utilities/functions';
 
 // Get composable components
-const comp = useComposables();
+const comp = cm.useComposables();
+// Get run task composable function
+const runTask = cm.useRunTask();
+// Get message dialog composable functions
+const { showSuccessDialog, showErrorDialog } = cm.useMessageDialog();
 
 // Defines the properties of this component
 const props = defineProps<{
@@ -237,15 +252,55 @@ const _modelValue = computed({
 // Flag resolving to true, if editor is in edit mode, otherwise false
 const isEditMode = computed(() =>
   comp.session.editorParameter
-    ? comp.session.editorParameter.operation === EDocumentOperation.Edit
+    ? comp.session.editorParameter.operation === cm.EDocumentOperation.Edit
     : false
 );
 
 // Flag resolving to true, if editor is in read only, otherwise false
 const isReadOnly = computed(() =>
   comp.session.editorParameter
-    ? comp.session.editorParameter.operation === EDocumentOperation.View
+    ? comp.session.editorParameter.operation === cm.EDocumentOperation.View
     : false
 );
 
+/**
+ * Initiates a test connection to an external application and handles the result.
+ *
+ * This function sends a test request to the external application specified by the current model value.
+ * If the connection is successful, a success dialog is displayed with information from the result.
+ * If the connection fails, a failure dialog is shown with the error message if the error code matches 'connection-failed'.
+ * Any other errors are considered unexpected.
+ */
+function testConnection(): void {
+  // Start the process
+  runTask(
+    async () => {
+      // Post the request
+      const result = await post<EditorExternalAppData, string>(
+        'testConnection',
+        _modelValue.value
+      );
+      // Show success dialog
+      showSuccessDialog(
+        comp.i18n.t('externalApp.dialog.testConnection.success.title'),
+        comp.i18n.t('externalApp.dialog.testConnection.success.message'),
+        result
+      );
+    },
+    (error: any) => {
+      // Check error code
+      if (error.code === 'connection-failed') {
+        // Show specific failure dialog
+        showErrorDialog(
+          comp.i18n.t('externalApp.dialog.testConnection.failure.title'),
+          comp.i18n.t('externalApp.dialog.testConnection.failure.message'),
+          error.message
+        );
+        return true;
+      }
+      // Show unexpected error
+      return false;
+    }
+  );
+}
 </script>

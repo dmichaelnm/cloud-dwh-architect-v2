@@ -19,7 +19,11 @@
           <!-- Container Button Column -->
           <div class="col-6 text-right q-gutter-x-sm">
             <!-- Save Button -->
-            <button-push  v-if="!readOnly" :label="$t('label.save')" type="submit" />
+            <button-push
+              v-if="!readOnly"
+              :label="$t('label.save')"
+              type="submit"
+            />
             <!-- Cancel Button -->
             <button-push
               :label="readOnly ? $t('label.close') : $t('label.cancel')"
@@ -85,55 +89,53 @@
 </style>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import {
-  EDocumentOperation,
-  TEditorTab,
-  useComposables,
-  useRunTask,
-} from 'src/scripts/utilities/common';
+import * as fd from 'src/scripts/application/FirestoreDocument';
+import * as cm from 'src/scripts/utilities/common';
 import ButtonPush from 'components/common/ButtonPush.vue';
 import InputValue from 'components/common/InputValue.vue';
-import {
-  createDocument,
-  EFirestoreDocumentType,
-  FirestoreDocument,
-  IFirestoreDocumentData,
-  updateDocument,
-} from 'src/scripts/application/FirestoreDocument';
+import { computed, ref } from 'vue';
 import { EditorData } from 'src/scripts/ui/common';
 
 // Get composable functions
-const comp = useComposables();
+const comp = cm.useComposables();
 // Get run task composable function
-const runTask = useRunTask();
+const runTask = cm.useRunTask();
 
 // Defines the properties of this component
 const props = defineProps<{
   /** The model value */
-  modelValue: EditorData<IFirestoreDocumentData>;
+  modelValue: EditorData<fd.IFirestoreDocumentData>;
   /** Document type of the editor */
-  scope: EFirestoreDocumentType;
+  scope: fd.EFirestoreDocumentType;
   /** Tab definition array */
-  tabs: TEditorTab[];
+  tabs: cm.TEditorTab[];
   /** Parent Firestore document */
-  parent?: FirestoreDocument<IFirestoreDocumentData>;
+  parent?: fd.FirestoreDocument<fd.IFirestoreDocumentData>;
 }>();
 
 // Defines the events that can be emitted by this component
 const emit = defineEmits<{
   /** Model update event */
-  (event: 'update:modelValue', value: EditorData<IFirestoreDocumentData>): void;
+  (
+    event: 'update:modelValue',
+    value: EditorData<fd.IFirestoreDocumentData>
+  ): void;
   /** Create event */
-  (event: 'created', value: FirestoreDocument<IFirestoreDocumentData>): void;
+  (
+    event: 'created',
+    value: fd.FirestoreDocument<fd.IFirestoreDocumentData>
+  ): void;
   /** Update event */
-  (event: 'updated', value: FirestoreDocument<IFirestoreDocumentData>): void;
+  (
+    event: 'updated',
+    value: fd.FirestoreDocument<fd.IFirestoreDocumentData>
+  ): void;
 }>();
 
 // The internal model value of this component
 const _modelValue = computed({
   get: () => props.modelValue,
-  set: (value: EditorData<IFirestoreDocumentData>) =>
+  set: (value: EditorData<fd.IFirestoreDocumentData>) =>
     emit('update:modelValue', value),
 });
 
@@ -141,7 +143,7 @@ const _modelValue = computed({
 const mode = computed(() =>
   comp.session.editorParameter
     ? comp.session.editorParameter?.operation
-    : EDocumentOperation.Create
+    : cm.EDocumentOperation.Create
 );
 
 // Current tab key
@@ -151,7 +153,7 @@ const tabKey = ref(props.tabs.length > 0 ? props.tabs[0].key : '');
 // it returns true if the operation is "View" or if there are no editor parameters.
 const readOnly = computed(() =>
   comp.session.editorParameter
-    ? comp.session.editorParameter.operation === EDocumentOperation.View
+    ? comp.session.editorParameter.operation === cm.EDocumentOperation.View
     : true
 );
 
@@ -185,11 +187,12 @@ function onSubmit(): void {
     // Get the data object
     const data = _modelValue.value.createData();
     // Check document operation
-    const op = comp.session.editorParameter?.operation as EDocumentOperation;
-    const type = comp.session.editorParameter?.scope as EFirestoreDocumentType;
-    if (op === EDocumentOperation.Create) {
+    const op = comp.session.editorParameter?.operation as cm.EDocumentOperation;
+    const type = comp.session.editorParameter
+      ?.scope as fd.EFirestoreDocumentType;
+    if (op === cm.EDocumentOperation.Create) {
       // Create Firestore document
-      const document = await createDocument(
+      const document = await fd.createDocument(
         type,
         data,
         undefined,
@@ -197,7 +200,7 @@ function onSubmit(): void {
       );
       // Emit created event
       emit('created', document);
-    } else if (op === EDocumentOperation.Edit) {
+    } else if (op === cm.EDocumentOperation.Edit) {
       // Get attached Firestore document
       const document = _modelValue.value.document;
       if (document) {
@@ -206,7 +209,7 @@ function onSubmit(): void {
         // Apply new data to document
         document.data = data;
         // Update the Firestore document
-        await updateDocument(document);
+        await fd.updateDocument(document, true);
         // Emit updated event
         emit('updated', document);
       }

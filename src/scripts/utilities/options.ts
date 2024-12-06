@@ -4,7 +4,7 @@ import {
 } from 'src/scripts/utilities/common';
 import { flagDE, flagUS } from 'quasar-extras-svg-icons/country-flag-icons';
 import { EProjectMemberRole } from 'src/scripts/application/Project';
-import { EExternalAppProvider } from 'src/scripts/utilities/provider';
+import { EExternalAppProvider } from 'src/scripts/provider/common';
 
 /**
  * Retrieves the options for language selection.

@@ -34,11 +34,11 @@ import * as cm from 'src/scripts/utilities/common';
 import EditorContainer from 'components/app/main/EditorContainer.vue';
 import ExternalAppEditorProvider from 'components/app/extapp/ExternalAppEditorProvider.vue';
 import CustomAttributesTable from 'components/app/main/CustomAttributesTable.vue';
+import { EDocumentOperation } from 'src/scripts/utilities/common';
 import { EditorExternalAppData } from 'src/scripts/ui/externalApp';
 import { computed, onBeforeMount, ref } from 'vue';
 import { ExternalApp } from 'src/scripts/application/ExternalApp';
 import { Project } from 'src/scripts/application/Project';
-import { EDocumentOperation } from 'src/scripts/utilities/common';
 
 // Get composable components
 const comp = cm.useComposables();

@@ -4,8 +4,9 @@ import {
 } from 'src/scripts/application/FirestoreDocument';
 import { ProjectDocument } from 'src/scripts/application/ProjectDocument';
 import { loadChildDocuments, Project } from 'src/scripts/application/Project';
-import { EExternalAppProvider, TProviderCredentials } from 'src/scripts/utilities/provider';
+import { TProviderCredentials } from 'src/scripts/provider/common';
 import { TCustomAttribute } from 'src/scripts/utilities/common';
+import { EExternalAppProvider } from 'src/scripts/provider/common';
 
 /**
  * Represents the external application data associated with a provider.

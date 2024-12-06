@@ -51,6 +51,8 @@ const props = defineProps<{
   hideBottomSpace?: boolean;
   /** Flag for marking the input field as read only */
   readOnly?: boolean;
+  /** Flag for using only uppercase characters */
+  upperCase?: boolean;
 }>();
 
 // Defines the events that can be emitted by this component
@@ -61,8 +63,17 @@ const emit = defineEmits<{
 
 // The internal model value of this component
 const _modelValue = computed({
-  get: () => props.modelValue,
-  set: (value: string | number | null) => emit('update:modelValue', value),
+  get: () => {
+    if (props.upperCase && typeof props.modelValue === 'string') {
+      return props.modelValue.toUpperCase();
+    }
+    return props.modelValue;
+  },
+  set: (value: string | number | null) =>
+    emit(
+      'update:modelValue',
+      props.upperCase && typeof value === 'string' ? value.toUpperCase() : value
+    ),
 });
 
 /**

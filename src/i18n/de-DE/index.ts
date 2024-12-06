@@ -496,5 +496,29 @@ export default {
           'aktualisieren, falls dies nötig ist.',
       },
     },
+    // Dialog Messages
+    dialog: {
+      // Test Connection Messages
+      testConnection: {
+        // Success Message
+        success: {
+          // Title
+          title: 'Verbindung erfolgreich',
+          // Message
+          message:
+            'Die Verbindung konnte erfolgreich hergestellt werden. Die angegebenen Informationen scheinen ' +
+            'korrekt zu sein.',
+        },
+        // Failure Message
+        failure: {
+          // Title
+          title: 'Verbindung fehlgeschlagen',
+          // Message
+          message:
+            'Leider konnte keine Verbindung hergestellt werden. Genauere Informatin können Sie den Details ' +
+            'entnehmen.',
+        },
+      },
+    },
   },
 };

@@ -124,6 +124,24 @@ export type TFuncShowSuccessDialog = (
 ) => void;
 
 /**
+ * Represents a function to display an error dialog.
+ *
+ * @param {string} title - The title of the dialog.
+ * @param {string} message - The message to be displayed in the dialog.
+ * @param {string | null | undefined} [detail] - Additional details to be displayed, if any.
+ * @param {Function | null | undefined} [result] - An optional callback function to handle the result of the dialog.
+ */
+export type TFuncShowErrorDialog = (
+  title: string,
+  message: string,
+  detail?: string | null | undefined,
+  result?:
+    | ((value: string) => boolean | void | Promise<boolean | void>)
+    | null
+    | undefined
+) => void;
+
+/**
  * Type definition for a function that shows a confirmation dialog.
  *
  * @param {string} title - The title of the confirmation dialog.
@@ -289,6 +307,7 @@ export function useMessageDialog(): {
   messageDialogOptions: Ref<TMessageDialogOptions>;
   showMessageDialog: TFuncShowMessageDialog;
   showSuccessDialog: TFuncShowSuccessDialog;
+  showErrorDialog: TFuncShowErrorDialog;
   showConfirmationDialog: TFuncShowConfirmationDialog;
 } {
   return {
@@ -309,6 +328,17 @@ export function useMessageDialog(): {
       messageDialogOptions.value.message = message;
       messageDialogOptions.value.detail = detail;
       messageDialogOptions.value.color = '#5dba73';
+      messageDialogOptions.value.buttons = [
+        { value: 'close', label: 'label.close' },
+      ];
+      messageDialogOptions.value.result = result;
+      messageDialogOptions.value.visibility = true;
+    },
+    showErrorDialog: (title, message, detail, result) => {
+      messageDialogOptions.value.title = title;
+      messageDialogOptions.value.message = message;
+      messageDialogOptions.value.detail = detail;
+      messageDialogOptions.value.color = '#C3606A';
       messageDialogOptions.value.buttons = [
         { value: 'close', label: 'label.close' },
       ];

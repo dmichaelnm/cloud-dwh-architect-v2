@@ -1,13 +1,11 @@
 import { EditorData } from 'src/scripts/ui/common';
 import { IExternalAppData } from 'src/scripts/application/ExternalApp';
 import { FirestoreDocument } from 'src/scripts/application/FirestoreDocument';
-import {
-  EExternalAppProvider,
-  TProviderCredentials,
-  TProviderCredentialsS3,
-  TProviderCredentialsSnowflake,
-} from 'src/scripts/utilities/provider';
+import { TProviderCredentials } from 'src/scripts/provider/common';
 import { TCustomAttribute } from 'src/scripts/utilities/common';
+import { EExternalAppProvider } from 'src/scripts/provider/common';
+import * as s3 from 'src/scripts/provider/s3';
+import * as snflk from 'src/scripts/provider/snowflake';
 
 /**
  * The EditorExternalAppData class is responsible for managing and initializing
@@ -50,25 +48,10 @@ export class EditorExternalAppData extends EditorData<IExternalAppData> {
     let credentials: TProviderCredentials = {};
     if (this.provider === EExternalAppProvider.S3) {
       // Amazon S3 credentials
-      const s3 = this.credentials as TProviderCredentialsS3;
-      credentials = {
-        region: s3.region,
-        bucket: s3.bucket,
-        accessKeyId: s3.accessKeyId,
-        secretAccessKey: s3.secretAccessKey,
-      };
+      credentials = s3.createCredentials(this.credentials);
     } else if (this.provider == EExternalAppProvider.Snowflake) {
       // Snowflake credentials
-      const snflk = this.credentials as TProviderCredentialsSnowflake;
-      credentials = {
-        account: snflk.account,
-        username: snflk.username,
-        password: snflk.password,
-        database: snflk.database ? snflk.database : null,
-        warehouse: snflk.warehouse ? snflk.warehouse : null,
-        role: snflk.role ? snflk.role : null,
-        schema: snflk.schema ? snflk.schema : null,
-      };
+      credentials = snflk.createCredentials(this.credentials);
     }
     // Return data object
     return {

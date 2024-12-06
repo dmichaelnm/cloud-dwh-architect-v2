@@ -1,8 +1,5 @@
 import { capitalize } from 'src/scripts/utilities/common';
-import {
-  firebaseStore,
-  getCurrentAccountName,
-} from 'src/scripts/utilities/firebase';
+import { firebaseStore, getCurrentAccountName } from 'src/scripts/utilities/firebase';
 import * as fs from 'firebase/firestore';
 import { ProjectDocument } from 'src/scripts/application/ProjectDocument';
 
@@ -284,8 +281,6 @@ export class FirestoreDocument<D extends IFirestoreDocumentData> {
         await child.deleteAllDocuments();
         // Delete the document itself
         await deleteDocument(child);
-        // TODO Remove debug log
-        console.debug(`Deleted document ${child.toString()}`);
       }
     }
   }
@@ -319,7 +314,7 @@ export async function createDocument<
   type: EFirestoreDocumentType,
   data: D,
   id?: string,
-  parent?: FirestoreDocument<IFirestoreDocumentData>
+  parent?: FirestoreDocument<IFirestoreDocumentData>,
 ): Promise<R> {
   // Set meta information on data object, if not specified yet
   if (data.common.meta === undefined) {
@@ -425,7 +420,6 @@ export async function loadDocuments<
  *
  * @param {R} document - The Firestore document reference to update.
  * @param {boolean} [updateMeta=true] - Flag to indicate whether to update metadata (e.g., timestamp, account name).
- * @return {Promise<void>} - A promise that resolves when the document is successfully updated.
  *
  * @template D - The type of the specific data interface.
  * @template R - The type of the specific document class.
@@ -433,7 +427,10 @@ export async function loadDocuments<
 export async function updateDocument<
   D extends IFirestoreDocumentData,
   R extends FirestoreDocument<D>
->(document: R, updateMeta: boolean = true): Promise<void> {
+>(
+  document: R,
+  updateMeta: boolean = true,
+): Promise<void> {
   // Update metadata if necessary
   if (updateMeta && document.data.common.meta) {
     document.data.common.meta.altered = {
