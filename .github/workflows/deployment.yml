@@ -65,7 +65,7 @@ jobs:
 
       - name: Deploy Firebase
         run: |
-          firebase deploy --only hosting,functions --non-interactive --debug --project ${{vars.FIREBASE_PROJECT_ID}}
+          firebase deploy --only hosting --non-interactive --debug --project ${{vars.FIREBASE_PROJECT_ID}}
 
       - name: Cleanup
         run: |
