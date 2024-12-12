@@ -110,3 +110,45 @@ export const testConnection = onRequest(
     });
   }
 );
+
+/**
+ * Handles the request to retrieve folders from an external provider.
+ * This function is designed to support multiple external applications, such as S3,
+ * and fetch the folders based on the given credentials and provider type.
+ *
+ * The function uses request authorization to validate the user's access and then delegates
+ * folder retrieval to the respective external application provider.
+ *
+ * The supported provider types are defined in the `EExternalAppProvider` enumeration.
+ *
+ * If the provider is unsupported or invalid, an error response with the status "failure" is returned.
+ */
+export const getFolders = onRequest(
+  {
+    region: region,
+    cors: true,
+  },
+  async (request, response) => {
+    // Authorize the request
+    await authorize(request, response, async (user) => {
+      // Get provider
+      const provider = request.body.provider as EExternalAppProvider;
+      if (provider === EExternalAppProvider.S3) {
+        // Get Folders from AWS S3 Bucket
+        const result = await s3.getFolders(
+          request.body.credentials as s3.TProviderCredentialsS3
+        );
+        logger.debug(result);
+        // Return the result
+        response.send(result);
+      } else {
+        // Unknown provider
+        response.send({
+          status: 'failure',
+          code: 'unknown-provider',
+          message: `The provider ${provider} is not supported.`,
+        });
+      }
+    });
+  }
+);

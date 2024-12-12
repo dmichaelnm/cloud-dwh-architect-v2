@@ -57,6 +57,11 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'storageLoc/overview',
         component: () => import('pages/storageloc/StorageLocationOverviewPage.vue'),
+      },
+      // Storage Location Editor Page
+      {
+        path: 'storageLoc/editor',
+        component: () => import('pages/storageloc/StorageLocationEditorPage.vue'),
       }
     ],
   },

@@ -1,18 +1,9 @@
 import * as fd from 'src/scripts/application/FirestoreDocument';
-import {
-  EFirestoreDocumentType,
-  FirestoreDocument,
-  IFirestoreDocumentData,
-  loadDocuments,
-} from 'src/scripts/application/FirestoreDocument';
+import * as ea from 'src/scripts/application/ExternalApp';
 import { where } from 'firebase/firestore';
 import { getCurrentAccountId } from 'src/scripts/utilities/firebase';
 import { TCustomAttribute } from 'src/scripts/utilities/common';
-import {
-  ExternalApp,
-  IExternalAppData,
-  loadExternalApps,
-} from 'src/scripts/application/ExternalApp';
+import { ELocationType } from 'src/scripts/provider/common';
 
 /**
  * Enumeration for project member roles.
@@ -63,6 +54,8 @@ export interface IProjectData extends fd.IFirestoreDocumentData {
  * Represents a Project document in Firestore.
  */
 export class Project extends fd.FirestoreDocument<IProjectData> {
+  /** Flag for a loaded project */
+  loaded: boolean = false;
 
   /**
    * Retrieves an external application based on the provided ID.
@@ -70,9 +63,9 @@ export class Project extends fd.FirestoreDocument<IProjectData> {
    * @param {string} id - The unique identifier of the external application.
    * @return {ExternalApp | undefined} The external application corresponding to the given ID, or undefined if not found.
    */
-  getExternalApplication(id: string): ExternalApp | undefined {
-    return this.getDocument<IExternalAppData, ExternalApp>(
-      EFirestoreDocumentType.ExternalApp,
+  getExternalApplication(id: string): ea.ExternalApp | undefined {
+    return this.getDocument<ea.IExternalAppData, ea.ExternalApp>(
+      fd.EFirestoreDocumentType.ExternalApp,
       id
     );
   }
@@ -82,10 +75,22 @@ export class Project extends fd.FirestoreDocument<IProjectData> {
    *
    * @return {ExternalApp[]} An array of external application instances.
    */
-  getExternalApplications(): ExternalApp[] {
-    return this.getDocuments<IExternalAppData, ExternalApp>(
-      EFirestoreDocumentType.ExternalApp
+  getExternalApplications(): ea.ExternalApp[] {
+    return this.getDocuments<ea.IExternalAppData, ea.ExternalApp>(
+      fd.EFirestoreDocumentType.ExternalApp
     );
+  }
+
+  /**
+   * Retrieves a list of external applications that are capable of handling storage locations.
+   *
+   * @return {ExternalApp[]} An array of external applications that support storage location operations.
+   */
+  getStorageLocationCapableApps(): ea.ExternalApp[] {
+    // Get all external apps
+    const apps = this.getExternalApplications();
+    // Return only storage location capable apps
+    return apps.filter((app) => app.data.locationType === ELocationType.file);
   }
 
   /**
@@ -199,19 +204,22 @@ export async function loadProjects(): Promise<Project[]> {
  */
 export async function loadChildDocuments(
   project: Project,
-  type: EFirestoreDocumentType,
+  type: fd.EFirestoreDocumentType,
   factory: (
-    document: FirestoreDocument<IFirestoreDocumentData>
-  ) => FirestoreDocument<IFirestoreDocumentData>,
-  parent?: FirestoreDocument<IFirestoreDocumentData>
+    document: fd.FirestoreDocument<fd.IFirestoreDocumentData>
+  ) => fd.FirestoreDocument<fd.IFirestoreDocumentData>,
+  parent?: fd.FirestoreDocument<fd.IFirestoreDocumentData>
 ): Promise<void> {
   // Remove all external application documents
   project.children.delete(type);
   // Create new map for external applications and add it to the project
-  const children = new Map<string, FirestoreDocument<IFirestoreDocumentData>>();
+  const children = new Map<
+    string,
+    fd.FirestoreDocument<fd.IFirestoreDocumentData>
+  >();
   project.children.set(type, children);
   // Load all documents
-  const documents = await loadDocuments(type, parent ? parent : project);
+  const documents = await fd.loadDocuments(type, parent ? parent : project);
   // Add the external application documents to the project
   for (const document of documents) {
     children.set(document.id, factory(document));
@@ -229,7 +237,9 @@ export async function loadProject(project: Project): Promise<void> {
   // Clear all children documents
   project.children.clear();
   // Load external applications
-  await loadExternalApps(project);
+  await ea.loadExternalApps(project);
+  // Set project as loaded
+  project.loaded = true;
 }
 
 /**

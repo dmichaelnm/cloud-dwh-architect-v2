@@ -505,11 +505,52 @@ export default {
   },
 
   // Storage Location Messages
-  storageLocation: {
+  storageLoc: {
     // Label Messages
     label: {
       // Drawer Item
       drawerItem: 'File Storage Locations',
+      // Name
+      name: 'Name des Ablageorts',
+      // Path
+      path: 'Relative Path To Source Files',
+    },
+    // Overview Messages
+    overview: {
+      // Title
+      title: 'File Storage Locations',
+      // Message
+      message:
+        'The following table shows an overview of all already created storage locations for files that are intended ' +
+        'to serve as sources for the Data Warehouse. File storage locations are based on external applications ' +
+        'that allow access to files. Creating file storage locations serves the organization and structuring of ' +
+        'different classes of source files.',
+      // Empty Message
+      messageEmpty: 'No file storage locations have been defined yet.',
+    },
+    // Editor Messages
+    editor: {
+      // Editor Create Messages
+      create: {
+        // Title
+        title: 'Create New File Storage Location',
+        // Message
+        message:
+          'Create a new file storage location here based on an external application that serves as a source ' +
+          'for importing source files into your data warehouse. Such storage locations allow you to organize and ' +
+          'structure your source data.',
+      },
+      // Common Messages
+      message: {
+        // External App Selection
+        externalAppSelection:
+          'Select the external application here for which you want to create a file storage location. ' +
+          'Only applications capable of providing file storage locations will be displayed.',
+        // Path Selection
+        pathSelection:
+          'Enter the relative path to the source files here. You can also use the search button on the right side of ' +
+          'the input field to open a dialog where you can select the desired path.',
+      },
     },
   },
 };

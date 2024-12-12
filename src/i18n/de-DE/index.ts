@@ -525,11 +525,53 @@ export default {
   },
 
   // Storage Location Messages
-  storageLocation: {
+  storageLoc: {
     // Label Messages
     label: {
       // Drawer Item
       drawerItem: 'Datei-Ablageorte',
+      // Name
+      name: 'Storage Location Name',
+      // Path
+      path: 'relativer Pfad zu den Quelldateien',
+    },
+    // Overview Messages
+    overview: {
+      // Title
+      title: 'Datei-Ablageorte',
+      // Message
+      message:
+        'In der folgenden Tabelle sehen Sie eine Übersicht über alle bereits erstellten Ablageorte für Dateien, ' +
+        'die als Quelle für das Data Warehouse dienen sollen. Datei-Ablageorte basieren auf externen Applikationen, ' +
+        'die den Zugriff auf Dateien zulassen. Das Erstellen von Datei-Ablageorten dient der Organisation und ' +
+        'Strukturierung verschiedener Klassen von Quelldateien.',
+      // Empty Message
+      messageEmpty: 'Bisher wurden noch keine Datei-Ablageorte definiert.',
+    },
+    // Editor Messages
+    editor: {
+      // Editor Create Messages
+      create: {
+        // Title
+        title: 'Neuen Datei-Ablageort erstellen',
+        // Message
+        message:
+          'Erstellen Sie hier einen neuen Datei-Ablageort basierend auf einer externen Applikation, der als ' +
+          'Quelle für den Import von Quelldateien in Ihr Data-Warehouse dient. Mit solchen Ablageorten können Sie ' +
+          'Ihre Quelldaten organisieren und strukturieren.',
+      },
+      // Common Messages
+      message: {
+        // External App Selection
+        externalAppSelection:
+          'Wählen Sie hier die externe Applikation aus, für die Sie einen Datei-Ablageort ' +
+          'anlegen wollen. Es werden nur Applikationen angezeigt, die fähig sind, Datei-Ablageorte bereitzustellen.',
+        // Path Selection
+        pathSelection:
+          'Geben Sie hier den relativen Pfad zu den Quelldateien ein. Sie können über den Suchen-Knopf ' +
+          'auf der rechten Seite des Eingabefelds auch einen Dialog aufrufen, über den Sie den gewünschten Pfad ' +
+          'auswählen können.',
+      },
     },
   },
 };
