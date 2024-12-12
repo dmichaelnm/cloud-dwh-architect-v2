@@ -82,7 +82,7 @@ export const testConnection = onRequest(
   },
   async (request, response) => {
     // Authorize the request
-    await authorize(request, response, async (user) => {
+    await authorize(request, response, async () => {
       // Get provider
       const provider = request.body.provider as EExternalAppProvider;
       if (provider === EExternalAppProvider.S3) {
@@ -130,7 +130,7 @@ export const getFolders = onRequest(
   },
   async (request, response) => {
     // Authorize the request
-    await authorize(request, response, async (user) => {
+    await authorize(request, response, async () => {
       // Get provider
       const provider = request.body.provider as EExternalAppProvider;
       if (provider === EExternalAppProvider.S3) {
