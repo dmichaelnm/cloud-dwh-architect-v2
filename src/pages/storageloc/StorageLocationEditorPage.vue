@@ -31,7 +31,7 @@ import * as fd from 'src/scripts/application/FirestoreDocument';
 import * as cm from 'src/scripts/utilities/common';
 import EditorContainer from 'components/app/main/EditorContainer.vue';
 import { EditorStorageLocationData } from 'src/scripts/ui/storageLocation';
-import { computed, ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import { Project } from 'src/scripts/application/Project';
 import { StorageLocation } from 'src/scripts/application/StorageLocation';
 import CustomAttributesTable from 'components/app/main/CustomAttributesTable.vue';
@@ -51,6 +51,26 @@ const isReadOnly = computed(() =>
     ? comp.session.editorParameter.operation === cm.EDocumentOperation.View
     : false
 );
+
+// Lifecycle method that is called before this component is mounted
+onBeforeMount(() => {
+  // Get current project
+  const project = comp.session.project;
+  if (
+    project &&
+    (comp.session.editorParameter?.operation === cm.EDocumentOperation.Edit ||
+      comp.session.editorParameter?.operation === cm.EDocumentOperation.View)
+  ) {
+    // Get storage location ID
+    const storageLocId = comp.session.editorParameter.id as string;
+    // Get storage location object
+    const storageLoc = (project as Project).getStorageLocation(storageLocId);
+    if (storageLoc) {
+      // Initialize editor data
+      editorData.value.initEditorData(storageLoc);
+    }
+  }
+});
 
 /**
  * Handles actions to be taken when a new Firestore document is created.

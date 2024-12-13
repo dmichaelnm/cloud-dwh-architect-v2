@@ -61,7 +61,18 @@ export class EditorStorageLocationData extends EditorData<IStorageLocationData> 
   initEditorData(
     document: FirestoreDocument<IStorageLocationData>
   ): void | Promise<void> {
-    console.log(document);
-    return undefined;
+    // Attach document
+    this.document = document;
+    // Apply common values
+    this.name = document.data.common.name;
+    this.description = document.data.common.description;
+    // Apply external app and path
+    this.externalApp = document.data.externalApp;
+    this.path = document.data.path;
+    // Apply custom attributes
+    const attr = document.data.attributes;
+    for (const i in attr) {
+      this.attributes.push({ ...attr[i] });
+    }
   }
 }

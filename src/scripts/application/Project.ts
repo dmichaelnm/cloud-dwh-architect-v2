@@ -106,6 +106,19 @@ export class Project extends fd.FirestoreDocument<IProjectData> {
   }
 
   /**
+   * Retrieves the storage location associated with the provided identifier.
+   *
+   * @param {string} id - The unique identifier of the storage location to retrieve.
+   * @return {sl.StorageLocation | undefined} The retrieved storage location object, or undefined if not found.
+   */
+  getStorageLocation(id: string): sl.StorageLocation | undefined {
+    return this.getDocument<sl.IStorageLocationData, sl.StorageLocation>(
+      fd.EFirestoreDocumentType.StorageLoc,
+      id
+    );
+  }
+
+  /**
    * Retrieves the project member who holds the role of Owner.
    *
    * @return {TProjectMember | null} The project member with the role of Owner, or null if no Owner is found.
