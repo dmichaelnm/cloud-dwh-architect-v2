@@ -4,7 +4,7 @@
     <!-- Message Row -->
     <div class="row" v-if="message">
       <!-- Message Column -->
-      <div class="col-6">
+      <div :class="colWidthAttr">
         <!-- Message -->
         {{ message }}
       </div>
@@ -23,9 +23,18 @@
 <style scoped lang="scss"></style>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+
 // Defines the properties of this component
-defineProps<{
+const props = defineProps<{
   /** The message of the component */
   message?: string;
+  /** The width of the text (in columns 1 - 12) */
+  colWidth?: number;
 }>();
+
+// The attribute specifying the column width
+const colWidthAttr = computed(() =>
+  props.colWidth ? `col-${props.colWidth}` : 'col-9'
+);
 </script>

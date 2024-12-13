@@ -1,5 +1,6 @@
 import { TProviderCredentialsS3 } from 'src/scripts/provider/s3';
 import { TProviderCredentialsSnowflake } from 'src/scripts/provider/snowflake';
+import { TProviderCredentialsGCS } from 'src/scripts/provider/gcs';
 
 /**
  * Enumeration representing external application providers.
@@ -7,6 +8,8 @@ import { TProviderCredentialsSnowflake } from 'src/scripts/provider/snowflake';
 export enum EExternalAppProvider {
   /** Amazon AWS S3 Bucket */
   S3 = 's3',
+  /** Google Cloud Storage */
+  GCS = 'gcs',
   /** Snowflake Database */
   Snowflake = 'snowflake',
 }
@@ -35,5 +38,6 @@ export enum ELocationType {
  */
 export type TProviderCredentials =
   | TProviderCredentialsS3
+  | TProviderCredentialsGCS
   | TProviderCredentialsSnowflake
   | Record<string, never>;

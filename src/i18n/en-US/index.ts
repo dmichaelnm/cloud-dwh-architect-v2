@@ -28,6 +28,8 @@ export default {
 
   // Common Labels
   label: {
+    // Architecture
+    architecture: 'Architecture',
     // Altered
     altered: 'Altered By / At',
     // Custom Attributes
@@ -164,6 +166,8 @@ export default {
     externalAppProvider: {
       // Amazon AWS S3 Bucket
       s3: 'Amazon AWS S3 Bucket',
+      // Google Cloud Storage
+      gcs: 'Google Cloud Storage',
       // Snowflake Database
       snowflake: 'Snowflake Database',
     },
@@ -362,7 +366,7 @@ export default {
     },
   },
 
-  // External Applications
+  // External Application Messages
   externalApp: {
     // Object name
     object: 'External Application',
@@ -400,6 +404,29 @@ export default {
         accessKeyId: 'Access Key ID',
         // Secret Access Key
         secretAccessKey: 'Secret Access Key',
+      },
+      // Google Cloud Storage
+      gcs: {
+        // General Message
+        message:
+          'Please carefully enter the login information into the designated fields. The project ID is the unique ' +
+          'identifier of your Google Cloud project. The client email corresponds to the email address of the service ' +
+          'account that has access to Google Cloud Storage. The private key is part of the JSON file generated when ' +
+          'creating the service account. Please note that this information is confidential and should not be shared ' +
+          'with unauthorized persons or stored insecurely. If you have any questions, please contact your ' +
+          'administrator.',
+        // Project ID
+        projectId: 'Project ID',
+        // Client ID
+        clientId: 'Client ID',
+        // Client Email
+        clientEmail: 'Client EMail',
+        // Private Key ID
+        privateKeyId: 'Private Key ID',
+        // Private Key
+        privateKey: 'Private Key',
+        // Bucket
+        bucket: 'Bucket',
       },
       // Snowflake
       snowflake: {
@@ -498,6 +525,101 @@ export default {
           message:
             'Unfortunately, no connection could be established. You can find more detailed information in the details.',
         },
+      },
+    },
+  },
+
+  // Storage Location Messages
+  storageLoc: {
+    // Object Name
+    object: 'File Storage Location',
+    // Article
+    article: 'the',
+    // Label Messages
+    label: {
+      // Drawer Item
+      drawerItem: 'File Storage Locations',
+      // Name
+      name: 'Storage Location Name',
+      // Path
+      path: 'Relative Path To Source Files',
+      // Location
+      location: 'Application / Path',
+    },
+    // Overview Messages
+    overview: {
+      // Title
+      title: 'File Storage Locations',
+      // Message
+      message:
+        'The following table shows an overview of all already created storage locations for files that are intended ' +
+        'to serve as sources for the Data Warehouse. File storage locations are based on external applications ' +
+        'that allow access to files. Creating file storage locations serves the organization and structuring of ' +
+        'different classes of source files.',
+      // Empty Message
+      messageEmpty: 'No file storage locations have been defined yet.',
+      // Tooltip Messages
+      tooltip: {
+        // Edit Storage Location
+        edit: 'Edit Storage Location',
+        // Delete Storage Location
+        delete: 'Delete Storage Location',
+        // View Storage Location
+        view: 'View Storage Location',
+      },
+    },
+    // Editor Messages
+    editor: {
+      // Editor Create Messages
+      create: {
+        // Title
+        title: 'Create New File Storage Location',
+        // Message
+        message:
+          'Create a new file storage location here based on an external application that serves as a source ' +
+          'for importing source files into your data warehouse. Such storage locations allow you to organize and ' +
+          'structure your source data.',
+      },
+      // Editor Edit Messages
+      edit: {
+        // Title
+        title: 'Edit File Storage Location',
+        // Message
+        message:
+          'Here you can edit the properties of the file storage location. Note that changes to the path may ' +
+          'have an impact on dependent objects, which may then no longer function correctly.',
+      },
+      // Editor View Messages
+      view: {
+        // Title
+        title: 'View File Storage Location',
+        // Message
+        message:
+          'Here you can view the properties of the file storage location. However, due to your role, you cannot ' +
+          'make any changes.',
+      },
+      // Common Messages
+      message: {
+        // External App Selection
+        externalAppSelection:
+          'Select the external application here for which you want to create a file storage location. ' +
+          'Only applications capable of providing file storage locations will be displayed.',
+        // Path Selection
+        pathSelection:
+          'Enter the relative path to the source files here. You can also use the search button on the right side of ' +
+          'the input field to open a dialog where you can select the desired path.',
+      },
+    },
+    // Dialog Messages
+    dialog: {
+      // Path Selection Dialog
+      pathSelection: {
+        // Title
+        title: 'Select A Path',
+        // Message
+        message:
+          'Please select a storage location from the list of available paths. The selected path serves as a container ' +
+          'for source files to be imported into the data warehouse.',
       },
     },
   },

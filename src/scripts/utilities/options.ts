@@ -88,6 +88,11 @@ export function getExternalApplicationProviders(): TSelectOption[] {
       icon: 'img:icons/s3.png',
     },
     {
+      value: EExternalAppProvider.GCS,
+      label: 'enumeration.externalAppProvider.gcs',
+      icon: 'img:icons/gcs.png',
+    },
+    {
       value: EExternalAppProvider.Snowflake,
       label: 'enumeration.externalAppProvider.snowflake',
       icon: 'img:icons/snowflake.png',

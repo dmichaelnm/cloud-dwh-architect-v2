@@ -30,6 +30,8 @@ export default {
 
   // Common Labels
   label: {
+    // Architecture
+    architecture: 'Architektur',
     // Altered
     altered: 'Geändert von / am',
     // Custom Attributes
@@ -169,6 +171,8 @@ export default {
     externalAppProvider: {
       // Amazon AWS S3 Bucket
       s3: 'Amazon AWS S3 Bucket',
+      // Google Cloud Storage
+      gcs: 'Google Cloud Storage',
       // Snowflake Database
       snowflake: 'Snowflake Database',
     },
@@ -375,7 +379,7 @@ export default {
     },
   },
 
-  // External Applications
+  // External Application Messages
   externalApp: {
     // Object name
     object: 'Externe Applikation',
@@ -415,6 +419,29 @@ export default {
         accessKeyId: 'ID des Zugriffsschlüssels',
         // Secret Access Key
         secretAccessKey: 'Geheimer Zugriffsschlüssel',
+      },
+      // Google Cloud Storage
+      gcs: {
+        // General Message
+        message:
+          'Bitte tragen Sie die Anmeldeinformationen sorgfältig in die vorgesehenen Felder ein. Die Projekt-ID ' +
+          'ist die eindeutige Kennung Ihres Google-Cloud-Projekts. Die Client-E-Mail entspricht der E-Mail-Adresse ' +
+          'des Servicekontos, das Zugriff auf Google Cloud Storage hat. Der private Schlüssel ist Teil der JSON-Datei, ' +
+          'die beim Erstellen des Servicekontos generiert wurde. Beachten Sie, dass diese Informationen vertraulich ' +
+          'sind und nicht an unbefugte Personen weitergegeben oder unsicher gespeichert werden sollten. Wenden Sie ' +
+          'sich bei Fragen an Ihren Administrator.',
+        // Project ID
+        projectId: 'Projekt-ID',
+        // Client ID
+        clientId: 'Client-ID',
+        // Client Email
+        clientEmail: 'Client-EMail',
+        // Private Key ID
+        privateKeyId: 'ID des privaten Schlüssels',
+        // Private Key
+        privateKey: 'Privater Schlüssel',
+        // Bucket
+        bucket: 'Bucket',
       },
       // Snowflake
       snowflake: {
@@ -518,6 +545,103 @@ export default {
             'Leider konnte keine Verbindung hergestellt werden. Genauere Informatin können Sie den Details ' +
             'entnehmen.',
         },
+      },
+    },
+  },
+
+  // Storage Location Messages
+  storageLoc: {
+    // Object Name
+    object: 'Datei-Ablageort',
+    // Article
+    article: 'den',
+    // Label Messages
+    label: {
+      // Drawer Item
+      drawerItem: 'Datei-Ablageorte',
+      // Name
+      name: 'Name des Ablageort',
+      // Path
+      path: 'relativer Pfad zu den Quelldateien',
+      // Location
+      location: 'Applikation / Pfad',
+    },
+    // Overview Messages
+    overview: {
+      // Title
+      title: 'Datei-Ablageorte',
+      // Message
+      message:
+        'In der folgenden Tabelle sehen Sie eine Übersicht über alle bereits erstellten Ablageorte für Dateien, ' +
+        'die als Quelle für das Data Warehouse dienen sollen. Datei-Ablageorte basieren auf externen Applikationen, ' +
+        'die den Zugriff auf Dateien zulassen. Das Erstellen von Datei-Ablageorten dient der Organisation und ' +
+        'Strukturierung verschiedener Klassen von Quelldateien.',
+      // Empty Message
+      messageEmpty: 'Bisher wurden noch keine Datei-Ablageorte definiert.',
+      // Tooltip Messages
+      tooltip: {
+        // Edit Storage Location
+        edit: 'Datei-Ablageort bearbeiten',
+        // Delete Storage Location
+        delete: 'Datei-Ablageort löschen',
+        // View Storage Location
+        view: 'Datei-Ablageort anzeigen',
+      },
+    },
+    // Editor Messages
+    editor: {
+      // Editor Create Messages
+      create: {
+        // Title
+        title: 'Neuen Datei-Ablageort erstellen',
+        // Message
+        message:
+          'Erstellen Sie hier einen neuen Datei-Ablageort basierend auf einer externen Applikation, der als ' +
+          'Quelle für den Import von Quelldateien in Ihr Data-Warehouse dient. Mit solchen Ablageorten können Sie ' +
+          'Ihre Quelldaten organisieren und strukturieren.',
+      },
+      // Editor Edit Messages
+      edit: {
+        // Title
+        title: 'Datei-Ablageort bearbeiten',
+        // Message
+        message:
+          'Hier können Sie die Eigenschaften des Datei-Ablageorts bearbeiten. Beachten Sie, dass Änderungen am ' +
+          'Pfad unter Umständen Auswirkungen auf abhängige Objekte haben können und diese dann eventuell nicht mehr ' +
+          'korrekt funktionieren.',
+      },
+      // Editor View Messages
+      view: {
+        // Title
+        title: 'Datei-Ablageort anzeigen',
+        // Message
+        message:
+          'Hier können Sie die Eigenschaften des Datei-Ablageorts ansehen. Aufgrund Ihrer Rolle können Sie ' +
+          'jedoch keine Änderungen vornehmen.',
+      },
+      // Common Messages
+      message: {
+        // External App Selection
+        externalAppSelection:
+          'Wählen Sie hier die externe Applikation aus, für die Sie einen Datei-Ablageort ' +
+          'anlegen wollen. Es werden nur Applikationen angezeigt, die fähig sind, Datei-Ablageorte bereitzustellen.',
+        // Path Selection
+        pathSelection:
+          'Geben Sie hier den relativen Pfad zu den Quelldateien ein. Sie können über den Suchen-Knopf ' +
+          'auf der rechten Seite des Eingabefelds auch einen Dialog aufrufen, über den Sie den gewünschten Pfad ' +
+          'auswählen können.',
+      },
+    },
+    // Dialog Messages
+    dialog: {
+      // Path Selection Dialog
+      pathSelection: {
+        // Title
+        title: 'Auswahl des Pfads',
+        // Message
+        message:
+          'Bitte wählen Sie einen Speicherort aus der Liste der verfügbaren Pfade aus. Der ausgewählte Pfad dient als ' +
+          'Container für Quelldateien, die in das Data Warehouse importiert werden sollen.',
       },
     },
   },

@@ -92,6 +92,54 @@
           </message-component>
         </div>
       </div>
+      <!-- Google Cloud Storage Credentials Row -->
+      <div class="row" v-if="_modelValue.provider === EExternalAppProvider.GCS">
+        <!-- Google Cloud Storage Credentials Column -->
+        <div class="col">
+          <!-- Google Cloud Storage Message Component -->
+          <message-component :message="$t('externalApp.provider.gcs.message')">
+            <!-- Google Cloud Storage DIV -->
+            <div class="q-col-gutter-y-sm">
+              <!-- Client EMail Row & Bucket -->
+              <div class="row q-col-gutter-x-sm">
+                <!-- Bucket Column -->
+                <div class="col-3">
+                  <!-- Bucket -->
+                  <input-value
+                    v-model="(_modelValue.credentials as TProviderCredentialsGCS).bucket"
+                    :label="$t('externalApp.provider.gcs.bucket')"
+                    :read-only="isReadOnly"
+                    mandatory
+                  />
+                </div>
+                <!-- Client Email Column -->
+                <div class="col-3">
+                  <!-- Client Email -->
+                  <input-value
+                    v-model="(_modelValue.credentials as TProviderCredentialsGCS).clientEmail"
+                    :label="$t('externalApp.provider.gcs.clientEmail')"
+                    :read-only="isReadOnly"
+                    mandatory
+                  />
+                </div>
+              </div>
+              <!-- Private Key Row -->
+              <div class="row" v-if="!isReadOnly">
+                <!-- Private Key Column -->
+                <div class="col">
+                  <!-- Private Key -->
+                  <input-value
+                    v-model="(_modelValue.credentials as TProviderCredentialsGCS).privateKey"
+                    :label="$t('externalApp.provider.gcs.privateKey')"
+                    type="textarea"
+                    mandatory
+                  />
+                </div>
+              </div>
+            </div>
+          </message-component>
+        </div>
+      </div>
       <!-- Snowflake Credentials Row-->
       <div
         class="row"
@@ -104,7 +152,7 @@
             :message="$t('externalApp.provider.snowflake.message')"
           >
             <!-- Snowflake DIV -->
-            <div>
+            <div class="q-col-gutter-y-sm">
               <!-- Account, Username & Password Row -->
               <div class="row q-col-gutter-x-sm">
                 <!-- Account Column -->
@@ -223,6 +271,7 @@ import { getExternalApplicationProviders } from 'src/scripts/utilities/options';
 import { EditorExternalAppData } from 'src/scripts/ui/externalApp';
 import { EExternalAppProvider } from 'src/scripts/provider/common';
 import { post } from 'src/scripts/utilities/functions';
+import { TProviderCredentialsGCS } from 'src/scripts/provider/gcs';
 
 // Get composable components
 const comp = cm.useComposables();

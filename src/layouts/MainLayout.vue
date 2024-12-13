@@ -75,6 +75,15 @@
             icon="apps"
             route-to-page="/externalApp/overview"
           />
+          <!-- Architecture -->
+          <drawer-label :label="$t('label.architecture')" />
+          <!-- Storage Locations -->
+          <drawer-item
+            :label="$t('storageLoc.label.drawerItem')"
+            :disable="!hasStorageLocations"
+            icon="storage"
+            route-to-page="/storageLoc/overview"
+          />
         </q-list>
       </div>
     </q-drawer>
@@ -143,6 +152,7 @@ import { computed, onBeforeMount, ref, watch } from 'vue';
 import { onAccountStateChanged } from 'src/scripts/application/Account';
 import { loadProject, loadProjects } from 'src/scripts/application/Project';
 import { updateDocument } from 'src/scripts/application/FirestoreDocument';
+import { ELocationType } from 'src/scripts/provider/common';
 
 // Get composable components
 const comp = cm.useComposables();
@@ -191,6 +201,15 @@ const leftDrawerIcon = computed(() =>
 // Reference to the current project
 const project = computed(() => comp.session.project);
 
+// Flag for enabling the storage locations
+const hasStorageLocations = computed(() => {
+  if (project.value !== null && project.value.loaded) {
+    const apps = project.value.getExternalApplications();
+    return apps.some((app) => app.data.locationType === ELocationType.file);
+  }
+  return false;
+});
+
 // Watch the current project for being removed
 watch(project, (newValue, oldValue) => {
   if (newValue === null && oldValue !== null) {
@@ -236,7 +255,10 @@ async function switchProject(): Promise<void> {
         ? comp.session.account?.data.state.currentProject
         : null;
       // Do nothing, if project is already active
-      if (projectId !== comp.session.project?.id) {
+      if (
+        comp.session.project === null ||
+        projectId !== comp.session.project?.id
+      ) {
         // Check, if project ID is in projects array
         const project = comp.session.getProject(projectId);
         // If project was found, current ID on account is valid

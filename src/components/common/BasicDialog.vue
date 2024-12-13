@@ -82,7 +82,7 @@ const props = defineProps<{
   /** An optional message of the dialog */
   message?: string;
   /** Close handler */
-  handler?: () => Promise<boolean>;
+  handler?: () => boolean | Promise<boolean>;
 }>();
 
 // Defines the events that can be emitted by this component

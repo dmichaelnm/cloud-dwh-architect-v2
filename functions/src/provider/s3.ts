@@ -47,7 +47,66 @@ export async function testConnection(
       // Connection was successful
       resolve({
         status: 'success',
-        data: undefined
+        data: undefined,
+      });
+    } catch (error: any) {
+      // Failed to connect
+      resolve({
+        status: 'failure',
+        code: 'connection-failed',
+        message: error.message ? error.message : error,
+      });
+    }
+  });
+}
+
+/**
+ * Retrieves a list of folder keys from an S3 bucket using the provided credentials.
+ *
+ * @param {TProviderCredentialsS3} credentials - The credentials for accessing the S3 bucket, including the region,
+ *                                               accessKeyId, secretAccessKey, and bucket name.
+ * @return {Promise<TResult<string[]>>} A promise that resolves with an object containing the status of the operation,
+ *                                                and if successful, an array of folder keys from the specified S3 bucket.
+ */
+export async function getFolders(
+  credentials: TProviderCredentialsS3
+): Promise<TResult<string[]>> {
+  return new Promise(async (resolve) => {
+    try {
+      // Create S3 client
+      const client = new S3Client({
+        region: credentials.region,
+        credentials: {
+          accessKeyId: credentials.accessKeyId,
+          secretAccessKey: credentials.secretAccessKey,
+        },
+      });
+      // Create listObjects command
+      const command = new ListObjectsCommand({
+        Bucket: credentials.bucket,
+      });
+      // Execute command
+      const result = await client.send(command);
+      // Create folder array
+      const folders: string[] = [];
+      // Get contents array
+      const contents = result.Contents;
+      // Check contents array
+      if (contents) {
+        // Iterate over content objects
+        for (const content of contents) {
+          // Get key
+          const key = content.Key;
+          // Check if key is a folder
+          if (key && key.endsWith('/')) {
+            folders.push(key);
+          }
+        }
+      }
+      // Connection was successful
+      resolve({
+        status: 'success',
+        data: folders,
       });
     } catch (error: any) {
       // Failed to connect

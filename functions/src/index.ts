@@ -3,6 +3,7 @@ import { Response } from 'express';
 import * as logger from 'firebase-functions/logger';
 import * as admin from 'firebase-admin';
 import * as s3 from './provider/s3';
+import * as gcs from './provider/gcs';
 import * as snflk from './provider/snowflake';
 import { EExternalAppProvider } from './types';
 
@@ -82,7 +83,7 @@ export const testConnection = onRequest(
   },
   async (request, response) => {
     // Authorize the request
-    await authorize(request, response, async (user) => {
+    await authorize(request, response, async () => {
       // Get provider
       const provider = request.body.provider as EExternalAppProvider;
       if (provider === EExternalAppProvider.S3) {
@@ -92,12 +93,67 @@ export const testConnection = onRequest(
         );
         // Send result
         response.send(result);
+      } else if (provider === EExternalAppProvider.GCS) {
+        // Call test connection function for Google Cloud Storage
+        const result = await gcs.testConnection(
+          request.body.credentials as gcs.TProviderCredentialsGCS
+        );
+        // Send result
+        response.send(result);
       } else if (provider === EExternalAppProvider.Snowflake) {
         // Call test connection function for Snowflake
         const result = await snflk.testConnection(
           request.body.credentials as snflk.TProviderCredentialsSnowflake
         );
         // Send result
+        response.send(result);
+      } else {
+        // Unknown provider
+        response.send({
+          status: 'failure',
+          code: 'unknown-provider',
+          message: `The provider ${provider} is not supported.`,
+        });
+      }
+    });
+  }
+);
+
+/**
+ * Handles the request to retrieve folders from an external provider.
+ * This function is designed to support multiple external applications, such as S3,
+ * and fetch the folders based on the given credentials and provider type.
+ *
+ * The function uses request authorization to validate the user's access and then delegates
+ * folder retrieval to the respective external application provider.
+ *
+ * The supported provider types are defined in the `EExternalAppProvider` enumeration.
+ *
+ * If the provider is unsupported or invalid, an error response with the status "failure" is returned.
+ */
+export const getFolders = onRequest(
+  {
+    region: region,
+    cors: true,
+  },
+  async (request, response) => {
+    // Authorize the request
+    await authorize(request, response, async () => {
+      // Get provider
+      const provider = request.body.provider as EExternalAppProvider;
+      if (provider === EExternalAppProvider.S3) {
+        // Get Folders from AWS S3 Bucket
+        const result = await s3.getFolders(
+          request.body.credentials as s3.TProviderCredentialsS3
+        );
+        // Return the result
+        response.send(result);
+      } else if (provider === EExternalAppProvider.GCS) {
+        // Get folders from Google Cloud Storage
+        const result = await gcs.getFolders(
+          request.body.credentials as gcs.TProviderCredentialsGCS
+        );
+        // Return the result
         response.send(result);
       } else {
         // Unknown provider

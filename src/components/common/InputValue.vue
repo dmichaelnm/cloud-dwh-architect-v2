@@ -19,7 +19,13 @@
     outlined
     dense
     @update:modelValue="(value) => (_modelValue = value)"
-  />
+  >
+    <!-- Template for Select Button -->
+    <template v-slot:append v-if="!readOnly && buttonIcon">
+      <!-- Select Button -->
+      <button-icon :icon="buttonIcon" @click="emit('buttonClick')" />
+    </template>
+  </q-input>
 </template>
 
 <style scoped lang="scss"></style>
@@ -27,6 +33,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { QInput } from 'quasar';
+import ButtonIcon from 'components/common/ButtonIcon.vue';
 
 // Reference to the q-input component.
 const inputValue = ref<QInput | null>(null);
@@ -53,19 +60,28 @@ const props = defineProps<{
   readOnly?: boolean;
   /** Flag for using only uppercase characters */
   upperCase?: boolean;
+  /** Icon of an optional button */
+  buttonIcon?: string;
+  /** Flag for hiding the content when read only flag is true */
+  hideWhenReadOnly?: boolean;
 }>();
 
 // Defines the events that can be emitted by this component
 const emit = defineEmits<{
   /** Model update event */
   (event: 'update:modelValue', value: string | number | null): void;
+  /** Button Click event */
+  (event: 'buttonClick'): void;
 }>();
 
 // The internal model value of this component
 const _modelValue = computed({
   get: () => {
     // Hide passwords in read only mode
-    if (props.readOnly && props.type === 'password') {
+    if (
+      props.readOnly &&
+      (props.type === 'password' || props.hideWhenReadOnly)
+    ) {
       return '';
     }
     // Process upper case flag
