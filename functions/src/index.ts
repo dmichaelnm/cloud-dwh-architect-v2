@@ -3,6 +3,7 @@ import { Response } from 'express';
 import * as logger from 'firebase-functions/logger';
 import * as admin from 'firebase-admin';
 import * as s3 from './provider/s3';
+import * as gcs from './provider/gcs';
 import * as snflk from './provider/snowflake';
 import { EExternalAppProvider } from './types';
 
@@ -92,6 +93,13 @@ export const testConnection = onRequest(
         );
         // Send result
         response.send(result);
+      } else if (provider === EExternalAppProvider.GCS) {
+        // Call test connection function for Google Cloud Storage
+        const result = await gcs.testConnection(
+          request.body.credentials as gcs.TProviderCredentialsGCS
+        );
+        // Send result
+        response.send(result);
       } else if (provider === EExternalAppProvider.Snowflake) {
         // Call test connection function for Snowflake
         const result = await snflk.testConnection(
@@ -138,7 +146,13 @@ export const getFolders = onRequest(
         const result = await s3.getFolders(
           request.body.credentials as s3.TProviderCredentialsS3
         );
-        logger.debug(result);
+        // Return the result
+        response.send(result);
+      } else if (provider === EExternalAppProvider.GCS) {
+        // Get folders from Google Cloud Storage
+        const result = await gcs.getFolders(
+          request.body.credentials as gcs.TProviderCredentialsGCS
+        );
         // Return the result
         response.send(result);
       } else {

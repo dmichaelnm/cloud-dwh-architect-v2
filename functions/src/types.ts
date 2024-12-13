@@ -4,6 +4,8 @@
 export enum EExternalAppProvider {
   /** Amazon AWS S3 Bucket */
   S3 = 's3',
+  /** Google Cloud Storage */
+  GCS = 'gcs',
   /** Snowflake Database */
   Snowflake = 'snowflake',
 }
