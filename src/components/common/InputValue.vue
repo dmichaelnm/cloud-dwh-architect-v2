@@ -62,6 +62,8 @@ const props = defineProps<{
   upperCase?: boolean;
   /** Icon of an optional button */
   buttonIcon?: string;
+  /** Flag for hiding the content when read only flag is true */
+  hideWhenReadOnly?: boolean;
 }>();
 
 // Defines the events that can be emitted by this component
@@ -76,7 +78,10 @@ const emit = defineEmits<{
 const _modelValue = computed({
   get: () => {
     // Hide passwords in read only mode
-    if (props.readOnly && props.type === 'password') {
+    if (
+      props.readOnly &&
+      (props.type === 'password' || props.hideWhenReadOnly)
+    ) {
       return '';
     }
     // Process upper case flag

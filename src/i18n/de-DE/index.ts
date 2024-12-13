@@ -439,7 +439,9 @@ export default {
         // Private Key ID
         privateKeyId: 'ID des privaten Schlüssels',
         // Private Key
-        privateKey: 'Privater Schlüssel'
+        privateKey: 'Privater Schlüssel',
+        // Bucket
+        bucket: 'Bucket',
       },
       // Snowflake
       snowflake: {

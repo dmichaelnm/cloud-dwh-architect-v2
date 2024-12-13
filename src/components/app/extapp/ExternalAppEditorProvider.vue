@@ -100,23 +100,15 @@
           <message-component :message="$t('externalApp.provider.gcs.message')">
             <!-- Google Cloud Storage DIV -->
             <div class="q-col-gutter-y-sm">
-              <!-- Project ID, Client ID, Client EMail Row & Private Key ID-->
+              <!-- Client EMail Row & Bucket -->
               <div class="row q-col-gutter-x-sm">
-                <!-- Project ID Column -->
+                <!-- Bucket Column -->
                 <div class="col-3">
-                  <!-- Project ID -->
+                  <!-- Bucket -->
                   <input-value
-                    v-model="(_modelValue.credentials as TProviderCredentialsGCS).projectId"
-                    :label="$t('externalApp.provider.gcs.projectId')"
-                    mandatory
-                  />
-                </div>
-                <!-- Client ID Column -->
-                <div class="col-3">
-                  <!-- Client ID -->
-                  <input-value
-                    v-model="(_modelValue.credentials as TProviderCredentialsGCS).clientId"
-                    :label="$t('externalApp.provider.gcs.clientId')"
+                    v-model="(_modelValue.credentials as TProviderCredentialsGCS).bucket"
+                    :label="$t('externalApp.provider.gcs.bucket')"
+                    :read-only="isReadOnly"
                     mandatory
                   />
                 </div>
@@ -126,21 +118,13 @@
                   <input-value
                     v-model="(_modelValue.credentials as TProviderCredentialsGCS).clientEmail"
                     :label="$t('externalApp.provider.gcs.clientEmail')"
-                    mandatory
-                  />
-                </div>
-                <!-- Private Key ID Column -->
-                <div class="col-3">
-                  <!-- Private Key ID -->
-                  <input-value
-                    v-model="(_modelValue.credentials as TProviderCredentialsGCS).privateKeyId"
-                    :label="$t('externalApp.provider.gcs.privateKeyId')"
+                    :read-only="isReadOnly"
                     mandatory
                   />
                 </div>
               </div>
               <!-- Private Key Row -->
-              <div class="row">
+              <div class="row" v-if="!isReadOnly">
                 <!-- Private Key Column -->
                 <div class="col">
                   <!-- Private Key -->
