@@ -119,6 +119,11 @@
             </div>
           </q-td>
         </template>
+        <!-- Template for custom columns -->
+        <template v-for="c in columns" v-slot:[getSlotName(c)]="{ props }">
+          <!-- Slot -->
+          <slot :name="getSlotName(c)" :props="props" />
+        </template>
       </editable-table>
     </div>
   </q-page>
@@ -247,5 +252,15 @@ function confirmDeletion(
       }
     }
   );
+}
+
+/**
+ * Constructs a slot name for a given table column.
+ *
+ * @param {TTableColumn} column - The table column object for which the slot name is being constructed.
+ * @return {`body-cell-${string}`} The constructed slot name for the table cell.
+ */
+function getSlotName(column: TTableColumn): `body-cell-${string}` {
+  return `body-cell-${column.name}` as const;
 }
 </script>

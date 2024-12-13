@@ -171,6 +171,8 @@ export default {
     externalAppProvider: {
       // Amazon AWS S3 Bucket
       s3: 'Amazon AWS S3 Bucket',
+      // Google Cloud Storage
+      gcs: 'Google Cloud Storage',
       // Snowflake Database
       snowflake: 'Snowflake Database',
     },
@@ -418,6 +420,27 @@ export default {
         // Secret Access Key
         secretAccessKey: 'Geheimer Zugriffsschlüssel',
       },
+      // Google Cloud Storage
+      gcs: {
+        // General Message
+        message:
+          'Bitte tragen Sie die Anmeldeinformationen sorgfältig in die vorgesehenen Felder ein. Die Projekt-ID ' +
+          'ist die eindeutige Kennung Ihres Google-Cloud-Projekts. Die Client-E-Mail entspricht der E-Mail-Adresse ' +
+          'des Servicekontos, das Zugriff auf Google Cloud Storage hat. Der private Schlüssel ist Teil der JSON-Datei, ' +
+          'die beim Erstellen des Servicekontos generiert wurde. Beachten Sie, dass diese Informationen vertraulich ' +
+          'sind und nicht an unbefugte Personen weitergegeben oder unsicher gespeichert werden sollten. Wenden Sie ' +
+          'sich bei Fragen an Ihren Administrator.',
+        // Project ID
+        projectId: 'Projekt-ID',
+        // Client ID
+        clientId: 'Client-ID',
+        // Client Email
+        clientEmail: 'Client-EMail',
+        // Private Key ID
+        privateKeyId: 'ID des privaten Schlüssels',
+        // Private Key
+        privateKey: 'Privater Schlüssel'
+      },
       // Snowflake
       snowflake: {
         // General Message
@@ -531,9 +554,11 @@ export default {
       // Drawer Item
       drawerItem: 'Datei-Ablageorte',
       // Name
-      name: 'Storage Location Name',
+      name: 'Name des Ablageort',
       // Path
       path: 'relativer Pfad zu den Quelldateien',
+      // Location
+      location: 'Applikation / Pfad',
     },
     // Overview Messages
     overview: {
@@ -571,6 +596,18 @@ export default {
           'Geben Sie hier den relativen Pfad zu den Quelldateien ein. Sie können über den Suchen-Knopf ' +
           'auf der rechten Seite des Eingabefelds auch einen Dialog aufrufen, über den Sie den gewünschten Pfad ' +
           'auswählen können.',
+      },
+    },
+    // Dialog Messages
+    dialog: {
+      // Path Selection Dialog
+      pathSelection: {
+        // Title
+        title: 'Auswahl des Pfads',
+        // Message
+        message:
+          'Bitte wählen Sie einen Speicherort aus der Liste der verfügbaren Pfade aus. Der ausgewählte Pfad dient als ' +
+          'Container für Quelldateien, die in das Data Warehouse importiert werden sollen.',
       },
     },
   },

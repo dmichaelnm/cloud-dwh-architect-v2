@@ -84,7 +84,11 @@
 
 .app-footer {
   padding: 4px 8px;
-  background-color: transparent;
+  background-color: $background-body-light;
+}
+
+.body--dark .app-footer {
+  background-color: $background-body-dark;
 }
 
 .social-media-button {

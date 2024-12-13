@@ -4,6 +4,7 @@ import { FirestoreDocument } from 'src/scripts/application/FirestoreDocument';
 import { TCustomAttribute } from 'src/scripts/utilities/common';
 import * as pc from 'src/scripts/provider/common';
 import * as s3 from 'src/scripts/provider/s3';
+import * as gcs from 'src/scripts/provider/gcs';
 import * as snflk from 'src/scripts/provider/snowflake';
 
 /**
@@ -44,13 +45,16 @@ export class EditorExternalAppData extends EditorData<IExternalAppData> {
    */
   createData(): IExternalAppData {
     // Create credentials object
-    let credentials:pc. TProviderCredentials = {};
+    let credentials: pc.TProviderCredentials = {};
     let locationType: pc.ELocationType = pc.ELocationType.file;
     if (this.provider === pc.EExternalAppProvider.S3) {
       // Amazon S3 credentials
       credentials = s3.createCredentials(this.credentials);
       locationType = pc.ELocationType.file;
-    } else if (this.provider == pc.EExternalAppProvider.Snowflake) {
+    } else if (this.provider === pc.EExternalAppProvider.GCS) {
+      credentials = gcs.createCredentials(this.credentials);
+      locationType = pc.ELocationType.file;
+    } else if (this.provider === pc.EExternalAppProvider.Snowflake) {
       // Snowflake credentials
       credentials = snflk.createCredentials(this.credentials);
       locationType = pc.ELocationType.relational;

@@ -1,5 +1,6 @@
 import * as fd from 'src/scripts/application/FirestoreDocument';
 import * as ea from 'src/scripts/application/ExternalApp';
+import * as sl from 'src/scripts/application/StorageLocation';
 import { where } from 'firebase/firestore';
 import { getCurrentAccountId } from 'src/scripts/utilities/firebase';
 import { TCustomAttribute } from 'src/scripts/utilities/common';
@@ -91,6 +92,17 @@ export class Project extends fd.FirestoreDocument<IProjectData> {
     const apps = this.getExternalApplications();
     // Return only storage location capable apps
     return apps.filter((app) => app.data.locationType === ELocationType.file);
+  }
+
+  /**
+   * Retrieves a list of storage locations from the database.
+   *
+   * @return {StorageLocation[]} An array of storage locations.
+   */
+  getStorageLocations(): sl.StorageLocation[] {
+    return this.getDocuments<sl.IStorageLocationData, sl.StorageLocation>(
+      fd.EFirestoreDocumentType.StorageLoc
+    );
   }
 
   /**
@@ -238,6 +250,8 @@ export async function loadProject(project: Project): Promise<void> {
   project.children.clear();
   // Load external applications
   await ea.loadExternalApps(project);
+  // Load storage locations
+  await sl.loadStorageLocations(project);
   // Set project as loaded
   project.loaded = true;
 }

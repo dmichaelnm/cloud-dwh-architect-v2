@@ -1,6 +1,7 @@
-import { IFirestoreDocumentData } from 'src/scripts/application/FirestoreDocument';
+import * as fd from 'src/scripts/application/FirestoreDocument';
 import { ProjectDocument } from 'src/scripts/application/ProjectDocument';
 import { TCustomAttribute } from 'src/scripts/utilities/common';
+import { loadChildDocuments, Project } from 'src/scripts/application/Project';
 
 /**
  * Represents a storage location data structure extending the base Firestore document data.
@@ -11,7 +12,7 @@ import { TCustomAttribute } from 'src/scripts/utilities/common';
  * - `path`: The path indicating the location.
  * - `attributes`: A collection of custom attributes associated with this storage location.
  */
-export interface IStorageLocationData extends IFirestoreDocumentData {
+export interface IStorageLocationData extends fd.IFirestoreDocumentData {
   /** ID of the external application */
   externalApp: string;
   /** Path to the location */
@@ -34,3 +35,18 @@ export interface IStorageLocationData extends IFirestoreDocumentData {
  * provided by the ProjectDocument base class.
  */
 export class StorageLocation extends ProjectDocument<IStorageLocationData> {}
+
+/**
+ * Loads storage locations for the specified project. This method retrieves
+ * all relevant child documents of type `StorageLoc` from the Firestore and
+ * initializes them as `StorageLocation` objects.
+ *
+ * @param {Project} project - The project for which storage locations are to be loaded.
+ */
+export async function loadStorageLocations(project: Project): Promise<void> {
+  await loadChildDocuments(
+    project,
+    fd.EFirestoreDocumentType.StorageLoc,
+    (document) => new StorageLocation({ obj: document }, project)
+  );
+}

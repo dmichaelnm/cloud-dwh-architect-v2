@@ -166,6 +166,8 @@ export default {
     externalAppProvider: {
       // Amazon AWS S3 Bucket
       s3: 'Amazon AWS S3 Bucket',
+      // Google Cloud Storage
+      gcs: 'Google Cloud Storage',
       // Snowflake Database
       snowflake: 'Snowflake Database',
     },
@@ -403,6 +405,27 @@ export default {
         // Secret Access Key
         secretAccessKey: 'Secret Access Key',
       },
+      // Google Cloud Storage
+      gcs: {
+        // General Message
+        message:
+          'Please carefully enter the login information into the designated fields. The project ID is the unique ' +
+          'identifier of your Google Cloud project. The client email corresponds to the email address of the service ' +
+          'account that has access to Google Cloud Storage. The private key is part of the JSON file generated when ' +
+          'creating the service account. Please note that this information is confidential and should not be shared ' +
+          'with unauthorized persons or stored insecurely. If you have any questions, please contact your ' +
+          'administrator.',
+        // Project ID
+        projectId: 'Project ID',
+        // Client ID
+        clientId: 'Client ID',
+        // Client Email
+        clientEmail: 'Client EMail',
+        // Private Key ID
+        privateKeyId: 'Private Key ID',
+        // Private Key
+        privateKey: 'Private Key'
+      },
       // Snowflake
       snowflake: {
         // General Message
@@ -511,9 +534,11 @@ export default {
       // Drawer Item
       drawerItem: 'File Storage Locations',
       // Name
-      name: 'Name des Ablageorts',
+      name: 'Storage Location Name',
       // Path
       path: 'Relative Path To Source Files',
+      // Location
+      location: 'Application / Path',
     },
     // Overview Messages
     overview: {
@@ -550,6 +575,18 @@ export default {
         pathSelection:
           'Enter the relative path to the source files here. You can also use the search button on the right side of ' +
           'the input field to open a dialog where you can select the desired path.',
+      },
+    },
+    // Dialog Messages
+    dialog: {
+      // Path Selection Dialog
+      pathSelection: {
+        // Title
+        title: 'Select A Path',
+        // Message
+        message:
+          'Please select a storage location from the list of available paths. The selected path serves as a container ' +
+          'for source files to be imported into the data warehouse.',
       },
     },
   },
