@@ -1,9 +1,10 @@
 <template>
   <!-- Overview Container -->
   <overview-container
-    :scope="EFirestoreDocumentType.StorageLoc"
+    :scope="fd.EFirestoreDocumentType.StorageLoc"
     :items="storageLocs"
     :permission="getPermission"
+    :delete-handler="deleteItem"
     :columns="[
       {
         name: 'location',
@@ -46,12 +47,12 @@
 <style scoped lang="scss"></style>
 
 <script setup lang="ts">
-import * as cm  from 'src/scripts/utilities/common';
+import * as cm from 'src/scripts/utilities/common';
+import * as fd from 'src/scripts/application/FirestoreDocument';
+import * as sl from 'src/scripts/application/StorageLocation';
 import OverviewContainer from 'components/app/main/OverviewContainer.vue';
-import { EFirestoreDocumentType } from 'src/scripts/application/FirestoreDocument';
 import { computed } from 'vue';
 import { ExternalApp } from 'src/scripts/application/ExternalApp';
-import { StorageLocation } from 'src/scripts/application/StorageLocation';
 import { EProjectMemberRole, Project } from 'src/scripts/application/Project';
 
 // Get composable components
@@ -59,7 +60,9 @@ const comp = cm.useComposables();
 
 // Storage locations array
 const storageLocs = computed(() =>
-  comp.session.project ? (comp.session.project as Project).getStorageLocations() : []
+  comp.session.project
+    ? (comp.session.project as Project).getStorageLocations()
+    : []
 );
 
 /**
@@ -73,7 +76,7 @@ function getExternalApp(row: any): ExternalApp | undefined {
   const project = comp.session.project;
   if (project) {
     // Get storage location
-    const storageLoc = row as StorageLocation;
+    const storageLoc = row as sl.StorageLocation;
     // Return external app
     return project.getExternalApplication(storageLoc.data.externalApp);
   }
@@ -104,15 +107,27 @@ function getPermission(operation: cm.EDocumentOperation): boolean {
     // Check edit permission
     if (operation === cm.EDocumentOperation.Edit) {
       // Developer and above
-      return project.isRoleGreaterOrEqualTo(EProjectMemberRole.Deployer);
+      return project.isRoleGreaterOrEqualTo(EProjectMemberRole.Developer);
     }
     // Check delete permission
     if (operation === cm.EDocumentOperation.Delete) {
       // Maintainer and above
-      return project.isRoleGreaterOrEqualTo(EProjectMemberRole.Maintainer);
+      return project.isRoleGreaterOrEqualTo(EProjectMemberRole.Developer);
     }
   }
   // No permissions
   return false;
+}
+
+/**
+ * Deletes a specified Firestore document and removes it from the current project session if applicable.
+ *
+ * @param {fd.FirestoreDocument<fd.IFirestoreDocumentData>} document - The Firestore document to be deleted.
+ */
+async function deleteItem(
+  document: fd.FirestoreDocument<fd.IFirestoreDocumentData>
+): Promise<void> {
+  // Delete the document
+  await sl.deleteStorageLocation(document as sl.StorageLocation);
 }
 </script>

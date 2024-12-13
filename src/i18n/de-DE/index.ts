@@ -551,6 +551,10 @@ export default {
 
   // Storage Location Messages
   storageLoc: {
+    // Object Name
+    object: 'Datei-Ablageort',
+    // Article
+    article: 'den',
     // Label Messages
     label: {
       // Drawer Item
@@ -574,6 +578,15 @@ export default {
         'Strukturierung verschiedener Klassen von Quelldateien.',
       // Empty Message
       messageEmpty: 'Bisher wurden noch keine Datei-Ablageorte definiert.',
+      // Tooltip Messages
+      tooltip: {
+        // Edit Storage Location
+        edit: 'Datei-Ablageort bearbeiten',
+        // Delete Storage Location
+        delete: 'Datei-Ablageort löschen',
+        // View Storage Location
+        view: 'Datei-Ablageort anzeigen',
+      },
     },
     // Editor Messages
     editor: {
@@ -586,6 +599,25 @@ export default {
           'Erstellen Sie hier einen neuen Datei-Ablageort basierend auf einer externen Applikation, der als ' +
           'Quelle für den Import von Quelldateien in Ihr Data-Warehouse dient. Mit solchen Ablageorten können Sie ' +
           'Ihre Quelldaten organisieren und strukturieren.',
+      },
+      // Editor Edit Messages
+      edit: {
+        // Title
+        title: 'Datei-Ablageort bearbeiten',
+        // Message
+        message:
+          'Hier können Sie die Eigenschaften des Datei-Ablageorts bearbeiten. Beachten Sie, dass Änderungen am ' +
+          'Pfad unter Umständen Auswirkungen auf abhängige Objekte haben können und diese dann eventuell nicht mehr ' +
+          'korrekt funktionieren.',
+      },
+      // Editor View Messages
+      view: {
+        // Title
+        title: 'Datei-Ablageort anzeigen',
+        // Message
+        message:
+          'Hier können Sie die Eigenschaften des Datei-Ablageorts ansehen. Aufgrund Ihrer Rolle können Sie ' +
+          'jedoch keine Änderungen vornehmen.',
       },
       // Common Messages
       message: {

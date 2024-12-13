@@ -24,16 +24,14 @@
 
 <script setup lang="ts">
 import * as fd from 'src/scripts/application/FirestoreDocument';
+import * as cm from 'src/scripts/utilities/common';
+import * as ea from 'src/scripts/application/ExternalApp';
 import OverviewContainer from 'components/app/main/OverviewContainer.vue';
-import {
-  EDocumentOperation,
-  useComposables,
-} from 'src/scripts/utilities/common';
 import { computed } from 'vue';
 import { EProjectMemberRole, Project } from 'src/scripts/application/Project';
 
 // Get composable components
-const comp = useComposables();
+const comp = cm.useComposables();
 
 // Returns an array of external applications of the current project
 const externalApps = computed(() =>
@@ -48,20 +46,20 @@ const externalApps = computed(() =>
  * @param {EDocumentOperation} operation - The type of document operation being checked (e.g., View, Create, Edit, Delete).
  * @return {boolean} - Returns true if the user has the required permission for the specified operation; otherwise, returns false.
  */
-function getPermission(operation: EDocumentOperation): boolean {
+function getPermission(operation: cm.EDocumentOperation): boolean {
   // Check for current project
   if (comp.session.project) {
     // Check view permission
-    if (operation === EDocumentOperation.View) {
+    if (operation === cm.EDocumentOperation.View) {
       return comp.session.project.isRoleLessOrEqualTo(
         EProjectMemberRole.Deployer
       );
     }
     // Check create/edit/delete permission
     if (
-      operation === EDocumentOperation.Create ||
-      operation === EDocumentOperation.Edit ||
-      operation === EDocumentOperation.Delete
+      operation === cm.EDocumentOperation.Create ||
+      operation === cm.EDocumentOperation.Edit ||
+      operation === cm.EDocumentOperation.Delete
     ) {
       return comp.session.project.isRoleGreaterOrEqualTo(
         EProjectMemberRole.Maintainer
@@ -79,13 +77,7 @@ function getPermission(operation: EDocumentOperation): boolean {
 async function deleteItem(
   document: fd.FirestoreDocument<fd.IFirestoreDocumentData>
 ): Promise<void> {
-  // Get current project
-  const project = comp.session.project;
-  if (project) {
-    // Delete the document
-    await fd.deleteDocument(document);
-    // Remove the document from the current project
-    (project as Project).removeDocument(document);
-  }
+  // Delete the document
+  await ea.deleteExternalApp(document as ea.ExternalApp);
 }
 </script>

@@ -24,6 +24,7 @@
                 v-model="_modelValue.externalApp"
                 :options="externalAppOptions"
                 :label="$t('externalApp.label.name')"
+                :read-only="isReadOnly || isEditMode"
               />
             </div>
           </div>
@@ -44,6 +45,7 @@
               <input-value
                 v-model="_modelValue.path"
                 :label="$t('storageLoc.label.path')"
+                :read-only="isReadOnly"
                 button-icon="search"
                 @button-click="openDialog"
               />
@@ -118,6 +120,20 @@ const externalAppOptions = computed(() => {
   // Return options array
   return options;
 });
+
+// Flag resolving to true, if editor is in edit mode, otherwise false
+const isEditMode = computed(() =>
+  comp.session.editorParameter
+    ? comp.session.editorParameter.operation === cm.EDocumentOperation.Edit
+    : false
+);
+
+// Flag resolving to true, if editor is in read only, otherwise false
+const isReadOnly = computed(() =>
+  comp.session.editorParameter
+    ? comp.session.editorParameter.operation === cm.EDocumentOperation.View
+    : false
+);
 
 /**
  * Opens a dialog to interact with folders retrieved from an external application's provider.

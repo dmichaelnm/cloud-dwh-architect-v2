@@ -531,6 +531,10 @@ export default {
 
   // Storage Location Messages
   storageLoc: {
+    // Object Name
+    object: 'File Storage Location',
+    // Article
+    article: 'the',
     // Label Messages
     label: {
       // Drawer Item
@@ -554,6 +558,15 @@ export default {
         'different classes of source files.',
       // Empty Message
       messageEmpty: 'No file storage locations have been defined yet.',
+      // Tooltip Messages
+      tooltip: {
+        // Edit Storage Location
+        edit: 'Edit Storage Location',
+        // Delete Storage Location
+        delete: 'Delete Storage Location',
+        // View Storage Location
+        view: 'View Storage Location',
+      },
     },
     // Editor Messages
     editor: {
@@ -566,6 +579,24 @@ export default {
           'Create a new file storage location here based on an external application that serves as a source ' +
           'for importing source files into your data warehouse. Such storage locations allow you to organize and ' +
           'structure your source data.',
+      },
+      // Editor Edit Messages
+      edit: {
+        // Title
+        title: 'Edit File Storage Location',
+        // Message
+        message:
+          'Here you can edit the properties of the file storage location. Note that changes to the path may ' +
+          'have an impact on dependent objects, which may then no longer function correctly.',
+      },
+      // Editor View Messages
+      view: {
+        // Title
+        title: 'View File Storage Location',
+        // Message
+        message:
+          'Here you can view the properties of the file storage location. However, due to your role, you cannot ' +
+          'make any changes.',
       },
       // Common Messages
       message: {

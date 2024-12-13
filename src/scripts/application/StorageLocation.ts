@@ -2,6 +2,7 @@ import * as fd from 'src/scripts/application/FirestoreDocument';
 import { ProjectDocument } from 'src/scripts/application/ProjectDocument';
 import { TCustomAttribute } from 'src/scripts/utilities/common';
 import { loadChildDocuments, Project } from 'src/scripts/application/Project';
+import { deleteDocument } from 'src/scripts/application/FirestoreDocument';
 
 /**
  * Represents a storage location data structure extending the base Firestore document data.
@@ -49,4 +50,18 @@ export async function loadStorageLocations(project: Project): Promise<void> {
     fd.EFirestoreDocumentType.StorageLoc,
     (document) => new StorageLocation({ obj: document }, project)
   );
+}
+
+/**
+ * Deletes the specified storage location by removing its corresponding document.
+ *
+ * @param {StorageLocation} storageLocation - The storage location object to be deleted.
+ */
+export async function deleteStorageLocation(storageLocation: StorageLocation) {
+  // Get project
+  const project = storageLocation.project;
+  // Delete storage location document
+  await deleteDocument(storageLocation);
+  // Remove document from project
+  project.removeDocument(storageLocation);
 }
