@@ -60,6 +60,8 @@ export default {
     lightMode: 'Heller Modus',
     // Management
     management: 'Verwaltung',
+    // Modeling
+    modeling: 'Modellierung',
     // Okay
     okay: 'Okay',
     // Save
@@ -552,40 +554,40 @@ export default {
   // Storage Location Messages
   storageLoc: {
     // Object Name
-    object: 'Datei-Ablageort',
+    object: 'Verzeichnis',
     // Article
-    article: 'den',
+    article: 'das',
     // Label Messages
     label: {
       // Drawer Item
-      drawerItem: 'Datei-Ablageorte',
+      drawerItem: 'Verzeichnisse',
       // Name
-      name: 'Name des Ablageort',
+      name: 'Name des Verzeichnisses',
       // Path
-      path: 'relativer Pfad zu den Quelldateien',
+      path: 'Pfad zum Verzeichnis',
       // Location
-      location: 'Applikation / Pfad',
+      location: 'Applikation / Verzeichnis',
     },
     // Overview Messages
     overview: {
       // Title
-      title: 'Datei-Ablageorte',
+      title: 'Verzeichnisse',
       // Message
       message:
-        'In der folgenden Tabelle sehen Sie eine Übersicht über alle bereits erstellten Ablageorte für Dateien, ' +
-        'die als Quelle für das Data Warehouse dienen sollen. Datei-Ablageorte basieren auf externen Applikationen, ' +
-        'die den Zugriff auf Dateien zulassen. Das Erstellen von Datei-Ablageorten dient der Organisation und ' +
+        'In der folgenden Tabelle sehen Sie eine Übersicht über alle bereits erstellten Verzeichnisse für Dateien, ' +
+        'die als Quelle für das Data Warehouse dienen sollen. Verzeichnisse basieren auf externen Applikationen, ' +
+        'die den Zugriff auf Dateien zulassen. Das Erstellen von Verzeichnissen dient der Organisation und ' +
         'Strukturierung verschiedener Klassen von Quelldateien.',
       // Empty Message
-      messageEmpty: 'Bisher wurden noch keine Datei-Ablageorte definiert.',
+      messageEmpty: 'Bisher wurden noch keine Verzeichnisse definiert.',
       // Tooltip Messages
       tooltip: {
         // Edit Storage Location
-        edit: 'Datei-Ablageort bearbeiten',
+        edit: 'Verzeichnis bearbeiten',
         // Delete Storage Location
-        delete: 'Datei-Ablageort löschen',
+        delete: 'Verzeichnis löschen',
         // View Storage Location
-        view: 'Datei-Ablageort anzeigen',
+        view: 'Verzeichnis anzeigen',
       },
     },
     // Editor Messages
@@ -593,38 +595,38 @@ export default {
       // Editor Create Messages
       create: {
         // Title
-        title: 'Neuen Datei-Ablageort erstellen',
+        title: 'Neues Verzeichnis erstellen',
         // Message
         message:
-          'Erstellen Sie hier einen neuen Datei-Ablageort basierend auf einer externen Applikation, der als ' +
-          'Quelle für den Import von Quelldateien in Ihr Data-Warehouse dient. Mit solchen Ablageorten können Sie ' +
+          'Erstellen Sie hier ein neues Verzeichnis basierend auf einer externen Applikation, der als ' +
+          'Quelle für den Import von Quelldateien in Ihr Data-Warehouse dient. Mit solchen Verzeichnissen können Sie ' +
           'Ihre Quelldaten organisieren und strukturieren.',
       },
       // Editor Edit Messages
       edit: {
         // Title
-        title: 'Datei-Ablageort bearbeiten',
+        title: 'Verzeichnis bearbeiten',
         // Message
         message:
-          'Hier können Sie die Eigenschaften des Datei-Ablageorts bearbeiten. Beachten Sie, dass Änderungen am ' +
+          'Hier können Sie die Eigenschaften des Verzeichnisses bearbeiten. Beachten Sie, dass Änderungen am ' +
           'Pfad unter Umständen Auswirkungen auf abhängige Objekte haben können und diese dann eventuell nicht mehr ' +
           'korrekt funktionieren.',
       },
       // Editor View Messages
       view: {
         // Title
-        title: 'Datei-Ablageort anzeigen',
+        title: 'Verzeichnis anzeigen',
         // Message
         message:
-          'Hier können Sie die Eigenschaften des Datei-Ablageorts ansehen. Aufgrund Ihrer Rolle können Sie ' +
+          'Hier können Sie die Eigenschaften des Verzeichnis ansehen. Aufgrund Ihrer Rolle können Sie ' +
           'jedoch keine Änderungen vornehmen.',
       },
       // Common Messages
       message: {
         // External App Selection
         externalAppSelection:
-          'Wählen Sie hier die externe Applikation aus, für die Sie einen Datei-Ablageort ' +
-          'anlegen wollen. Es werden nur Applikationen angezeigt, die fähig sind, Datei-Ablageorte bereitzustellen.',
+          'Wählen Sie hier die externe Applikation aus, für die Sie ein Verzeichnis ' +
+          'anlegen wollen. Es werden nur Applikationen angezeigt, die fähig sind, Verzeichnisse bereitzustellen.',
         // Path Selection
         pathSelection:
           'Geben Sie hier den relativen Pfad zu den Quelldateien ein. Sie können über den Suchen-Knopf ' +
@@ -642,6 +644,45 @@ export default {
         message:
           'Bitte wählen Sie einen Speicherort aus der Liste der verfügbaren Pfade aus. Der ausgewählte Pfad dient als ' +
           'Container für Quelldateien, die in das Data Warehouse importiert werden sollen.',
+      },
+    },
+  },
+
+  // Files
+  file: {
+    // File Labels
+    label: {
+      // Drawer Item Label
+      drawerItem: 'Datei-Objekte',
+      // Name
+      name: 'Name des Dateiobjekts',
+      // Column Definitions
+      columns: 'Spalten-Definition',
+    },
+    // Overview Messages
+    overview: {
+      // Title
+      title: 'Datei-Objekte',
+      // Message
+      message:
+        'Die folgende Übersicht zeigt eine Liste von erstellten Dateiobjekten an, die auf Dateien in ' +
+        'Verzeichnissen von Cloud-Speicherdiensten wie S3 oder Google Cloud Storage liegen. Diese Dateiobjekte ' +
+        'beschreiben die Struktur der Dateien und dienen dazu, den Importprozess in ein Data Warehouse zu ' +
+        'vereinfachen und zu automatisieren.',
+      // Empty Message
+      messageEmpty: 'Bisher wurden noch keine Dateiobjekte definiert.',
+    },
+    // Editor Messages
+    editor: {
+      // Create Messages
+      create: {
+        // Title
+        title: 'Neue Dateiobjekt erstellen',
+        // Message
+        message:
+          'Auf dieser Seite können Sie ein Dateiobjekt für eine Datei in einem Cloudspeicherdienst erstellen. ' +
+          'Dabei können Sie entweder die Struktur der Datei manuell definieren oder automatisch über Reverse ' +
+          'Engineering ermitteln lassen. Dies erleichtert die Integration der Datei in Ihr Data Warehouse.',
       },
     },
   },

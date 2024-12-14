@@ -26,6 +26,10 @@ export enum EFirestoreDocumentType {
    * A Firestore document containing information about a file storage location.
    */
   StorageLoc = 'storageLoc',
+  /**
+   * A Firestore document containing information about a file.
+   */
+  File = 'file',
 }
 
 /**

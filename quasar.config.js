@@ -37,6 +37,7 @@ module.exports = configure(function (/* ctx */) {
       'bootstrap-icons',
       'roboto-font', // optional, you are not bound to it
       'material-icons', // optional, you are not bound to it
+      'material-icons-outlined',
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
@@ -95,12 +96,12 @@ module.exports = configure(function (/* ctx */) {
       ],
 
       viteVuePluginOptions: {
-        exclude: ['./functions/**']
+        exclude: ['./functions/**'],
       },
 
       rollupOptions: {
         external: ['functions/**'],
-      }
+      },
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer

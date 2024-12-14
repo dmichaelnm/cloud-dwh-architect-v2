@@ -60,6 +60,8 @@ export default {
     lightMode: 'Light Mode',
     // Management
     management: 'Management',
+    // Modeling
+    modeling: 'Modeling',
     // Save
     save: 'Save',
     // Type
@@ -620,6 +622,45 @@ export default {
         message:
           'Please select a storage location from the list of available paths. The selected path serves as a container ' +
           'for source files to be imported into the data warehouse.',
+      },
+    },
+  },
+
+  // Files
+  file: {
+    // File Labels
+    label: {
+      // Drawer Item Label
+      drawerItem: 'File Objects',
+      // Name
+      name: 'File Object Name',
+      // Column Definitions
+      columns: 'Spalten-Definition',
+    },
+    // Overview Messages
+    overview: {
+      // Title
+      title: 'File Objects',
+      // Message
+      message:
+        'The following overview displays a list of created file objects that reference files in ' +
+        'directories of cloud storage services such as S3 or Google Cloud Storage. These file objects ' +
+        'describe the structure of the files and are intended to simplify and automate the import process ' +
+        'into a data warehouse.',
+      // Empty Message
+      messageEmpty: 'No file objects have been defined yet.',
+    },
+    // Editor Messages
+    editor: {
+      // Create Messages
+      create: {
+        // Title
+        title: 'Create new file object',
+        // Message
+        message:
+          'On this page, you can create a file object for a file in a cloud storage service. ' +
+          'You can either define the structure of the file manually or automatically determine it ' +
+          'using reverse engineering. This simplifies the integration of the file into your data warehouse.',
       },
     },
   },
