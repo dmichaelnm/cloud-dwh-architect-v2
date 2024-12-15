@@ -1,5 +1,6 @@
-import { TResult } from '../types';
+import { TFileInfo, TResult } from '../types';
 import { ListObjectsCommand, S3Client } from '@aws-sdk/client-s3';
+//import * as logger from 'firebase-functions/logger';
 
 /**
  * Represents the credentials and configuration needed to authenticate
@@ -17,6 +18,24 @@ export type TProviderCredentialsS3 = {
 };
 
 /**
+ * Creates and returns an instance of the S3Client configured with the provided credentials.
+ *
+ * @param {TProviderCredentialsS3} credentials - The credentials required to configure the S3 client, including
+ *                                               access key, secret key, and region.
+ * @return {S3Client} The initialized S3 client instance.
+ */
+function createClient(credentials: TProviderCredentialsS3): S3Client {
+  // Create S3 client
+  return new S3Client({
+    region: credentials.region,
+    credentials: {
+      accessKeyId: credentials.accessKeyId,
+      secretAccessKey: credentials.secretAccessKey,
+    },
+  });
+}
+
+/**
  * Tests the connection to an S3 bucket using the provided credentials.
  *
  * @param {TProviderCredentialsS3} credentials - The credentials required to access the S3 bucket, including region,
@@ -29,14 +48,8 @@ export async function testConnection(
 ): Promise<TResult<string>> {
   return new Promise(async (resolve) => {
     try {
-      // Create S3 client
-      const client = new S3Client({
-        region: credentials.region,
-        credentials: {
-          accessKeyId: credentials.accessKeyId,
-          secretAccessKey: credentials.secretAccessKey,
-        },
-      });
+      // Create client
+      const client = createClient(credentials);
       // Create listObjects command
       const command = new ListObjectsCommand({
         Bucket: credentials.bucket,
@@ -73,14 +86,8 @@ export async function getFolders(
 ): Promise<TResult<string[]>> {
   return new Promise(async (resolve) => {
     try {
-      // Create S3 client
-      const client = new S3Client({
-        region: credentials.region,
-        credentials: {
-          accessKeyId: credentials.accessKeyId,
-          secretAccessKey: credentials.secretAccessKey,
-        },
-      });
+      // Create client
+      const client = createClient(credentials);
       // Create listObjects command
       const command = new ListObjectsCommand({
         Bucket: credentials.bucket,
@@ -103,7 +110,7 @@ export async function getFolders(
           }
         }
       }
-      // Connection was successful
+      // Return the result
       resolve({
         status: 'success',
         data: folders,
@@ -112,7 +119,64 @@ export async function getFolders(
       // Failed to connect
       resolve({
         status: 'failure',
-        code: 'connection-failed',
+        code: 'unexpected-error',
+        message: error.message ? error.message : error,
+      });
+    }
+  });
+}
+
+/**
+ * Retrieves a list of files from a specified path in an S3 bucket.
+ *
+ * @param {TProviderCredentialsS3} credentials - The credentials required to access the S3 bucket, including access keys and bucket details.
+ * @param {string} path - The path or prefix within the S3 bucket to search for files.
+ * @return {Promise<TResult<string[]>>} A promise resolving to a TResult object containing a list of file names on success, or failure details on error.
+ */
+export async function getFiles(
+  credentials: TProviderCredentialsS3,
+  path: string
+): Promise<TResult<TFileInfo[]>> {
+  return new Promise(async (resolve) => {
+    try {
+      // Create client
+      const client = createClient(credentials);
+      // Create listObjects command
+      const command = new ListObjectsCommand({
+        Bucket: credentials.bucket,
+        Prefix: path,
+      });
+      // Execute the command
+      const result = await client.send(command);
+      // Create result array
+      const files: TFileInfo[] = [];
+      // Check result
+      if (result.Contents) {
+        // Iterate over the result
+        for (const obj of result.Contents) {
+          // Exclude folders
+          if (obj.Key && !obj.Key?.endsWith('/')) {
+            // Remove path from file
+            const file = obj.Key.replace(path, '');
+            // Add to result array
+            files.push({
+              name: file,
+              size: obj.Size,
+              lastModified: obj.LastModified
+            });
+          }
+        }
+      }
+      // Return the result
+      resolve({
+        status: 'success',
+        data: files,
+      });
+    } catch (error: any) {
+      // Failed to connect
+      resolve({
+        status: 'failure',
+        code: 'unexpected-error',
         message: error.message ? error.message : error,
       });
     }

@@ -25,3 +25,15 @@ export type TResult<R> = {
   /** Data object when status is 'success' */
   data?: R;
 };
+
+/**
+ * Represents file information with details about its name, size, and last modified date.
+ */
+export type TFileInfo = {
+  /** Name */
+  name: string;
+  /** Size */
+  size: string | number | undefined;
+  /** Last Modified */
+  lastModified: Date | string | undefined;
+}

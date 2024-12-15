@@ -166,3 +166,68 @@ export const getFolders = onRequest(
     });
   }
 );
+
+/**
+ * Handles a request to retrieve files from an external storage provider.
+ *
+ * The function processes HTTP requests to fetch files from either an Amazon S3
+ * bucket or a Google Cloud Storage (GCS) bucket, based on the specified provider.
+ *
+ * Configuration:
+ * - The `region` option specifies the region configuration of the request handler.
+ * - The `cors` option enables Cross-Origin Resource Sharing for the endpoint.
+ *
+ * Request Payload:
+ * - `provider`: A string representing the external storage provider (e.g., "S3" or "GCS").
+ * - `path`: A string specifying the directory or path in the storage provider to retrieve files from.
+ * - `credentials`: An object containing the credentials required to authenticate with the specified provider.
+ *
+ * Behavior:
+ * - For Amazon S3 (`EExternalAppProvider.S3`): Retrieves files using the specified S3 credentials and path.
+ * - For Google Cloud Storage (`EExternalAppProvider.GCS`): Retrieves files using the specified GCS credentials and path.
+ * - If the provider is not recognized, returns an error response with status "failure".
+ *
+ * Responses:
+ * - On success: Sends the result containing the list of files retrieved from the specified provider.
+ * - On unknown provider: Sends an error object indicating that the provider is not supported.
+ */
+export const getFiles = onRequest(
+  {
+    region: region,
+    cors: true,
+  },
+  async (request, response) => {
+    // Authorize the request
+    await authorize(request, response, async () => {
+      // Get provider
+      const provider = request.body.provider as EExternalAppProvider;
+      // Get path
+      const path = request.body.path as string;
+
+      if (provider === EExternalAppProvider.S3) {
+        // Get files from Amazon S3 bucket
+        const result = await s3.getFiles(
+          request.body.credentials as s3.TProviderCredentialsS3,
+          path
+        );
+        // Return the result
+        response.send(result);
+      } else if (provider === EExternalAppProvider.GCS) {
+        // Get files from Amazon S3 bucket
+        const result = await gcs.getFiles(
+          request.body.credentials as gcs.TProviderCredentialsGCS,
+          path
+        );
+        // Return the result
+        response.send(result);
+      } else {
+        // Unknown provider
+        response.send({
+          status: 'failure',
+          code: 'unknown-provider',
+          message: `The provider ${provider} is not supported.`,
+        });
+      }
+    });
+  }
+);
