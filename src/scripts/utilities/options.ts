@@ -99,3 +99,21 @@ export function getExternalApplicationProviders(): TSelectOption[] {
     },
   ];
 }
+
+/**
+ * Retrieves a list of file types as selectable options.
+ *
+ * @return {TSelectOption[]} An array of objects representing file types, each containing a `value` and a `label`.
+ */
+export function getFileTypes(): TSelectOption[] {
+  return [
+    {
+      value: 'unknown',
+      label: 'enumeration.fileType.unknown',
+    },
+    {
+      value: 'text/csv',
+      label: 'enumeration.fileType.csv',
+    },
+  ];
+}

@@ -9,6 +9,19 @@ import firebase from 'firebase/compat';
 import Timestamp = firebase.firestore.Timestamp;
 
 /**
+ * Enumeration representing different file types.
+ *
+ * This enum is commonly used to define and categorize
+ * supported file types by their MIME type.
+ */
+export enum EFileType {
+  /** Unknown file type */
+  Unknown = 'unknown',
+  /** Plain CSV */
+  CSV = 'text/csv',
+}
+
+/**
  * Enumeration representing operations that can be performed on a document.
  */
 export enum EDocumentOperation {

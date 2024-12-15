@@ -178,6 +178,13 @@ export default {
       // Snowflake Database
       snowflake: 'Snowflake Database',
     },
+    // File Types
+    fileType: {
+      // Unknown
+      unknown: 'Unbekannter Dateityp',
+      // CSV
+      csv: 'CSV-Datei',
+    },
   },
 
   // Authentication Messages
@@ -658,6 +665,12 @@ export default {
       name: 'Name des Dateiobjekts',
       // Column Definitions
       columns: 'Spalten-Definition',
+      // Path
+      path: 'Name der Datei im gewählten Verzeichnis',
+      // File Type
+      type: 'Dateityp',
+      // Select Storage Location
+      storageLocation: 'Verzeichnis auswählen',
     },
     // Overview Messages
     overview: {
@@ -683,6 +696,14 @@ export default {
           'Auf dieser Seite können Sie ein Dateiobjekt für eine Datei in einem Cloudspeicherdienst erstellen. ' +
           'Dabei können Sie entweder die Struktur der Datei manuell definieren oder automatisch über Reverse ' +
           'Engineering ermitteln lassen. Dies erleichtert die Integration der Datei in Ihr Data Warehouse.',
+      },
+      // Tab Messages
+      message: {
+        // General
+        general:
+          'Geben Sie hier den Pfad zur Datei im Cloud-Speicher sowie den Dateityp an. Sie können auch durch ' +
+          'Auswahl einer Datei im Cloud-Speicher alle Informationen durch Reverse Engineering automatisch ' +
+          'ermitteln lassen, sofern der Dateityp von der Anwednung unterstützt wird.',
       },
     },
   },

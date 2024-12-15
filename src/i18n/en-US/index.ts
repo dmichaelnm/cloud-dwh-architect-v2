@@ -173,6 +173,13 @@ export default {
       // Snowflake Database
       snowflake: 'Snowflake Database',
     },
+    // File Types
+    fileType: {
+      // Unknown
+      unknown: 'Unknown File Type',
+      // CSV
+      csv: 'CSV File',
+    },
   },
 
   // Authentication Messages
@@ -636,6 +643,12 @@ export default {
       name: 'File Object Name',
       // Column Definitions
       columns: 'Spalten-Definition',
+      // Path
+      path: 'Name of the file in the chosen storage location',
+      // File Type
+      type: 'File Type',
+      // Select Storage Location
+      storageLocation: 'Choose Storage Location',
     },
     // Overview Messages
     overview: {
@@ -661,6 +674,14 @@ export default {
           'On this page, you can create a file object for a file in a cloud storage service. ' +
           'You can either define the structure of the file manually or automatically determine it ' +
           'using reverse engineering. This simplifies the integration of the file into your data warehouse.',
+      },
+      // Tab Messages
+      message: {
+        // General
+        general:
+          'Enter the path to the file in cloud storage here along with the file type. You can also ' +
+          'automatically obtain all information via reverse engineering by selecting a file in cloud storage, ' +
+          'provided that the file type is supported by the application.',
       },
     },
   },
