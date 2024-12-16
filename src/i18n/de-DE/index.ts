@@ -706,6 +706,24 @@ export default {
           'ermitteln lassen, sofern der Dateityp von der Anwednung unterstützt wird.',
       },
     },
+    // File Properties Messages
+    properties: {
+      // CSV Properties
+      csv: {
+        // General message
+        message:
+          'Hier können Sie die konkreten Eigenschaften der ausgewählten CSV-Datei festlegen, um z.B. ein ' +
+          'Reverse Engineering zur Ermittlung der Struktur der CSV-Datei durchzuführen.',
+        // Row Separator
+        rowSeparator: 'Zeilenumbruch',
+        // Field Delimiter
+        fieldDelimiter: 'Feld-Trennzeichen',
+        // Quote Character
+        quoteCharacter: 'Anführungszeichen',
+        // Has Header Row
+        hasHeaderRow: 'Erste Zeile enthält Spaltennamen',
+      },
+    },
     // Dialog Messages
     dialog: {
       // File Selection Dialog
@@ -713,14 +731,15 @@ export default {
         // Title
         title: 'Datei auswählen',
         // Message
-        message: 'Wählen Sie aus der Liste die Datei aus, für die Sie ein Datei-Objekt erstellen wollen.',
+        message:
+          'Wählen Sie aus der Liste die Datei aus, für die Sie ein Datei-Objekt erstellen wollen.',
         // File Name
         fileName: 'Name der Datei',
         // File Size
         fileSize: 'Größe',
         // Last Modified
-        lastModified: 'Zuletzt geändert'
-      }
-    }
+        lastModified: 'Zuletzt geändert',
+      },
+    },
   },
 };

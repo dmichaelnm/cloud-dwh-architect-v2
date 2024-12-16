@@ -1,10 +1,10 @@
+import * as fo from 'src/scripts/application/FileObject';
 import { EditorData } from 'src/scripts/ui/common';
-import { IFileObjectData } from 'src/scripts/application/FileObject';
 import { FirestoreDocument } from 'src/scripts/application/FirestoreDocument';
 import { EFileType } from 'src/scripts/utilities/common';
 import { Project } from 'src/scripts/application/Project';
 
-export class EditorFileObjectData extends EditorData<IFileObjectData> {
+export class EditorFileObjectData extends EditorData<fo.IFileObjectData> {
   /** Storage Location */
   storageLocation: string = '';
 
@@ -13,6 +13,9 @@ export class EditorFileObjectData extends EditorData<IFileObjectData> {
 
   /** Path to file in the cloud storage */
   path: string = '';
+
+  /** File properties */
+  properties: fo.TFileProperties = null;
 
   /**
    * Constructs an instance, optionally initializing it with a given project.
@@ -32,7 +35,7 @@ export class EditorFileObjectData extends EditorData<IFileObjectData> {
     }
   }
 
-  createData(): IFileObjectData {
+  createData(): fo.IFileObjectData {
     return {
       common: {
         name: this.name,
@@ -41,11 +44,12 @@ export class EditorFileObjectData extends EditorData<IFileObjectData> {
       stoageLocation: this.storageLocation,
       type: this.type,
       path: this.path,
+      properties: this.properties,
     };
   }
 
   initEditorData(
-    document: FirestoreDocument<IFileObjectData>
+    document: FirestoreDocument<fo.IFileObjectData>
   ): void | Promise<void> {
     // Attach document
     this.document = document;

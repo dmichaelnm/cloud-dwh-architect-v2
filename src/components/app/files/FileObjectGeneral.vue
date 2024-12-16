@@ -44,27 +44,35 @@
             :label="$t('file.label.type')"
             translate
             hide-icon
+            @update:modelValue="onFileTypeChanged"
           />
         </div>
       </div>
     </div>
   </message-component>
+  <!-- CSV Properties -->
+  <file-object-properties-c-s-v
+    v-if="_modelValue.type === EFileType.CSV"
+    v-model="_modelValue"
+  />
 </template>
 
 <style scoped lang="scss"></style>
 
 <script setup lang="ts">
 import * as cm from 'src/scripts/utilities/common';
+import * as fo from 'src/scripts/application/FileObject';
 import MessageComponent from 'components/common/MessageComponent.vue';
 import InputValue from 'components/common/InputValue.vue';
 import SelectValue from 'components/common/SelectValue.vue';
 import FileObjectSelectionDialog from 'components/app/files/FileObjectSelectionDialog.vue';
+import FileObjectPropertiesCSV from 'components/app/files/FileObjectPropertiesCSV.vue';
+import { EFileType } from 'src/scripts/utilities/common';
 import { computed, ref } from 'vue';
 import { EditorFileObjectData } from 'src/scripts/ui/fileObject';
 import { getFileTypes } from 'src/scripts/utilities/options';
 import { Project } from 'src/scripts/application/Project';
 import { post } from 'src/scripts/utilities/functions';
-import { getFileTypeFromExtension } from 'src/scripts/application/FileObject';
 
 // Get composable components
 const comp = cm.useComposables();
@@ -166,8 +174,12 @@ function openFileSelectionDialog(): void {
 function onFileSelected(file: cm.TFileInfo): void {
   // Get file extension
   const extension = file.name.split('.').pop();
-  // Get file type from extension
-  _modelValue.value.type = getFileTypeFromExtension(extension);
+  // Set file type
+  _modelValue.value.type = fo.getFileTypeFromExtension(extension);
+  // Set file properties for current file type
+  _modelValue.value.properties = fo.getFilePropertiesFromType(
+    _modelValue.value.type
+  );
   // Determine the name of the file object
   _modelValue.value.name = file.name
     .split('.')
@@ -176,5 +188,16 @@ function onFileSelected(file: cm.TFileInfo): void {
     .toUpperCase();
   // Set the file name
   _modelValue.value.path = file.name;
+}
+
+/**
+ * Handles the change in file type and updates the file properties accordingly.
+ * Fetches the appropriate properties based on the new file type and assigns them to the model's value.
+ */
+function onFileTypeChanged(): void {
+  // Set file properties for current file type
+  _modelValue.value.properties = fo.getFilePropertiesFromType(
+    _modelValue.value.type
+  );
 }
 </script>

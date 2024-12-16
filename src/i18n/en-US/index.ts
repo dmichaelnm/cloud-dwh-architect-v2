@@ -663,7 +663,24 @@ export default {
       // Empty Message
       messageEmpty: 'No file objects have been defined yet.',
     },
-    // Editor Messages
+    // File Properties Messages
+    properties: {
+      // CSV Properties
+      csv: {
+        // General message
+        message:
+          'Here you can specify the concrete properties of the selected CSV file, for example, to perform reverse ' +
+          'engineering to determine the structure of the CSV file.',
+        // Row Separator
+        rowSeparator: 'Line Break',
+        // Field Delimiter
+        fieldDelimiter: 'Field Delimiter',
+        // Quote Character
+        quoteCharacter: 'Quote Character',
+        // Has Header Row
+        hasHeaderRow: 'First Row Contains Column Names',
+      },
+    }, // Editor Messages
     editor: {
       // Create Messages
       create: {
@@ -698,7 +715,7 @@ export default {
         // File Size
         fileSize: 'Size',
         // Last Modified
-        lastModified: 'Last Modified'
+        lastModified: 'Last Modified',
       },
     },
   },

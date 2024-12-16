@@ -35,6 +35,6 @@ const props = defineProps<{
 
 // The attribute specifying the column width
 const colWidthAttr = computed(() =>
-  props.colWidth ? `col-${props.colWidth}` : 'col-9'
+  props.colWidth ? `col-${props.colWidth}` : 'col-6'
 );
 </script>
