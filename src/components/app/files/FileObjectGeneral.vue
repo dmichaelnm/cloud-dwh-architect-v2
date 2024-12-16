@@ -1,4 +1,11 @@
 <template>
+  <!-- File Selection Dialog -->
+  <file-object-selection-dialog
+    v-model="dialogVisible"
+    :files="fileNames"
+    @file-selected="onFileSelected"
+  />
+
   <!-- Message Component -->
   <message-component :message="$t('file.editor.message.general')">
     <!-- Main DIV -->
@@ -47,24 +54,22 @@
 <style scoped lang="scss"></style>
 
 <script setup lang="ts">
+import * as cm from 'src/scripts/utilities/common';
 import MessageComponent from 'components/common/MessageComponent.vue';
-import { computed } from 'vue';
-import { EditorFileObjectData } from 'src/scripts/ui/fileObject';
 import InputValue from 'components/common/InputValue.vue';
 import SelectValue from 'components/common/SelectValue.vue';
+import FileObjectSelectionDialog from 'components/app/files/FileObjectSelectionDialog.vue';
+import { computed, ref } from 'vue';
+import { EditorFileObjectData } from 'src/scripts/ui/fileObject';
 import { getFileTypes } from 'src/scripts/utilities/options';
-import {
-  TSelectOption,
-  useComposables,
-  useRunTask,
-} from 'src/scripts/utilities/common';
 import { Project } from 'src/scripts/application/Project';
 import { post } from 'src/scripts/utilities/functions';
+import { getFileTypeFromExtension } from 'src/scripts/application/FileObject';
 
 // Get composable components
-const comp = useComposables();
+const comp = cm.useComposables();
 // Get run task composable function
-const runTask = useRunTask();
+const runTask = cm.useRunTask();
 
 // Defines the properties of this component
 const props = defineProps<{
@@ -87,7 +92,7 @@ const _modelValue = computed({
 // Array of storage locations for the selection
 const storageLocations = computed(() => {
   // Options array
-  const options: TSelectOption[] = [];
+  const options: cm.TSelectOption[] = [];
   // Get current project
   const project = comp.session.project as Project;
   if (project) {
@@ -113,6 +118,16 @@ const storageLocations = computed(() => {
   return options;
 });
 
+// Flag for opening file selection dialog
+const dialogVisible = ref(false);
+// Array of file names
+const fileNames = ref<cm.TFileInfo[]>([]);
+
+/**
+ * Opens a file selection dialog for the user to choose files.
+ * This method retrieves file information from an external provider
+ * associated with the project's storage location and displays it in a dialog.
+ */
 function openFileSelectionDialog(): void {
   // Get current project
   const project = comp.session.project as Project;
@@ -129,15 +144,37 @@ function openFileSelectionDialog(): void {
       if (externalApp) {
         // Retrieve files
         runTask(async () => {
-          const result = await post('getFiles', {
+          // Get the array of filenames from server
+          fileNames.value = await post('getFiles', {
             provider: externalApp.data.provider,
             credentials: externalApp.data.credentials,
             path: storageLoc.data.path,
           });
-          console.debug(result);
+          // Open the dialog
+          dialogVisible.value = true;
         });
       }
     }
   }
+}
+
+/**
+ * Handles the event triggered when a file is selected and updates the file model properties accordingly.
+ *
+ * @param {TFileInfo} file - The file information object containing details about the selected file.
+ */
+function onFileSelected(file: cm.TFileInfo): void {
+  // Get file extension
+  const extension = file.name.split('.').pop();
+  // Get file type from extension
+  _modelValue.value.type = getFileTypeFromExtension(extension);
+  // Determine the name of the file object
+  _modelValue.value.name = file.name
+    .split('.')
+    .slice(0, -1)
+    .join('.')
+    .toUpperCase();
+  // Set the file name
+  _modelValue.value.path = file.name;
 }
 </script>

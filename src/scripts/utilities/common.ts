@@ -48,6 +48,18 @@ export enum ECustomAttributeType {
 }
 
 /**
+ * Represents file information with details about its name, size, and last modified date.
+ */
+export type TFileInfo = {
+  /** Name */
+  name: string;
+  /** Size */
+  size: string | number | undefined;
+  /** Last Modified */
+  lastModified: Date | string | undefined;
+}
+
+/**
  * Represents a custom attribute with a key, type, and value.
  *
  * @property {string} key - The key of the attribute.

@@ -42,6 +42,7 @@
                   :val="props.rowIndex"
                   dense
                   size="xs"
+                  @update:model-value="emit('rowSelected', props.rowIndex)"
                 />
               </q-td>
             </template>
@@ -63,14 +64,14 @@
                     "
                   >
                     <!-- Value DIV -->
-                    <div class="flex q-gutter-x-sm">
+                    <div class="flex q-gutter-x-sm" style="width: 100%">
                       <!-- Optional Icon DIV -->
-                      <div v-if="getIcon(col, props.row)">
+                      <div v-if="getIcon(col, props.row)" style="width: 100%">
                         <!-- Optional Icon -->
                         <q-icon :name="getIcon(col, props.row)" size="xs" />
                       </div>
                       <!-- Value -->
-                      <div>{{ props.value }}</div>
+                      <div style="width: 100%">{{ props.value }}</div>
                     </div>
                   </div>
                   <!-- Custom Boolean Column Value -->
@@ -189,9 +190,6 @@ import { TSelectOption } from 'src/scripts/utilities/common';
 // Contains the references to popup editors in the editable table
 const references = reactive(<Record<string, any>>{});
 
-// Selected row index
-const selectedRowIndex = ref(-1);
-
 // Defines the properties of this component
 const props = defineProps<{
   /** Model value */
@@ -222,12 +220,21 @@ const props = defineProps<{
   sortBy?: string;
   /** Sort order */
   sortOrder?: 'asc' | 'desc';
+  /** Flag for the possibility of selecting a row */
+  selectable?: boolean;
+  /** Selected Row Index */
+  selectedRow?: number;
 }>();
+
+// Selected row index
+const selectedRowIndex = ref(props.selectedRow ?? -1);
 
 // Defines the events that can be emitted by this component
 const emit = defineEmits<{
   /** Model update event */
   (event: 'update:modelValue', value: Record<string, any>[]): void;
+  /** Row selection event */
+  (event: 'rowSelected', value: number): void;
 }>();
 
 // The internal model value of this component
@@ -241,7 +248,7 @@ const computedColumns = computed(() => {
   // Create computed columns array
   const colArr: TTableColumn[] = [];
   // If rows are deletable or moveable, create a selection column
-  if (props.deletable || props.moveable) {
+  if (props.deletable || props.moveable || props.selectable) {
     colArr.push({
       name: 'select',
       align: 'center',

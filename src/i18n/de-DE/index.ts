@@ -706,5 +706,21 @@ export default {
           'ermitteln lassen, sofern der Dateityp von der Anwednung unterstützt wird.',
       },
     },
+    // Dialog Messages
+    dialog: {
+      // File Selection Dialog
+      fileSelection: {
+        // Title
+        title: 'Datei auswählen',
+        // Message
+        message: 'Wählen Sie aus der Liste die Datei aus, für die Sie ein Datei-Objekt erstellen wollen.',
+        // File Name
+        fileName: 'Name der Datei',
+        // File Size
+        fileSize: 'Größe',
+        // Last Modified
+        lastModified: 'Zuletzt geändert'
+      }
+    }
   },
 };

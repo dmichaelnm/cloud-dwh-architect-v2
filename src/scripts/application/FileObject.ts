@@ -12,3 +12,25 @@ export interface IFileObjectData extends IFirestoreDocumentData {
 }
 
 export class FileObject extends ProjectDocument<IFileObjectData> {}
+
+/**
+ * Determines the file type based on the provided file extension.
+ *
+ * @param {string} extension - The file extension to evaluate.
+ * @return {EFileType} The corresponding file type as an EFileType enum value.
+ */
+export function getFileTypeFromExtension(
+  extension: string | undefined
+): EFileType {
+  // Check extension
+  if (!extension) {
+    return EFileType.Unknown;
+  }
+  // Determine file type
+  switch (extension.toLowerCase()) {
+    case 'csv':
+      return EFileType.CSV;
+    default:
+      return EFileType.Unknown;
+  }
+}

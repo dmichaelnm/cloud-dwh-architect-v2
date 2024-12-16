@@ -684,5 +684,22 @@ export default {
           'provided that the file type is supported by the application.',
       },
     },
+    // Dialog Messages
+    dialog: {
+      // File Selection Dialog
+      fileSelection: {
+        // Title
+        title: 'Select file',
+        // Message
+        message:
+          'Choose the file from the list for which you want to create a file object.',
+        // File Name
+        fileName: 'File Name',
+        // File Size
+        fileSize: 'Size',
+        // Last Modified
+        lastModified: 'Last Modified'
+      },
+    },
   },
 };
