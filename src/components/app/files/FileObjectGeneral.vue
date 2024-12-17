@@ -107,6 +107,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   /** Model update event */
   (event: 'update:modelValue', value: EditorFileObjectData): void;
+  /** Reverse Engineered event */
+  (event: 'reverse-engineered'): void;
 }>();
 
 // The internal model value of this component
@@ -274,6 +276,8 @@ function sampleMetaData(): void {
             csvProperties.fieldDelimitor = csvResult.fieldDelimiter;
             // Apply column definitions
             _modelValue.value.columns = csvResult.columns;
+            // Emit event
+            emit('reverse-engineered');
           }
         });
       }

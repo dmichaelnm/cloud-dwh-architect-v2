@@ -1,6 +1,7 @@
 <template>
   <!-- Editor Container -->
   <editor-container
+    ref="editorContainer"
     v-model="editorData"
     :scope="EFirestoreDocumentType.File"
     :parent="comp.session.project ? comp.session.project : undefined"
@@ -22,7 +23,10 @@
     <!-- Template: General -->
     <template v-slot:tab-general>
       <!-- File Object General -->
-      <file-object-general v-model="editorData" />
+      <file-object-general
+        v-model="editorData"
+        @reverse-engineered="editorContainer?.setTab('columns')"
+      />
     </template>
     <!-- Template: Columns -->
     <template v-slot:tab-columns>
@@ -46,6 +50,9 @@ import FileObjectColumns from 'components/app/files/FileObjectColumns.vue';
 
 // Get composable components
 const comp = useComposables();
+
+// Editor container reference
+const editorContainer = ref<InstanceType<typeof EditorContainer> | null>(null);
 
 // Editor data object
 const editorData = ref<EditorFileObjectData>(

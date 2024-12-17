@@ -218,4 +218,16 @@ function onSubmit(): void {
     leaveEditor();
   });
 }
+
+/**
+ * Updates the tabKey value to the specified key.
+ *
+ * @param {string} key - The key to set as the current tab.
+ */
+function setTab(key: string): void {
+  tabKey.value = key;
+}
+
+// Defines the exposed functions
+defineExpose({ setTab });
 </script>
