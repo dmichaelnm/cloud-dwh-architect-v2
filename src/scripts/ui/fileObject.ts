@@ -66,10 +66,38 @@ export class EditorFileObjectData extends EditorData<fo.IFileObjectData> {
     };
   }
 
+  /**
+   * Initializes the editor with data from the given Firestore document.
+   * This method sets up the document, common values such as name and description,
+   * storage information, file properties, and column definitions.
+   *
+   * @param {FirestoreDocument<fo.IFileObjectData>} document - The Firestore document containing file object data to
+   *        initialize the editor.
+   */
   initEditorData(
     document: FirestoreDocument<fo.IFileObjectData>
   ): void | Promise<void> {
     // Attach document
     this.document = document;
+    // Apply common values
+    this.name = document.data.common.name;
+    this.description = document.data.common.description;
+    // Apply storage location, file and type
+    this.storageLocation = document.data.stoageLocation;
+    this.file = document.data.file;
+    this.type = document.data.type;
+    // Apply properties
+    this.properties = fo.getFilePropertiesFromType(
+      document.data.type,
+      document as fo.FileObject
+    );
+    console.debug(document.data.columns);
+    // Apply column definitions
+    this.columns = fo.getFileColumnDefinitions(document as fo.FileObject);
+    // Apply custom attributes
+    const attr = document.data.attributes;
+    for (const i in attr) {
+      this.attributes.push({ ...attr[i] });
+    }
   }
 }

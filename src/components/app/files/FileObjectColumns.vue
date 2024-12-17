@@ -6,6 +6,7 @@
     :message="$t('file.columns.message')"
     :empty-message="$t('file.columns.messageEmpty')"
     :add-row-handler="addColumn"
+    :read-only="readOnly"
     deletable
     moveable
   >
@@ -39,6 +40,8 @@ const comp = useComposables();
 const props = defineProps<{
   /** Model value */
   modelValue: EditorFileObjectData;
+  /** Read only flag */
+  readOnly?: boolean;
 }>();
 
 // Defines the events that can be emitted by this component

@@ -1,4 +1,3 @@
-import { capitalize } from 'src/scripts/utilities/common';
 import {
   firebaseStore,
   getCurrentAccountName,
@@ -294,15 +293,6 @@ export class FirestoreDocument<D extends IFirestoreDocumentData> {
         await deleteDocument(child);
       }
     }
-  }
-
-  /**
-   * Returns a string representation of the object.
-   *
-   * @return The type of the object with its common name, formatted as "Type: Name".
-   */
-  toString(): string {
-    return `${capitalize(this.type)}: ${this.data.common.name}`;
   }
 }
 

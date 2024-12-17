@@ -70,8 +70,8 @@ export default {
     type: 'Typ',
     // Records per page
     recordsPerPage: 'Zeilen pro Seite',
-    // Reverse Engineering
-    reverseEngineering: 'Reverse Engineering',
+    // Sample Data Structure
+    sampleDataStructure: 'Datenstruktur ermitteln',
     // Value
     value: 'Wert',
   },
@@ -674,6 +674,10 @@ export default {
 
   // Files
   file: {
+    // Object Name
+    object: 'Dateiobjekt',
+    // Article
+    article: 'das',
     // File Labels
     label: {
       // Drawer Item Label
@@ -688,6 +692,10 @@ export default {
       type: 'Dateityp',
       // Select Storage Location
       storageLocation: 'Verzeichnis auswählen',
+      // Column Count
+      columnCount: 'Anzahl Spalten',
+      // Location
+      location: 'Ablageort der Datei',
     },
     // Overview Messages
     overview: {
@@ -701,6 +709,15 @@ export default {
         'vereinfachen und zu automatisieren.',
       // Empty Message
       messageEmpty: 'Bisher wurden noch keine Dateiobjekte definiert.',
+      // Tooltip Messages
+      tooltip: {
+        // View
+        view: 'Datei-Objekt anzeigen',
+        // Edit
+        edit: 'Datei-Objekt bearbeiten',
+        // Delete
+        delete: 'Datei-Objekt löschen',
+      },
     },
     // Editor Messages
     editor: {
@@ -713,6 +730,24 @@ export default {
           'Auf dieser Seite können Sie ein Dateiobjekt für eine Datei in einem Cloudspeicherdienst erstellen. ' +
           'Dabei können Sie entweder die Struktur der Datei manuell definieren oder automatisch über Reverse ' +
           'Engineering ermitteln lassen. Dies erleichtert die Integration der Datei in Ihr Data Warehouse.',
+      },
+      // View Messages
+      view: {
+        // Title
+        title: 'Dateiobjekt anzeigen',
+        // Message
+        message:
+          'Hier können Sie sich die Eigenschaften und die Struktur des Dateiobjekts ansehen. Aufgrund Ihrer ' +
+          'Rolle können Sie jedoch keine Änderungen vornehmen.',
+      },
+      // Edit Messages
+      edit: {
+        // Title
+        title: 'Dateiobjekt bearbeiten',
+        // Message
+        message:
+          'Hier können Sie die Eigenschaften und die Struktur des Dateiobjekts bearbeiten. Beachten Sie, dass ' +
+          'dies Auswirkungen auf abhängige Objekte hat und diese dann eventuell nicht mehr korrekt funktionieren.',
       },
       // Tab Messages
       message: {
@@ -796,7 +831,8 @@ export default {
         // Title
         title: 'Keine Dateien gefunden',
         // Message
-        message: 'In dem ausgewählten Verzeichnis wurden keine Dateien gefunden.'
+        message:
+          'In dem ausgewählten Verzeichnis wurden keine Dateien gefunden.',
       },
     },
   },

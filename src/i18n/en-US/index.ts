@@ -68,8 +68,8 @@ export default {
     type: 'Type',
     // Records per page
     recordsPerPage: 'Records per page',
-    // Reverse Engineering
-    reverseEngineering: 'Reverse Engineering',
+    // Sample Data Structure
+    sampleDataStructure: 'Sample Data Structure',
     // Value
     value: 'Value',
   },
@@ -652,6 +652,10 @@ export default {
 
   // Files
   file: {
+    // Object Name
+    object: 'File Object',
+    // Article
+    article: 'the',
     // File Labels
     label: {
       // Drawer Item Label
@@ -666,6 +670,10 @@ export default {
       type: 'File Type',
       // Select Storage Location
       storageLocation: 'Choose Storage Location',
+      // Column Count
+      columnCount: 'Column Count',
+      // Location
+      location: 'File Location',
     },
     // Overview Messages
     overview: {
@@ -679,6 +687,15 @@ export default {
         'into a data warehouse.',
       // Empty Message
       messageEmpty: 'No file objects have been defined yet.',
+      // Tooltip Messages
+      tooltip: {
+        // View
+        view: 'View File Object',
+        // Edit
+        edit: 'Edit File Object',
+        // Delete
+        delete: 'Delete File Object',
+      },
     },
     // File Properties Messages
     properties: {
@@ -742,6 +759,24 @@ export default {
           'On this page, you can create a file object for a file in a cloud storage service. ' +
           'You can either define the structure of the file manually or automatically determine it ' +
           'using reverse engineering. This simplifies the integration of the file into your data warehouse.',
+      },
+      // View Messages
+      view: {
+        // Title
+        title: 'Dateiobjekt anzeigen',
+        // Message
+        message:
+          'Hier können Sie sich die Eigenschaften und die Struktur des Dateiobjekts ansehen. Aufgrund Ihrer ' +
+          'Rolle können Sie jedoch keine Änderungen vornehmen.',
+      },
+      // Edit Messages
+      edit: {
+        // Title
+        title: 'Edit file object',
+        // Message
+        message:
+          'Here you can edit the properties and structure of the file object. Please note that ' +
+          'this impacts dependent objects and they may no longer function correctly.',
       },
       // Tab Messages
       message: {

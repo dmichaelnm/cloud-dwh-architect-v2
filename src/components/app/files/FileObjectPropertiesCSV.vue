@@ -13,6 +13,7 @@
           <q-checkbox
             v-model="(_modelValue.properties as TFilePropertiesCSV).hasHeaderRow"
             :label="$t('file.properties.csv.hasHeaderRow')"
+            :disable="readOnly"
           />
         </div>
       </div>
@@ -24,6 +25,7 @@
           <select-value
             v-model="(_modelValue.properties as TFilePropertiesCSV).rowSeparator"
             :label="$t('file.properties.csv.rowSeparator')"
+            :read-only="readOnly"
             :options="[
               { value: 'CRLF', label: 'CRLF' },
               { value: 'LF', label: 'LF' },
@@ -38,6 +40,7 @@
           <input-value
             v-model="(_modelValue.properties as TFilePropertiesCSV).fieldDelimitor"
             :label="$t('file.properties.csv.fieldDelimiter')"
+            :read-only="readOnly"
           />
         </div>
         <!-- Quote Character Column -->
@@ -46,6 +49,7 @@
           <input-value
             v-model="(_modelValue.properties as TFilePropertiesCSV).quoteCharacter"
             :label="$t('file.properties.csv.quoteCharacter')"
+            :read-only="readOnly"
           />
         </div>
       </div>
@@ -57,6 +61,7 @@
           <input-value
             v-model="(_modelValue.properties as TFilePropertiesCSV).dateFormat"
             :label="$t('file.properties.csv.dateFormat')"
+            :read-only="readOnly"
           />
         </div>
         <!-- Time Format Column -->
@@ -65,6 +70,7 @@
           <input-value
             v-model="(_modelValue.properties as TFilePropertiesCSV).timeFormat"
             :label="$t('file.properties.csv.timeFormat')"
+            :read-only="readOnly"
           />
         </div>
         <!-- Timestamp Format Column -->
@@ -73,6 +79,7 @@
           <input-value
             v-model="(_modelValue.properties as TFilePropertiesCSV).timestampFormat"
             :label="$t('file.properties.csv.timestampFormat')"
+            :read-only="readOnly"
           />
         </div>
         <!-- Decimal Separator Column -->
@@ -81,6 +88,7 @@
           <input-value
             v-model="(_modelValue.properties as TFilePropertiesCSV).decimalSeparator"
             :label="$t('file.properties.csv.decimalSeparator')"
+            :read-only="readOnly"
           />
         </div>
       </div>
@@ -104,6 +112,8 @@ import { EditorFileObjectData } from 'src/scripts/ui/fileObject';
 const props = defineProps<{
   /** Model value */
   modelValue: EditorFileObjectData;
+  /** Read only flag */
+  readOnly?: boolean;
 }>();
 
 // Defines the events that can be emitted by this component

@@ -11,11 +11,11 @@
     <!-- Template: Buttons -->
     <template
       v-slot:buttons
-      v-if="_modelValue.type !== EFileType.Unknown && _modelValue.file"
+      v-if="_modelValue.type !== EFileType.Unknown && _modelValue.file && !readOnly"
     >
       <div class="text-right">
         <button-push
-          :label="$t('label.reverseEngineering')"
+          :label="$t('label.sampleDataStructure')"
           @click="sampleMetaData"
         />
       </div>
@@ -32,6 +32,7 @@
             v-model="_modelValue.storageLocation"
             :label="$t('file.label.storageLocation')"
             :options="storageLocations"
+            :read-only="readOnly"
           />
         </div>
       </div>
@@ -43,6 +44,7 @@
           <input-value
             v-model="_modelValue.file"
             :label="$t('file.label.path')"
+            :read-only="readOnly"
             button-icon="search"
             mandatory
             @button-click="openFileSelectionDialog"
@@ -55,6 +57,7 @@
             v-model="_modelValue.type"
             :options="getFileTypes()"
             :label="$t('file.label.type')"
+            :read-only="readOnly"
             translate
             hide-icon
             @update:modelValue="onFileTypeChanged"
@@ -67,6 +70,7 @@
   <file-object-properties-c-s-v
     v-if="_modelValue.type === EFileType.CSV"
     v-model="_modelValue"
+    :read-only="readOnly"
   />
 </template>
 
@@ -74,23 +78,19 @@
 
 <script setup lang="ts">
 import * as cm from 'src/scripts/utilities/common';
-import { EFileType } from 'src/scripts/utilities/common';
 import * as fo from 'src/scripts/application/FileObject';
 import MessageComponent from 'components/common/MessageComponent.vue';
 import InputValue from 'components/common/InputValue.vue';
 import SelectValue from 'components/common/SelectValue.vue';
 import FileObjectSelectionDialog from 'components/app/files/FileObjectSelectionDialog.vue';
 import FileObjectPropertiesCSV from 'components/app/files/FileObjectPropertiesCSV.vue';
+import ButtonPush from 'components/common/ButtonPush.vue';
+import { EFileType } from 'src/scripts/utilities/common';
 import { computed, ref } from 'vue';
 import { EditorFileObjectData } from 'src/scripts/ui/fileObject';
 import { getFileTypes } from 'src/scripts/utilities/options';
 import { Project } from 'src/scripts/application/Project';
 import { post } from 'src/scripts/utilities/functions';
-import ButtonPush from 'components/common/ButtonPush.vue';
-import {
-  TFilePropertiesCSV,
-  TMetaDataCSV,
-} from 'src/scripts/application/FileObject';
 
 // Get composable components
 const comp = cm.useComposables();
@@ -102,6 +102,8 @@ const { showWarningDialog } = cm.useMessageDialog();
 const props = defineProps<{
   /** Model value */
   modelValue: EditorFileObjectData;
+  /** Read only flag */
+  readOnly?: boolean;
 }>();
 
 // Defines the events that can be emitted by this component
@@ -284,10 +286,10 @@ function sampleMetaData(): void {
           });
           if (_modelValue.value.type === EFileType.CSV) {
             // Cast to CSV result
-            const csvResult = result as TMetaDataCSV;
+            const csvResult = result as fo.TMetaDataCSV;
             // Get CSV properties
             const csvProperties = _modelValue.value
-              .properties as TFilePropertiesCSV;
+              .properties as fo.TFilePropertiesCSV;
             // Apply CSV properties
             csvProperties.rowSeparator = csvResult.lineBreak;
             csvProperties.fieldDelimitor = csvResult.fieldDelimiter;
