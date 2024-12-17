@@ -7,7 +7,6 @@ import * as csv from './sampling/csv';
 import * as tp from './types';
 import { onRequest, Request } from 'firebase-functions/v2/https';
 import { Response } from 'express';
-import { TProviderCredentialsS3 } from './provider/s3';
 import { TFilePropertiesCSV } from './sampling/csv';
 
 // Initialize Firebase App
@@ -76,7 +75,14 @@ async function readTextFile(
   if (provider === tp.EExternalAppProvider.S3) {
     // Read text file from AWS S3 Bucket
     return await s3.readTextFile(
-      credentials as TProviderCredentialsS3,
+      credentials as s3.TProviderCredentialsS3,
+      path,
+      maxSize
+    );
+  } else if (provider === tp.EExternalAppProvider.GCS) {
+    // Read text file from Google Cloud Storage
+    return await gcs.readTextFile(
+      credentials as gcs.TProviderCredentialsGCS,
       path,
       maxSize
     );

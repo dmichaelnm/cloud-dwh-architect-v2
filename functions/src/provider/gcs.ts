@@ -162,3 +162,67 @@ export async function getFiles(
     }
   });
 }
+
+/**
+ * Reads the content of a text file from a specified path in a cloud storage bucket.
+ *
+ * @param {TProviderCredentialsGCS} credentials - The credentials for accessing the Google Cloud Storage bucket,
+ *        including the bucket name and authentication details.
+ * @param {string} path - The fully qualified path of the file to be read within the bucket.
+ * @param {number} [maxSize] - An optional maximum size (in bytes) for the file to be read. Reading will stop once
+ *        this size is reached.
+ * @return {Promise<TResult<string>>} A promise that resolves with the result, containing the file's content as a
+ *         string if successful, or an error message if there was any issue.
+ */
+export async function readTextFile(
+  credentials: TProviderCredentialsGCS,
+  path: string,
+  maxSize?: number
+): Promise<TResult<string>> {
+  // Return the promise
+  return new Promise(async (resolve) => {
+    try {
+      // Initialize Storage Client
+      const storage = createClient(credentials);
+      // Get the bucket
+      const bucket = storage.bucket(credentials.bucket);
+      // Get the file
+      const file = bucket.file(path);
+      // Create readable stream
+      const readable = file.createReadStream();
+      // Create chunk buffer
+      const buffer: Buffer[] = [];
+      // Bytes read
+      let readed = 0;
+      // Listener for reading chunks
+      readable.on('data', (chunk) => {
+        // Add chunk to buffer
+        buffer.push(chunk);
+        // Calculate read bytes
+        readed = readed + chunk.length;
+        // Check max Size
+        if (maxSize && readed >= maxSize) {
+          // Close stream
+          readable.destroy();
+        }
+      });
+      // Close listener
+      readable.on('close', () => {
+        // Create string from buffer
+        const content = Buffer.concat(buffer).toString('utf-8');
+        // Return result
+        resolve({
+          status: 'success',
+          data: content,
+        });
+      });
+    } catch (error: any) {
+      // Failed to connect
+      resolve({
+        status: 'failure',
+        code: 'unexpected-error',
+        message: error.message ? error.message : error,
+      });
+    }
+  });
+}

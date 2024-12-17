@@ -218,12 +218,16 @@ export async function readTextFile(
       const readable = response.Body as Readable;
       // Create buffer
       const buffer: Buffer[] = [];
+      // Read bytes
+      let read = 0;
       // Read listener
       readable.on('data', (chunk) => {
         // Add chunk to buffer
         buffer.push(chunk);
+        // Add to read bytes
+        read += chunk.length;
         // Check buffer size
-        if (maxSize && buffer.length >= maxSize) {
+        if (maxSize && read >= maxSize) {
           // Close stream
           readable.destroy();
         }
