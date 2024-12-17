@@ -1,6 +1,7 @@
-import { TFileInfo, TResult } from '../types';
-import { ListObjectsCommand, S3Client } from '@aws-sdk/client-s3';
 //import * as logger from 'firebase-functions/logger';
+import * as s3 from '@aws-sdk/client-s3';
+import { TFileInfo, TResult } from '../types';
+import { Readable } from 'node:stream';
 
 /**
  * Represents the credentials and configuration needed to authenticate
@@ -22,11 +23,11 @@ export type TProviderCredentialsS3 = {
  *
  * @param {TProviderCredentialsS3} credentials - The credentials required to configure the S3 client, including
  *                                               access key, secret key, and region.
- * @return {S3Client} The initialized S3 client instance.
+ * @return {s3.S3Client} The initialized S3 client instance.
  */
-function createClient(credentials: TProviderCredentialsS3): S3Client {
+function createClient(credentials: TProviderCredentialsS3): s3.S3Client {
   // Create S3 client
-  return new S3Client({
+  return new s3.S3Client({
     region: credentials.region,
     credentials: {
       accessKeyId: credentials.accessKeyId,
@@ -51,7 +52,7 @@ export async function testConnection(
       // Create client
       const client = createClient(credentials);
       // Create listObjects command
-      const command = new ListObjectsCommand({
+      const command = new s3.ListObjectsCommand({
         Bucket: credentials.bucket,
         MaxKeys: 1,
       });
@@ -89,7 +90,7 @@ export async function getFolders(
       // Create client
       const client = createClient(credentials);
       // Create listObjects command
-      const command = new ListObjectsCommand({
+      const command = new s3.ListObjectsCommand({
         Bucket: credentials.bucket,
       });
       // Execute command
@@ -142,7 +143,7 @@ export async function getFiles(
       // Create client
       const client = createClient(credentials);
       // Create listObjects command
-      const command = new ListObjectsCommand({
+      const command = new s3.ListObjectsCommand({
         Bucket: credentials.bucket,
         Prefix: path,
       });
@@ -162,7 +163,7 @@ export async function getFiles(
             files.push({
               name: file,
               size: obj.Size,
-              lastModified: obj.LastModified
+              lastModified: obj.LastModified,
             });
           }
         }
@@ -171,6 +172,71 @@ export async function getFiles(
       resolve({
         status: 'success',
         data: files,
+      });
+    } catch (error: any) {
+      // Failed to connect
+      resolve({
+        status: 'failure',
+        code: 'unexpected-error',
+        message: error.message ? error.message : error,
+      });
+    }
+  });
+}
+
+/**
+ * Reads a text file from an S3 path and retrieves its contents line by line. Optionally limits the number of bytes read.
+ *
+ * @param {TProviderCredentialsS3} credentials - The credentials for accessing the S3 bucket.
+ * @param {string} path - The path to the text file in the S3 bucket.
+ * @param {number} [maxSize] - Optional parameter to specify the maximum number of bytes to read from the file.
+ * @return {Promise<TResult<string>>} A promise that resolves to a result object containing the status and either
+ *                                      the content as string or an error message.
+ */
+export async function readTextFile(
+  credentials: TProviderCredentialsS3,
+  path: string,
+  maxSize?: number
+): Promise<TResult<string>> {
+  // Return the promise
+  return new Promise(async (resolve) => {
+    try {
+      // Create client
+      const client = createClient(credentials);
+      // Create object stream
+      const command = new s3.GetObjectCommand({
+        Bucket: credentials.bucket,
+        Key: path,
+      });
+      // Send command
+      const response = await client.send(command);
+      // Check response
+      if (!response.Body || !(response.Body instanceof Readable)) {
+        throw new Error('Failed to get a readable stream from S3.');
+      }
+      // Get readable
+      const readable = response.Body as Readable;
+      // Create buffer
+      const buffer: Buffer[] = [];
+      // Read listener
+      readable.on('data', (chunk) => {
+        // Add chunk to buffer
+        buffer.push(chunk);
+        // Check buffer size
+        if (maxSize && buffer.length >= maxSize) {
+          // Close stream
+          readable.destroy();
+        }
+      });
+      // Close listener
+      readable.on('close', () => {
+        // Create string from buffer
+        const content = Buffer.concat(buffer).toString('utf-8');
+        // Return result
+        resolve({
+          status: 'success',
+          data: content,
+        });
       });
     } catch (error: any) {
       // Failed to connect

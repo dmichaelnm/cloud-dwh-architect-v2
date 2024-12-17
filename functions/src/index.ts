@@ -1,11 +1,14 @@
-import { onRequest, Request } from 'firebase-functions/v2/https';
-import { Response } from 'express';
-import * as logger from 'firebase-functions/logger';
+//import * as logger from 'firebase-functions/logger';
 import * as admin from 'firebase-admin';
 import * as s3 from './provider/s3';
 import * as gcs from './provider/gcs';
 import * as snflk from './provider/snowflake';
-import { EExternalAppProvider } from './types';
+import * as csv from './sampling/csv';
+import * as tp from './types';
+import { onRequest, Request } from 'firebase-functions/v2/https';
+import { Response } from 'express';
+import { TProviderCredentialsS3 } from './provider/s3';
+import { TFilePropertiesCSV } from './sampling/csv';
 
 // Initialize Firebase App
 admin.initializeApp();
@@ -37,8 +40,6 @@ async function authorize(
       // Call the handler function
       await handler(decodedToken);
     } catch (error: any) {
-      // Log the error
-      logger.error(error);
       // Invalid token found
       response.send({
         status: 'failure',
@@ -53,6 +54,66 @@ async function authorize(
       code: 'invalid-authorization',
       message: 'Authorization token is missing, invalid or expired.',
     });
+  }
+}
+
+/**
+ * Reads the content of a text file from the specified provider.
+ *
+ * @param {EExternalAppProvider} provider - The external application provider (e.g., S3).
+ * @param {TProviderCredentials} credentials - The credentials required to access the specified provider.
+ * @param {string} path - The file path where the text file is located.
+ * @param {number} [maxSize] - The optional maximum number of bytes to read from the file.
+ * @return {Promise<TResult<string[]>>} A promise resolving to the result containing the file content as a
+ *                                      strings if successful, or an error object if the operation fails.
+ */
+async function readTextFile(
+  provider: tp.EExternalAppProvider,
+  credentials: tp.TProviderCredentials,
+  path: string,
+  maxSize?: number
+): Promise<tp.TResult<string>> {
+  if (provider === tp.EExternalAppProvider.S3) {
+    // Read text file from AWS S3 Bucket
+    return await s3.readTextFile(
+      credentials as TProviderCredentialsS3,
+      path,
+      maxSize
+    );
+  } else {
+    // Unknown provider
+    return {
+      status: 'failure',
+      code: 'unknown-provider',
+      message: `The provider ${provider} is not supported.`,
+    };
+  }
+}
+
+async function sampleMetaData(
+  type: tp.EFileType,
+  properties: tp.TFileProperties,
+  content: string
+): Promise<tp.TResult<tp.TMetaData>> {
+  // Check file type
+  if (type === tp.EFileType.CSV) {
+    // Sample CSV data
+    const metaData = await csv.sampleMetaData(
+      properties as TFilePropertiesCSV,
+      content
+    );
+    // Return result
+    return {
+      status: 'success',
+      data: metaData,
+    };
+  } else {
+    // Unknown file type
+    return {
+      status: 'failure',
+      code: 'unknown-file-type',
+      message: `The file type ${type} is not supported.`,
+    };
   }
 }
 
@@ -85,22 +146,22 @@ export const testConnection = onRequest(
     // Authorize the request
     await authorize(request, response, async () => {
       // Get provider
-      const provider = request.body.provider as EExternalAppProvider;
-      if (provider === EExternalAppProvider.S3) {
+      const provider = request.body.provider as tp.EExternalAppProvider;
+      if (provider === tp.EExternalAppProvider.S3) {
         // Call test connection function for Amazon AWS S3
         const result = await s3.testConnection(
           request.body.credentials as s3.TProviderCredentialsS3
         );
         // Send result
         response.send(result);
-      } else if (provider === EExternalAppProvider.GCS) {
+      } else if (provider === tp.EExternalAppProvider.GCS) {
         // Call test connection function for Google Cloud Storage
         const result = await gcs.testConnection(
           request.body.credentials as gcs.TProviderCredentialsGCS
         );
         // Send result
         response.send(result);
-      } else if (provider === EExternalAppProvider.Snowflake) {
+      } else if (provider === tp.EExternalAppProvider.Snowflake) {
         // Call test connection function for Snowflake
         const result = await snflk.testConnection(
           request.body.credentials as snflk.TProviderCredentialsSnowflake
@@ -140,15 +201,15 @@ export const getFolders = onRequest(
     // Authorize the request
     await authorize(request, response, async () => {
       // Get provider
-      const provider = request.body.provider as EExternalAppProvider;
-      if (provider === EExternalAppProvider.S3) {
+      const provider = request.body.provider as tp.EExternalAppProvider;
+      if (provider === tp.EExternalAppProvider.S3) {
         // Get Folders from AWS S3 Bucket
         const result = await s3.getFolders(
           request.body.credentials as s3.TProviderCredentialsS3
         );
         // Return the result
         response.send(result);
-      } else if (provider === EExternalAppProvider.GCS) {
+      } else if (provider === tp.EExternalAppProvider.GCS) {
         // Get folders from Google Cloud Storage
         const result = await gcs.getFolders(
           request.body.credentials as gcs.TProviderCredentialsGCS
@@ -200,11 +261,11 @@ export const getFiles = onRequest(
     // Authorize the request
     await authorize(request, response, async () => {
       // Get provider
-      const provider = request.body.provider as EExternalAppProvider;
+      const provider = request.body.provider as tp.EExternalAppProvider;
       // Get path
       const path = request.body.path as string;
 
-      if (provider === EExternalAppProvider.S3) {
+      if (provider === tp.EExternalAppProvider.S3) {
         // Get files from Amazon S3 bucket
         const result = await s3.getFiles(
           request.body.credentials as s3.TProviderCredentialsS3,
@@ -212,7 +273,7 @@ export const getFiles = onRequest(
         );
         // Return the result
         response.send(result);
-      } else if (provider === EExternalAppProvider.GCS) {
+      } else if (provider === tp.EExternalAppProvider.GCS) {
         // Get files from Amazon S3 bucket
         const result = await gcs.getFiles(
           request.body.credentials as gcs.TProviderCredentialsGCS,
@@ -226,6 +287,86 @@ export const getFiles = onRequest(
           status: 'failure',
           code: 'unknown-provider',
           message: `The provider ${provider} is not supported.`,
+        });
+      }
+    });
+  }
+);
+
+/**
+ * Handles the request to get metadata for a file using specified provider credentials and file information.
+ *
+ * This function processes an HTTP request and performs the following operations:
+ * - Authorizes the provided request.
+ * - Extracts provider, credentials, path, and file type information from the request body.
+ * - Validates the file type and, if valid, retrieves file content.
+ * - Analyzes the content to obtain metadata, including column information for certain file types.
+ * - Returns the metadata or corresponding error responses to the client.
+ *
+ * Request Body Parameters:
+ * - provider (EExternalAppProvider): The external application provider for file access.
+ * - credentials (TProviderCredentials): Credentials required to authenticate with the external provider.
+ * - path (string): Path of the file to retrieve metadata for.
+ * - type (EFileType): The type of file (e.g., CSV) to process.
+ *
+ * Responses:
+ * - On success, sends a response object with metadata information:
+ *   { status: 'success', data: [...] }
+ * - On failure to read the file or due to unsupported file type:
+ *   { status: 'failure', code: '...', message: '...' }
+ *
+ * File Type Handling:
+ * - If the file type is CSV, attempts to parse content up to a predefined size limit (1MB).
+ * - If the file type is unknown, returns an appropriate error response.
+ *
+ * Note:
+ * - The function depends on external functions `authorize`, `readTextFile`, and `sampleMetaData`.
+ * - Limits the file size during processing for certain recognized file types.
+ */
+export const getFileMetaData = onRequest(
+  {
+    region: region,
+    cors: true,
+  },
+  async (request, response) => {
+    // Authorize the request
+    await authorize(request, response, async () => {
+      // Get provider
+      const provider = request.body.provider as tp.EExternalAppProvider;
+      // Get credentials
+      const credentials = request.body.credentials as tp.TProviderCredentials;
+      // Get path
+      const path = request.body.path as string;
+      // Get file type
+      const type = request.body.type as tp.EFileType;
+      // Get file properties
+      const properties = request.body.properties as tp.TFileProperties;
+
+      // Check file type
+      if (type !== tp.EFileType.Unknown) {
+        // Get max size dependent on the file type
+        const maxSize = type === tp.EFileType.CSV ? 1024 * 1024 : undefined;
+        // Get the file content
+        const result = await readTextFile(provider, credentials, path, maxSize);
+        if (result.status === 'success') {
+          // Get column definitions
+          const metaData = await sampleMetaData(
+            type,
+            properties,
+            result.data as string
+          );
+          // Return result
+          response.send(metaData);
+        } else {
+          // Failed to read file
+          response.send(result);
+        }
+      } else {
+        // Unknown file type
+        response.send({
+          status: 'failure',
+          code: 'unknown-file-type',
+          message: `The file type ${type} is not supported.`,
         });
       }
     });
