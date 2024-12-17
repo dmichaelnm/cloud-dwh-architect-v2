@@ -1,6 +1,6 @@
 import { IFirestoreDocumentData } from 'src/scripts/application/FirestoreDocument';
 import { ProjectDocument } from 'src/scripts/application/ProjectDocument';
-import { EFileType } from 'src/scripts/utilities/common';
+import { EFileType, TCustomAttribute } from 'src/scripts/utilities/common';
 import { TColumnDefinition } from 'src/scripts/application/CommonTypes';
 
 /**
@@ -87,6 +87,8 @@ export interface IFileObjectData extends IFirestoreDocumentData {
   properties: TFileProperties;
   /** Column definitions */
   columns: TFileColumnDefinition[];
+  /** Custom attributes */
+  attributes: TCustomAttribute[];
 }
 
 export class FileObject extends ProjectDocument<IFileObjectData> {}

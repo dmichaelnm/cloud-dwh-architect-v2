@@ -1,7 +1,7 @@
 import * as fo from 'src/scripts/application/FileObject';
 import { EditorData } from 'src/scripts/ui/common';
 import { FirestoreDocument } from 'src/scripts/application/FirestoreDocument';
-import { EFileType } from 'src/scripts/utilities/common';
+import { EFileType, TCustomAttribute } from 'src/scripts/utilities/common';
 import { Project } from 'src/scripts/application/Project';
 
 /**
@@ -23,6 +23,9 @@ export class EditorFileObjectData extends EditorData<fo.IFileObjectData> {
 
   /** File column definitions */
   columns: fo.TFileColumnDefinition[] = [];
+
+  /** Custom Attributes */
+  attributes: TCustomAttribute[] = [];
 
   /**
    * Constructs an instance, optionally initializing it with a given project.
@@ -59,6 +62,7 @@ export class EditorFileObjectData extends EditorData<fo.IFileObjectData> {
       file: this.file,
       properties: this.properties,
       columns: this.columns,
+      attributes: this.attributes,
     };
   }
 

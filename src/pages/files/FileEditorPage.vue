@@ -33,6 +33,13 @@
       <!-- File Column Definitions -->
       <file-object-columns v-model="editorData" />
     </template>
+    <!-- Template for Custom Attributes tab -->
+    <template v-slot:tab-attributes>
+      <custom-attributes-table
+        v-model="editorData.attributes"
+        :read-only="isReadOnly"
+      />
+    </template>
   </editor-container>
 </template>
 
@@ -42,11 +49,15 @@
 import EditorContainer from 'components/app/main/EditorContainer.vue';
 import { EFirestoreDocumentType } from 'src/scripts/application/FirestoreDocument';
 import { EditorFileObjectData } from 'src/scripts/ui/fileObject';
-import { ref } from 'vue';
-import { useComposables } from 'src/scripts/utilities/common';
+import { computed, ref } from 'vue';
+import {
+  EDocumentOperation,
+  useComposables,
+} from 'src/scripts/utilities/common';
 import FileObjectGeneral from 'components/app/files/FileObjectGeneral.vue';
 import { Project } from 'src/scripts/application/Project';
 import FileObjectColumns from 'components/app/files/FileObjectColumns.vue';
+import CustomAttributesTable from 'components/app/main/CustomAttributesTable.vue';
 
 // Get composable components
 const comp = useComposables();
@@ -57,5 +68,12 @@ const editorContainer = ref<InstanceType<typeof EditorContainer> | null>(null);
 // Editor data object
 const editorData = ref<EditorFileObjectData>(
   new EditorFileObjectData(comp.session.project as Project)
+);
+
+// Flag resolving to true, if editor is in read only, otherwise false
+const isReadOnly = computed(() =>
+  comp.session.editorParameter
+    ? comp.session.editorParameter.operation === EDocumentOperation.View
+    : false
 );
 </script>
