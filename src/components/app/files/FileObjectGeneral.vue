@@ -96,6 +96,7 @@ import {
 const comp = cm.useComposables();
 // Get run task composable function
 const runTask = cm.useRunTask();
+const { showWarningDialog } = cm.useMessageDialog();
 
 // Defines the properties of this component
 const props = defineProps<{
@@ -172,14 +173,26 @@ function openFileSelectionDialog(): void {
       if (externalApp) {
         // Retrieve files
         runTask(async () => {
+          // Normalize path
+          const path = storageLoc.data.path.startsWith('/')
+            ? storageLoc.data.path.substring(1)
+            : storageLoc.data.path;
           // Get the array of filenames from server
           fileNames.value = await post('getFiles', {
             provider: externalApp.data.provider,
             credentials: externalApp.data.credentials,
-            path: storageLoc.data.path,
+            path: path,
           });
-          // Open the dialog
-          dialogVisible.value = true;
+          if (fileNames.value.length > 0) {
+            // Open the dialog
+            dialogVisible.value = true;
+          } else {
+            // Nothing found, show warning dialog
+            showWarningDialog(
+              comp.i18n.t('file.dialog.noFiles.title'),
+              comp.i18n.t('file.dialog.noFiles.message')
+            );
+          }
         });
       }
     }

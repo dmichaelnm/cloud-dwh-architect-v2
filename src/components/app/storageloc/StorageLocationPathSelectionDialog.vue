@@ -11,11 +11,16 @@
     <!-- Main DIV -->
     <div>
       <!-- Path Row -->
-      <div v-for="p in paths" :key="p" class="row">
+      <div v-for="p in pathOptions" :key="p" class="row">
         <!-- Path Column -->
         <div class="col">
           <!-- Path Radio Button -->
-          <q-radio v-model="path" :val="p" :label="p" size="xs" />
+          <q-radio
+            v-model="path"
+            :val="p"
+            :label="p.length > 0 ? p : $t('label.rootFolder')"
+            size="xs"
+          />
         </div>
       </div>
     </div>
@@ -54,6 +59,16 @@ const _modelValue = computed({
 
 // The selected path
 const path = ref('');
+
+// Returns the array with the available paths
+const pathOptions = computed(() => {
+  // Path array (with root directory)
+  const pathArray: string[] = ['/'];
+  // Add specified path entries
+  pathArray.push(...props.paths.map(path => `/${path}`));
+  // Return the path array
+  return pathArray;
+});
 
 /**
  * Initializes the dialog by setting the `path` value based on the provided `props`.

@@ -768,6 +768,13 @@ export default {
         // Last Modified
         lastModified: 'Last Modified',
       },
+      // No Files Warning Dialog Messages
+      noFiles: {
+        // Title
+        title: 'No files found',
+        // Message
+        message: 'No files were found in the selected directory.',
+      },
     },
   },
 };

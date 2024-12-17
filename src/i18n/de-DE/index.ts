@@ -791,6 +791,13 @@ export default {
         // Last Modified
         lastModified: 'Zuletzt geändert',
       },
+      // No Files Warning Dialog Messages
+      noFiles: {
+        // Title
+        title: 'Keine Dateien gefunden',
+        // Message
+        message: 'In dem ausgewählten Verzeichnis wurden keine Dateien gefunden.'
+      },
     },
   },
 };
