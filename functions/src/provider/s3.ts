@@ -2,6 +2,7 @@
 import * as s3 from '@aws-sdk/client-s3';
 import { TFileInfo, TResult } from '../types';
 import { Readable } from 'node:stream';
+import { checkAndGetFilename } from './utilities';
 
 /**
  * Represents the credentials and configuration needed to authenticate
@@ -155,13 +156,12 @@ export async function getFiles(
       if (result.Contents) {
         // Iterate over the result
         for (const obj of result.Contents) {
-          // Exclude folders
-          if (obj.Key && !obj.Key?.endsWith('/')) {
-            // Remove path from file
-            const file = obj.Key.replace(path, '');
+          // Check file path and get file name
+          const filename = checkAndGetFilename(obj.Key, path);
+          if (filename !== null) {
             // Add to result array
             files.push({
-              name: file,
+              name: filename,
               size: obj.Size,
               lastModified: obj.LastModified,
             });

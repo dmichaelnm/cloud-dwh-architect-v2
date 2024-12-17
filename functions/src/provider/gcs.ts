@@ -1,5 +1,6 @@
 import { TFileInfo, TResult } from '../types';
 import { Storage } from '@google-cloud/storage';
+import { checkAndGetFilename } from './utilities';
 
 /**
  * Type definition for Google Cloud Storage provider credentials.
@@ -135,13 +136,12 @@ export async function getFiles(
       const result: TFileInfo[] = [];
       // Iterate over all files
       files.forEach((file) => {
-        // Exclude folders
-        if (!file.name.endsWith('/')) {
-          // Remove path
-          const fileWithoutPath = file.name.replace(path, '');
+        // Check and get filename
+        const filename = checkAndGetFilename(file.name, path);
+        if (filename !== null) {
           // Add filename
           result.push({
-            name: fileWithoutPath,
+            name: filename,
             size: file.metadata.size,
             lastModified: file.metadata.updated,
           });
