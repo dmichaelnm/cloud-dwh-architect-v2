@@ -8,6 +8,19 @@
 
   <!-- Message Component -->
   <message-component :message="$t('file.editor.message.general')">
+    <!-- Template: Buttons -->
+    <template
+      v-slot:buttons
+      v-if="_modelValue.type !== EFileType.Unknown && _modelValue.path"
+    >
+      <div class="text-right">
+        <button-push
+          :label="$t('label.reverseEngineering')"
+          @click="sampleMetaData"
+        />
+      </div>
+    </template>
+
     <!-- Main DIV -->
     <div class="q-col-gutter-y-sm">
       <!-- Storage Location Selection Row -->
@@ -61,18 +74,23 @@
 
 <script setup lang="ts">
 import * as cm from 'src/scripts/utilities/common';
+import { EFileType } from 'src/scripts/utilities/common';
 import * as fo from 'src/scripts/application/FileObject';
 import MessageComponent from 'components/common/MessageComponent.vue';
 import InputValue from 'components/common/InputValue.vue';
 import SelectValue from 'components/common/SelectValue.vue';
 import FileObjectSelectionDialog from 'components/app/files/FileObjectSelectionDialog.vue';
 import FileObjectPropertiesCSV from 'components/app/files/FileObjectPropertiesCSV.vue';
-import { EFileType } from 'src/scripts/utilities/common';
 import { computed, ref } from 'vue';
 import { EditorFileObjectData } from 'src/scripts/ui/fileObject';
 import { getFileTypes } from 'src/scripts/utilities/options';
 import { Project } from 'src/scripts/application/Project';
 import { post } from 'src/scripts/utilities/functions';
+import ButtonPush from 'components/common/ButtonPush.vue';
+import {
+  TFilePropertiesCSV,
+  TMetaDataCSV,
+} from 'src/scripts/application/FileObject';
 
 // Get composable components
 const comp = cm.useComposables();
@@ -199,5 +217,67 @@ function onFileTypeChanged(): void {
   _modelValue.value.properties = fo.getFilePropertiesFromType(
     _modelValue.value.type
   );
+}
+
+/**
+ * Initiates a process to sample metadata for a file from an external application.
+ * Handles specific properties and column definitions for CSV file types.
+ */
+function sampleMetaData(): void {
+  // Get current project
+  const project = comp.session.project as Project;
+  if (project) {
+    // Get storage location
+    const storageLoc = project.getStorageLocation(
+      _modelValue.value.storageLocation
+    );
+    if (storageLoc) {
+      // Get external application
+      const externalApp = project.getExternalApplication(
+        storageLoc.data.externalApp
+      );
+      if (externalApp) {
+        // Start sampling task
+        runTask(async () => {
+          // Start sampling
+          const result = await post('getFileMetaData', {
+            provider: externalApp.data.provider,
+            credentials: externalApp.data.credentials,
+            path: `${storageLoc.data.path}${_modelValue.value.path}`,
+            type: _modelValue.value.type,
+            properties: {
+              hasHeaderRow: _modelValue.value.properties
+                ? _modelValue.value.properties.hasHeaderRow
+                : false,
+              decimalSeparator: _modelValue.value.properties
+                ? _modelValue.value.properties.decimalSeparator
+                : '.',
+              dateFormat: _modelValue.value.properties
+                ? _modelValue.value.properties.dateFormat
+                : 'yyyy-MM-dd',
+              timeFormat: _modelValue.value.properties
+                ? _modelValue.value.properties.timeFormat
+                : 'HH:mm:ss',
+              timestampFormat: _modelValue.value.properties
+                ? _modelValue.value.properties.timestampFormat
+                : 'yyyy-MM-dd HH:mm:ss.SSS',
+            },
+          });
+          if (_modelValue.value.type === EFileType.CSV) {
+            // Cast to CSV result
+            const csvResult = result as TMetaDataCSV;
+            // Get CSV properties
+            const csvProperties = _modelValue.value
+              .properties as TFilePropertiesCSV;
+            // Apply CSV properties
+            csvProperties.rowSeparator = csvResult.lineBreak;
+            csvProperties.fieldDelimitor = csvResult.fieldDelimiter;
+            // Apply column definitions
+            _modelValue.value.columns = csvResult.columns;
+          }
+        });
+      }
+    }
+  }
 }
 </script>

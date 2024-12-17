@@ -5,6 +5,17 @@
   >
     <!-- Main DIV -->
     <div class="q-col-gutter-y-sm">
+      <!-- Has Header Row - Row -->
+      <div class="row q-col-gutter-x-sm">
+        <!-- Header Row Column -->
+        <div class="col-2">
+          <!-- Header Row Selection -->
+          <q-checkbox
+            v-model="(_modelValue.properties as TFilePropertiesCSV).hasHeaderRow"
+            :label="$t('file.properties.csv.hasHeaderRow')"
+          />
+        </div>
+      </div>
       <!-- Row Separator, Field Delimitor, Quote Character Row-->
       <div class="row q-col-gutter-x-sm">
         <!-- Row Separator Column -->
@@ -38,13 +49,38 @@
           />
         </div>
       </div>
+      <!-- Format Pattern Rows -->
       <div class="row q-col-gutter-x-sm">
-        <!-- Header Row Column -->
+        <!-- Date Format Column -->
         <div class="col-2">
-          <!-- Header Row Selection -->
-          <q-checkbox
-            v-model="(_modelValue.properties as TFilePropertiesCSV).hasHeaderRow"
-            :label="$t('file.properties.csv.hasHeaderRow')"
+          <!-- Date Format Selection -->
+          <input-value
+            v-model="(_modelValue.properties as TFilePropertiesCSV).dateFormat"
+            :label="$t('file.properties.csv.dateFormat')"
+          />
+        </div>
+        <!-- Time Format Column -->
+        <div class="col-2">
+          <!-- Time Format Selection -->
+          <input-value
+            v-model="(_modelValue.properties as TFilePropertiesCSV).timeFormat"
+            :label="$t('file.properties.csv.timeFormat')"
+          />
+        </div>
+        <!-- Timestamp Format Column -->
+        <div class="col-2">
+          <!-- Timestamp Format Selection -->
+          <input-value
+            v-model="(_modelValue.properties as TFilePropertiesCSV).timestampFormat"
+            :label="$t('file.properties.csv.timestampFormat')"
+          />
+        </div>
+        <!-- Decimal Separator Column -->
+        <div class="col-2">
+          <!-- Decimal Separator Selection -->
+          <input-value
+            v-model="(_modelValue.properties as TFilePropertiesCSV).decimalSeparator"
+            :label="$t('file.properties.csv.decimalSeparator')"
           />
         </div>
       </div>

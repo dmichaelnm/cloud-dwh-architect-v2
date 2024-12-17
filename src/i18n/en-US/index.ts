@@ -696,6 +696,14 @@ export default {
         quoteCharacter: 'Quote Character',
         // Has Header Row
         hasHeaderRow: 'First Row Contains Column Names',
+        // Date Format
+        dateFormat: 'Date Format',
+        // Time Format
+        timeFormat: 'Time Format',
+        // Timestamp Format
+        timestampFormat: 'Timestamp Format',
+        // Decimal Separator
+        decimalSeparator: 'Decimal Separator',
       },
     },
     // Messages for the columns table

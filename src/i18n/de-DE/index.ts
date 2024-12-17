@@ -201,7 +201,7 @@ export default {
       timestamp: 'Zeitstempel',
       // Boolean
       boolean: 'Wahrheitswert',
-    }
+    },
   },
 
   // Authentication Messages
@@ -739,6 +739,14 @@ export default {
         quoteCharacter: 'Anführungszeichen',
         // Has Header Row
         hasHeaderRow: 'Erste Zeile enthält Spaltennamen',
+        // Date Format
+        dateFormat: 'Datumsformat',
+        // Time Format
+        timeFormat: 'Uhrzeit-Format',
+        // Timestamp Format
+        timestampFormat: 'Zeitstempel-Format',
+        // Decimal Separator
+        decimalSeparator: 'Dezimaltrennzeichen',
       },
     },
     // Messages for the columns table

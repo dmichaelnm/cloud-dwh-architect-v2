@@ -9,13 +9,6 @@
     deletable
     moveable
   >
-    <!-- Template: Buttons -->
-    <template v-slot:buttons v-if="_modelValue.type !== EFileType.Unknown">
-      <div class="text-right">
-        <!-- Reverse Engineering Button -->
-        <button-push :label="$t('label.reverseEngineering')" />
-      </div>
-    </template>
     <!-- Template: Position -->
     <template v-slot:body-cell-position="{ props }">
       <!-- Table Cell -->
@@ -38,7 +31,6 @@ import { EColumnType } from 'src/scripts/application/CommonTypes';
 import { ETableColumnInput, TTableColumn } from 'src/scripts/ui/common';
 import { EFileType, useComposables } from 'src/scripts/utilities/common';
 import { getColumnTypes } from 'src/scripts/utilities/options';
-import ButtonPush from 'components/common/ButtonPush.vue';
 
 // Get composable components
 const comp = useComposables();
@@ -129,7 +121,7 @@ const columns = computed(() => {
       name: 'format',
       align: 'left',
       label: comp.i18n.t('file.columns.format'),
-      headerStyle: 'width: 150px',
+      headerStyle: 'width: 200px',
       field: (row: TColumnDefinitionCSV) => row.format,
       input: (row) => getInputTypeFor('format', row),
     });
@@ -178,10 +170,10 @@ function getInputTypeFor(
 ): ETableColumnInput | undefined {
   if (scope === 'precision') {
     if (row.type === EColumnType.String) {
-      row.precision = 100;
+      row.precision = row.precision ? row.precision : 100;
       return ETableColumnInput.Number;
     } else if (row.type === EColumnType.Number) {
-      row.precision = 10;
+      row.precision = row.precision ? row.precision : 10;
       return ETableColumnInput.Number;
     } else if (row.type === EColumnType.Timestamp) {
       row.precision = 9;
@@ -191,7 +183,7 @@ function getInputTypeFor(
     }
   } else if (scope === 'scale') {
     if (row.type === EColumnType.Number) {
-      row.scale = 0;
+      row.scale = row.scale ? row.scale : 0;
       return ETableColumnInput.Number;
     } else {
       row.scale = null;
@@ -201,13 +193,22 @@ function getInputTypeFor(
       (row as TColumnDefinitionCSV).format = null;
       return ETableColumnInput.Text;
     } else if (row.type === EColumnType.Date) {
-      (row as TColumnDefinitionCSV).format = 'YYYY-MM-DD';
+      (row as TColumnDefinitionCSV).format = (row as TColumnDefinitionCSV)
+        .format
+        ? (row as TColumnDefinitionCSV).format
+        : 'YYYY-MM-DD';
       return ETableColumnInput.Text;
     } else if (row.type === EColumnType.Time) {
-      (row as TColumnDefinitionCSV).format = 'HH24:MI:SS';
+      (row as TColumnDefinitionCSV).format = (row as TColumnDefinitionCSV)
+        .format
+        ? (row as TColumnDefinitionCSV).format
+        : 'HH24:MI:SS';
       return ETableColumnInput.Text;
     } else if (row.type === EColumnType.Timestamp) {
-      (row as TColumnDefinitionCSV).format = 'YYYY-MM-DD HH24:MI:SS.FF9';
+      (row as TColumnDefinitionCSV).format = (row as TColumnDefinitionCSV)
+        .format
+        ? (row as TColumnDefinitionCSV).format
+        : 'YYYY-MM-DD HH24:MI:SS.FF9';
       return ETableColumnInput.Text;
     } else {
       (row as TColumnDefinitionCSV).format = null;

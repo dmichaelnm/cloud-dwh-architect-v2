@@ -16,6 +16,14 @@ export type TFilePropertiesCSV = {
   quoteCharacter: string;
   /** First row is header */
   hasHeaderRow: boolean;
+  /** Date Format */
+  dateFormat: string;
+  /** Time Format */
+  timeFormat: string;
+  /** Timestamp Format */
+  timestampFormat: string;
+  /** Decimal Separator */
+  decimalSeparator: string;
 };
 
 /**
@@ -27,6 +35,10 @@ export type TColumnDefinitionCSV = TColumnDefinition & {
   format: string | null;
 };
 
+/**
+ * Represents the type definition for a file column, which can be either
+ * a standard column definition or a column definition specific to CSV files.
+ */
 export type TFileColumnDefinition = TColumnDefinition | TColumnDefinitionCSV;
 
 /**
@@ -36,6 +48,26 @@ export type TFileColumnDefinition = TColumnDefinition | TColumnDefinitionCSV;
  * file properties are available.
  */
 export type TFileProperties = TFilePropertiesCSV | null;
+
+/**
+ * This type defines the structure for metadata, particularly focusing
+ * on column definitions within a dataset or table construct.
+ */
+export type TMetaData = {
+  /** Column Definitions */
+  columns: TColumnDefinition[];
+};
+
+/**
+ * Type definition for the metadata configuration of a CSV file.
+ * Extends the TMetaData type.
+ */
+export type TMetaDataCSV = TMetaData & {
+  /** Field delimiter */
+  fieldDelimiter: string;
+  /** Line break */
+  lineBreak: 'CRLF' | 'LF' | 'CR';
+};
 
 /**
  * Represents the data structure for a file object within a storage system.
@@ -98,6 +130,10 @@ export function getFilePropertiesFromType(type: EFileType): TFileProperties {
         fieldDelimitor: ',',
         quoteCharacter: '"',
         hasHeaderRow: false,
+        dateFormat: 'yyyy-MM-dd',
+        timeFormat: 'HH:mm:ss',
+        timestampFormat: 'yyyy-MM-dd HH:mm:ss.SSS',
+        decimalSeparator: '.',
       };
     // Unknown File Properties
     default:
