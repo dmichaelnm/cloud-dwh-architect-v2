@@ -181,7 +181,7 @@ function openFileSelectionDialog(): void {
           fileNames.value = await post('getFiles', {
             provider: externalApp.data.provider,
             credentials: externalApp.data.credentials,
-            path: path,
+            path: `${path}${_modelValue.value.path}`,
           });
           if (fileNames.value.length > 0) {
             // Open the dialog
@@ -254,11 +254,15 @@ function sampleMetaData(): void {
       if (externalApp) {
         // Start sampling task
         runTask(async () => {
+          // Normalize path
+          const path = storageLoc.data.path.startsWith('/')
+            ? storageLoc.data.path.substring(1)
+            : storageLoc.data.path;
           // Start sampling
           const result = await post('getFileMetaData', {
             provider: externalApp.data.provider,
             credentials: externalApp.data.credentials,
-            path: `${storageLoc.data.path}${_modelValue.value.path}`,
+            path: `${path}${_modelValue.value.path}`,
             type: _modelValue.value.type,
             properties: {
               hasHeaderRow: _modelValue.value.properties
