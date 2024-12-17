@@ -70,6 +70,8 @@ export default {
     type: 'Typ',
     // Records per page
     recordsPerPage: 'Zeilen pro Seite',
+    // Reverse Engineering
+    reverseEngineering: 'Reverse Engineering',
     // Value
     value: 'Wert',
   },
@@ -185,6 +187,21 @@ export default {
       // CSV
       csv: 'CSV-Datei',
     },
+    // Column Types
+    columnType: {
+      // String
+      string: 'Zeichenkette',
+      // Number
+      number: 'Zahl',
+      // Date
+      date: 'Datum',
+      // Time
+      time: 'Uhrzeit',
+      // Timestamp
+      timestamp: 'Zeitstempel',
+      // Boolean
+      boolean: 'Wahrheitswert',
+    }
   },
 
   // Authentication Messages
@@ -723,6 +740,32 @@ export default {
         // Has Header Row
         hasHeaderRow: 'Erste Zeile enthält Spaltennamen',
       },
+    },
+    // Messages for the columns table
+    columns: {
+      // General Message
+      message:
+        'Hier können Sie die Struktur der Daten in dem Dateiobjekt definieren, indem Sie die einzelnen Spalten ' +
+        'mit ihren entsprechenden Eigenschaften angeben. Sie können die Struktur auch per Reverse Engineering ' +
+        'vom System ermitteln lassen.',
+      // Empty Message
+      messageEmpty: 'Bisher wurden noch keine Spalten definiert.',
+      // New column default name
+      newColumn: 'Neue_Spalte',
+      // Column Name
+      name: 'Name der Spalte',
+      // Column Type
+      type: 'Datentyp',
+      // Precision
+      precision: 'Länge / Genauigkeit',
+      // Scale
+      scale: 'Dezimalstellen',
+      // Nullable
+      nullable: 'Leere Werte zulassen',
+      // Format
+      format: 'Format (Optional)',
+      // Comment
+      comment: 'Kommentar (Optional)',
     },
     // Dialog Messages
     dialog: {

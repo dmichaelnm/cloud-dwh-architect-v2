@@ -24,6 +24,11 @@
       <!-- File Object General -->
       <file-object-general v-model="editorData" />
     </template>
+    <!-- Template: Columns -->
+    <template v-slot:tab-columns>
+      <!-- File Column Definitions -->
+      <file-object-columns v-model="editorData" />
+    </template>
   </editor-container>
 </template>
 
@@ -37,6 +42,7 @@ import { ref } from 'vue';
 import { useComposables } from 'src/scripts/utilities/common';
 import FileObjectGeneral from 'components/app/files/FileObjectGeneral.vue';
 import { Project } from 'src/scripts/application/Project';
+import FileObjectColumns from 'components/app/files/FileObjectColumns.vue';
 
 // Get composable components
 const comp = useComposables();

@@ -11,6 +11,8 @@ import { TSelectOption } from 'src/scripts/utilities/common';
 export enum ETableColumnInput {
   /** Text Input */
   Text = 'text',
+  /** Number Input */
+  Number = 'number',
   /** Select Input */
   Select = 'select',
   /** Checkbox Input */
@@ -27,7 +29,7 @@ export enum ETableColumnInput {
  */
 export type TTableColumn = QTableColumn & {
   /** Input Type */
-  input?: ETableColumnInput | ((row: any) => ETableColumnInput);
+  input?: ETableColumnInput | ((row: any) => ETableColumnInput | undefined);
   /** Optional icon to be shown */
   icon?: string | ((row: any) => string);
   /** Options for input type Select */

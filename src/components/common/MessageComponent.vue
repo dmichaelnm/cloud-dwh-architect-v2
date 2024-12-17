@@ -4,9 +4,14 @@
     <!-- Message Row -->
     <div class="row" v-if="message">
       <!-- Message Column -->
-      <div :class="colWidthAttr">
+      <div :class="messageColumnWidth">
         <!-- Message -->
         {{ message }}
+      </div>
+      <!-- Button Column -->
+      <div :class="buttonColumnWidth">
+        <!-- Slot -->
+        <slot name="buttons" />
       </div>
     </div>
     <!-- Component Row -->
@@ -33,8 +38,13 @@ const props = defineProps<{
   colWidth?: number;
 }>();
 
-// The attribute specifying the column width
-const colWidthAttr = computed(() =>
+// The attribute specifying the column width of the message column
+const messageColumnWidth = computed(() =>
   props.colWidth ? `col-${props.colWidth}` : 'col-6'
+);
+
+// The attribute specifying the column width of the button column
+const buttonColumnWidth = computed(() =>
+  props.colWidth ? `col-${12 - props.colWidth}` : 'col-6'
 );
 </script>

@@ -1,6 +1,12 @@
 <template>
   <!-- Message Component -->
   <message-component :message="message">
+    <!-- Template: Buttons -->
+    <template v-slot:buttons>
+      <!-- Slot Buttons -->
+      <slot name="buttons" />
+    </template>
+
     <!-- Table DIV -->
     <div class="q-col-gutter-y-sm">
       <!-- Empty Message Row -->
@@ -92,7 +98,7 @@
                     <!-- Checkbox -->
                     <q-checkbox
                       v-if="!readOnly"
-                      v-model="props.row.value"
+                      v-model="props.row[col.name]"
                       size="xs"
                       dense
                     />
@@ -102,7 +108,10 @@
                     :ref="setEditorReference('pe', col, props.rowIndex)"
                     v-model="props.row[col.name]"
                     v-if="
-                      getInputType(col, props.row) === ETableColumnInput.Text &&
+                      (getInputType(col, props.row) ===
+                        ETableColumnInput.Text ||
+                        getInputType(col, props.row) ===
+                          ETableColumnInput.Number) &&
                       !readOnly
                     "
                     v-slot="scope"
@@ -114,6 +123,12 @@
                       :ref="setEditorReference('iv', col, props.rowIndex)"
                       v-model="scope.value"
                       :label="col.label"
+                      :type="
+                        getInputType(col, props.row) ===
+                        ETableColumnInput.Number
+                          ? 'number'
+                          : 'text'
+                      "
                       hide-bottom-space
                       @focusout="updateValue(props.rowIndex, col, scope.value)"
                       @keyup.enter="hideEditor(col, props.rowIndex)"

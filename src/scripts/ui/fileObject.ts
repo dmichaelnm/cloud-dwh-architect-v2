@@ -4,6 +4,10 @@ import { FirestoreDocument } from 'src/scripts/application/FirestoreDocument';
 import { EFileType } from 'src/scripts/utilities/common';
 import { Project } from 'src/scripts/application/Project';
 
+/**
+ * This class represents file metadata and its associated properties used within an editor.
+ * It extends the base `EditorData` class, allowing integration with file-specific data.
+ */
 export class EditorFileObjectData extends EditorData<fo.IFileObjectData> {
   /** Storage Location */
   storageLocation: string = '';
@@ -16,6 +20,9 @@ export class EditorFileObjectData extends EditorData<fo.IFileObjectData> {
 
   /** File properties */
   properties: fo.TFileProperties = null;
+
+  /** File column definitions */
+  columns: fo.TFileColumnDefinition[] = [];
 
   /**
    * Constructs an instance, optionally initializing it with a given project.
@@ -35,6 +42,12 @@ export class EditorFileObjectData extends EditorData<fo.IFileObjectData> {
     }
   }
 
+  /**
+   * Creates and returns an object representing file metadata and its properties.
+   *
+   * @return {fo.IFileObjectData} An object containing file information, including name, description, storage location,
+   *                              type, path, properties, and columns.
+   */
   createData(): fo.IFileObjectData {
     return {
       common: {
@@ -45,6 +58,7 @@ export class EditorFileObjectData extends EditorData<fo.IFileObjectData> {
       type: this.type,
       path: this.path,
       properties: this.properties,
+      columns: this.columns,
     };
   }
 

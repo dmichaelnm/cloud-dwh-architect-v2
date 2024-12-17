@@ -1,6 +1,7 @@
 import { IFirestoreDocumentData } from 'src/scripts/application/FirestoreDocument';
 import { ProjectDocument } from 'src/scripts/application/ProjectDocument';
 import { EFileType } from 'src/scripts/utilities/common';
+import { TColumnDefinition } from 'src/scripts/application/CommonTypes';
 
 /**
  * Represents the properties for configuring a CSV file. This type is used
@@ -18,6 +19,17 @@ export type TFilePropertiesCSV = {
 };
 
 /**
+ * Represents a type definition for a CSV column that extends the base TColumnType.
+ * Includes an optional format property which defines the specific format of the column.
+ */
+export type TColumnDefinitionCSV = TColumnDefinition & {
+  /** Optional Format */
+  format: string | null;
+};
+
+export type TFileColumnDefinition = TColumnDefinition | TColumnDefinitionCSV;
+
+/**
  * Represents the properties of a file as a type.
  * This type can either represent valid CSV file properties
  * (as defined in TFilePropertiesCSV) or a null value when no
@@ -25,6 +37,13 @@ export type TFilePropertiesCSV = {
  */
 export type TFileProperties = TFilePropertiesCSV | null;
 
+/**
+ * Represents the data structure for a file object within a storage system.
+ * Extends the `IFirestoreDocumentData` interface.
+ *
+ * This interface is used to define the necessary information about the file,
+ * including its location, type, properties, and additional metadata.
+ */
 export interface IFileObjectData extends IFirestoreDocumentData {
   /** Storage Location */
   stoageLocation: string;
@@ -34,6 +53,8 @@ export interface IFileObjectData extends IFirestoreDocumentData {
   path: string;
   /** File Properties */
   properties: TFileProperties;
+  /** Column definitions */
+  columns: TFileColumnDefinition[];
 }
 
 export class FileObject extends ProjectDocument<IFileObjectData> {}

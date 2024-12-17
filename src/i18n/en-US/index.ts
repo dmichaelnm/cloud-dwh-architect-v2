@@ -68,6 +68,8 @@ export default {
     type: 'Type',
     // Records per page
     recordsPerPage: 'Records per page',
+    // Reverse Engineering
+    reverseEngineering: 'Reverse Engineering',
     // Value
     value: 'Value',
   },
@@ -179,6 +181,21 @@ export default {
       unknown: 'Unknown File Type',
       // CSV
       csv: 'CSV File',
+    },
+    // Column Types
+    columnType: {
+      // String
+      string: 'String',
+      // Number
+      number: 'Number',
+      // Date
+      date: 'Date',
+      // Time
+      time: 'Time',
+      // Timestamp
+      timestamp: 'Timestamp',
+      // Boolean
+      boolean: 'Boolean',
     },
   },
 
@@ -680,6 +697,32 @@ export default {
         // Has Header Row
         hasHeaderRow: 'First Row Contains Column Names',
       },
+    },
+    // Messages for the columns table
+    columns: {
+      // General Message
+      message:
+        'Here you can define the structure of the data in the file object by specifying the individual columns ' +
+        'with their corresponding properties. You can also have the structure determined by the system using reverse ' +
+        'engineering.',
+      // Empty Message
+      messageEmpty: 'No columns have been defined yet.',
+      // New column default name
+      newColumn: 'New_Column',
+      // Column Name
+      name: 'Column Name',
+      // Column Type
+      type: 'Data Type',
+      // Precision
+      precision: 'Length / Precision',
+      // Scale
+      scale: 'Scale',
+      // Nullable
+      nullable: 'Allow Empty Values',
+      // Format
+      format: 'Format (Optional)',
+      // Comment
+      comment: 'Comment (Optional)',
     }, // Editor Messages
     editor: {
       // Create Messages
