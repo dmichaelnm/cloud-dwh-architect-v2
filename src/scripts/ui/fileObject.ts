@@ -15,8 +15,8 @@ export class EditorFileObjectData extends EditorData<fo.IFileObjectData> {
   /** File Type */
   type: EFileType = EFileType.Unknown;
 
-  /** Path to file in the cloud storage */
-  path: string = '';
+  /** File name in the cloud storage */
+  file: string = '';
 
   /** File properties */
   properties: fo.TFileProperties = null;
@@ -56,7 +56,7 @@ export class EditorFileObjectData extends EditorData<fo.IFileObjectData> {
       },
       stoageLocation: this.storageLocation,
       type: this.type,
-      path: this.path,
+      file: this.file,
       properties: this.properties,
       columns: this.columns,
     };

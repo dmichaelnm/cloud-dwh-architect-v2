@@ -11,7 +11,7 @@
     <!-- Template: Buttons -->
     <template
       v-slot:buttons
-      v-if="_modelValue.type !== EFileType.Unknown && _modelValue.path"
+      v-if="_modelValue.type !== EFileType.Unknown && _modelValue.file"
     >
       <div class="text-right">
         <button-push
@@ -41,7 +41,7 @@
         <div class="col-6">
           <!-- Path -->
           <input-value
-            v-model="_modelValue.path"
+            v-model="_modelValue.file"
             :label="$t('file.label.path')"
             button-icon="search"
             mandatory
@@ -181,7 +181,7 @@ function openFileSelectionDialog(): void {
           fileNames.value = await post('getFiles', {
             provider: externalApp.data.provider,
             credentials: externalApp.data.credentials,
-            path: `${path}${_modelValue.value.path}`,
+            path: `${path}${_modelValue.value.file}`,
           });
           if (fileNames.value.length > 0) {
             // Open the dialog
@@ -220,7 +220,7 @@ function onFileSelected(file: cm.TFileInfo): void {
     .join('.')
     .toUpperCase();
   // Set the file name
-  _modelValue.value.path = file.name;
+  _modelValue.value.file = file.name;
 }
 
 /**
@@ -262,7 +262,7 @@ function sampleMetaData(): void {
           const result = await post('getFileMetaData', {
             provider: externalApp.data.provider,
             credentials: externalApp.data.credentials,
-            path: `${path}${_modelValue.value.path}`,
+            path: `${path}${_modelValue.value.file}`,
             type: _modelValue.value.type,
             properties: {
               hasHeaderRow: _modelValue.value.properties

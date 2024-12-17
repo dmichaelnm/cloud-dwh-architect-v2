@@ -81,8 +81,8 @@ export interface IFileObjectData extends IFirestoreDocumentData {
   stoageLocation: string;
   /** File Type */
   type: EFileType;
-  /** Path to the file in the cloud storage */
-  path: string;
+  /** File name in the cloud storage */
+  file: string;
   /** File Properties */
   properties: TFileProperties;
   /** Column definitions */
