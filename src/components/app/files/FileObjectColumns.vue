@@ -73,7 +73,7 @@ const columns = computed(() => {
       name: 'name',
       align: 'left',
       label: comp.i18n.t('file.columns.name'),
-      headerStyle: 'width: 200px',
+      headerStyle: 'width: 250px',
       field: (row: TFileColumnDefinition) => row.name,
       input: ETableColumnInput.Text,
     },

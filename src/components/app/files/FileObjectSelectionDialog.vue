@@ -5,6 +5,7 @@
     :title="$t('file.dialog.fileSelection.title')"
     :message="$t('file.dialog.fileSelection.message')"
     :handler="onFileSelected"
+    :width="700"
     @update:model-value="(value) => (_modelValue = value)"
     @before-show="initDialog"
   >
@@ -17,14 +18,13 @@
           name: 'name',
           label: $t('file.dialog.fileSelection.fileName'),
           align: 'left',
-          headerStyle: 'width: 200px',
           field: (row) => row.name,
         },
         {
           name: 'size',
           label: $t('file.dialog.fileSelection.fileSize'),
-          align: 'center',
-          headerStyle: 'width: 100px',
+          align: 'right',
+          headerStyle: 'width: 150px',
           field: (row) => formatFileSize(row.size),
         },
         {
@@ -44,21 +44,21 @@
 <style scoped lang="scss"></style>
 
 <script setup lang="ts">
+import * as cm from 'src/scripts/utilities/common';
 import BasicDialog from 'components/common/BasicDialog.vue';
 import EditableTable from 'components/common/EditableTable.vue';
 import { computed, ref } from 'vue';
-import { TFileInfo, useComposables } from 'src/scripts/utilities/common';
 import { Account } from 'src/scripts/application/Account';
 
 // Get composable components
-const comp = useComposables();
+const comp = cm.useComposables();
 
 // Defines the properties of this component
 const props = defineProps<{
   /** Model value */
   modelValue: boolean;
   /** Array of file objects */
-  files: TFileInfo[];
+  files: cm.TFileInfo[];
 }>();
 
 // Defines the events that can be emitted by this component
@@ -66,7 +66,7 @@ const emit = defineEmits<{
   /** Model update event */
   (event: 'update:modelValue', value: boolean): void;
   /** File Selection Event */
-  (event: 'fileSelected', file: TFileInfo): void;
+  (event: 'fileSelected', file: cm.TFileInfo): void;
 }>();
 
 // The internal model value of this component
@@ -95,7 +95,37 @@ function initDialog(): void {
  * @return {string} The formatted file size string. Returns an empty string if the input size is undefined.
  */
 function formatFileSize(size: string | number | undefined): string {
-  return size === undefined ? '' : `${size} Bytes`;
+  // Check size
+  if (size) {
+    let value = 0;
+    if (typeof size === 'string') {
+      // Handle string values
+      const converted = cm.toNumber(size);
+      if (converted) {
+        value = converted as number;
+      } else {
+        return size;
+      }
+    } else {
+      value = size as number;
+    }
+    // Convert
+    if (value > 1024 * 1024 * 1024) {
+      // Giga Byte
+      return (value / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+    } else if (value > 1024 * 1024) {
+      // Mega Byte
+      return (value / (1024 * 1024)).toFixed(2) + ' MB';
+    } else if (value > 1024) {
+      // Kilo Byte
+      return (value / 1024).toFixed(2) + ' KB';
+    } else {
+      // Byte
+      return value + ' B';
+    }
+  }
+  // Return empty string
+  return '';
 }
 
 /**

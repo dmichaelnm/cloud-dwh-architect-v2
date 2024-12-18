@@ -281,6 +281,8 @@ async function switchProject(): Promise<void> {
         const project = comp.session.getProject(projectId);
         // If project was found, current ID on account is valid
         if (project) {
+          // Set unloaded
+          project.loaded = false;
           // Set current project
           comp.session.project = project;
           // Load project details
@@ -288,6 +290,8 @@ async function switchProject(): Promise<void> {
         } else if (comp.session.projects.length > 0) {
           // Set the first project in the list as active
           comp.session.project = comp.session.projects[0];
+          // Set unloaded
+          comp.session.project.loaded = false;
           // Load project details
           await loadProject(comp.session.project);
         } else {

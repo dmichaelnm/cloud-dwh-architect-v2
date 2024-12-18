@@ -9,7 +9,10 @@
   >
     <!-- Dialog DIV -->
     <div
-      :style="{ width: (props.width ? props.width : '600') + 'px' }"
+      :style="{
+        width: (props.width ? props.width : '600') + 'px',
+        maxWidth: (props.width ? props.width : '600') + 'px',
+      }"
       class="dialog-frame"
     >
       <!-- Dialog Header Row -->
