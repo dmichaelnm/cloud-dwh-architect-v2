@@ -80,7 +80,7 @@ export async function sampleMetaData(
   // Return the promise
   return new Promise((resolve) => {
     // Parse the CSV content
-    const result = parse(content);
+    const result = parse(content, { skipEmptyLines: 'greedy' });
     // Create result
     const metaData: TMetaDataCSV = {
       fieldDelimiter: result.meta.delimiter as string,
