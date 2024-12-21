@@ -17,6 +17,30 @@
       },
     ]"
   >
+    <!-- Template: Provider -->
+    <template v-slot:body-cell-provider="{ props }">
+      <!-- Table Cell -->
+      <q-td :props="props">
+        <!-- Main DIV -->
+        <div class="flex items-center q-gutter-x-md">
+          <!-- Icon DIV -->
+          <div>
+            <!-- External App Icon -->
+            <q-icon
+              :name="`img:icons/${props.row.data.provider}.png`"
+              size="sm"
+            />
+          </div>
+          <!-- Application & Path -->
+          <div>
+            <!-- Application Name -->
+            <div>{{ props.row.data.common.name }}</div>
+            <!-- Path -->
+            <div class="text-italic">{{ props.row.data.path }}</div>
+          </div>
+        </div>
+      </q-td>
+    </template>
   </overview-container>
 </template>
 

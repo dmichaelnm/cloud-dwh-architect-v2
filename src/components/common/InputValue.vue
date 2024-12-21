@@ -12,6 +12,7 @@
     :error-message="errorMessage"
     :hide-bottom-space="hideBottomSpace"
     :readonly="readOnly"
+    :class="blur ? 'blur-input' : ''"
     lazy-rules="ondemand"
     spellcheck="false"
     no-error-icon
@@ -28,7 +29,14 @@
   </q-input>
 </template>
 
-<style scoped lang="scss"></style>
+<style lang="scss">
+.blur-input .q-field__native {
+  filter: blur(4px);
+}
+.blur-input .q-field__native:focus {
+  filter: none;
+}
+</style>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
@@ -64,6 +72,8 @@ const props = defineProps<{
   buttonIcon?: string;
   /** Flag for hiding the content when read only flag is true */
   hideWhenReadOnly?: boolean;
+  /** Flag for bluring the content when not in focus */
+  blur?: boolean;
 }>();
 
 // Defines the events that can be emitted by this component
