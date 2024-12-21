@@ -5,7 +5,7 @@
     :title="$t('file.dialog.fileSelection.title')"
     :message="$t('file.dialog.fileSelection.message')"
     :handler="onFileSelected"
-    :width="700"
+    :width="900"
     @update:model-value="(value) => (_modelValue = value)"
     @before-show="initDialog"
   >

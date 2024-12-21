@@ -73,14 +73,20 @@ export class Project extends fd.FirestoreDocument<IProjectData> {
   }
 
   /**
-   * Retrieves a list of external applications from the database.
+   * Retrieves and returns an array of external applications. The array is sorted alphabetically
+   * by the name of the external applications.
    *
-   * @return {ExternalApp[]} An array of external application instances.
+   * @return {ea.ExternalApp[]} An array of external applications sorted alphabetically by name.
    */
   getExternalApplications(): ea.ExternalApp[] {
-    return this.getDocuments<ea.IExternalAppData, ea.ExternalApp>(
+    // Get array of external applications
+    const array = this.getDocuments<ea.IExternalAppData, ea.ExternalApp>(
       fd.EFirestoreDocumentType.ExternalApp
     );
+    // Sort array alphabetically
+    array.sort((a, b) => a.data.common.name.localeCompare(b.data.common.name));
+    // Return array
+    return array;
   }
 
   /**
@@ -101,9 +107,15 @@ export class Project extends fd.FirestoreDocument<IProjectData> {
    * @return {StorageLocation[]} An array of storage locations.
    */
   getStorageLocations(): sl.StorageLocation[] {
-    return this.getDocuments<sl.IStorageLocationData, sl.StorageLocation>(
-      fd.EFirestoreDocumentType.StorageLoc
-    );
+    // Get array of storage locations
+    const array = this.getDocuments<
+      sl.IStorageLocationData,
+      sl.StorageLocation
+    >(fd.EFirestoreDocumentType.StorageLoc);
+    // Sort array alphabetically
+    array.sort((a, b) => a.data.common.name.localeCompare(b.data.common.name));
+    // Return the array
+    return array;
   }
 
   /**

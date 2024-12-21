@@ -43,15 +43,6 @@
             :read-only="readOnly"
           />
         </div>
-        <!-- Quote Character Column -->
-        <div class="col-2">
-          <!-- Quote Character Selection -->
-          <input-value
-            v-model="(_modelValue.properties as TFilePropertiesCSV).quoteCharacter"
-            :label="$t('file.properties.csv.quoteCharacter')"
-            :read-only="readOnly"
-          />
-        </div>
       </div>
       <!-- Format Pattern Rows -->
       <div class="row q-col-gutter-x-sm">

@@ -686,8 +686,6 @@ export default {
       name: 'Name des Dateiobjekts',
       // Column Definitions
       columns: 'Spalten-Definition',
-      // Path
-      path: 'Name der Datei im gewählten Verzeichnis',
       // File Type
       type: 'Dateityp',
       // Select Storage Location
@@ -696,6 +694,10 @@ export default {
       columnCount: 'Anzahl Spalten',
       // Location
       location: 'Ablageort der Datei',
+      // Sample File
+      sampleFile: 'Beispiel-Datei',
+      // File Pattern
+      filePattern: 'Dateinamen-Muster',
     },
     // Overview Messages
     overview: {

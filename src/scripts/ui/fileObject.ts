@@ -15,8 +15,8 @@ export class EditorFileObjectData extends EditorData<fo.IFileObjectData> {
   /** File Type */
   type: EFileType = EFileType.Unknown;
 
-  /** File name in the cloud storage */
-  file: string = '';
+  /** File name pattern */
+  filePattern: string = '';
 
   /** File properties */
   properties: fo.TFileProperties = null;
@@ -59,7 +59,7 @@ export class EditorFileObjectData extends EditorData<fo.IFileObjectData> {
       },
       stoageLocation: this.storageLocation,
       type: this.type,
-      file: this.file,
+      filePattern: this.filePattern,
       properties: this.properties,
       columns: this.columns,
       attributes: this.attributes,
@@ -84,7 +84,7 @@ export class EditorFileObjectData extends EditorData<fo.IFileObjectData> {
     this.description = document.data.common.description;
     // Apply storage location, file and type
     this.storageLocation = document.data.stoageLocation;
-    this.file = document.data.file;
+    this.filePattern = document.data.filePattern;
     this.type = document.data.type;
     // Apply properties
     this.properties = fo.getFilePropertiesFromType(

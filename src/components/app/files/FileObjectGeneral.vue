@@ -8,19 +8,6 @@
 
   <!-- Message Component -->
   <message-component :message="$t('file.editor.message.general')">
-    <!-- Template: Buttons -->
-    <template
-      v-slot:buttons
-      v-if="_modelValue.type !== EFileType.Unknown && _modelValue.file && !readOnly"
-    >
-      <div class="text-right">
-        <button-push
-          :label="$t('label.sampleDataStructure')"
-          @click="sampleMetaData"
-        />
-      </div>
-    </template>
-
     <!-- Main DIV -->
     <div class="q-col-gutter-y-sm">
       <!-- Storage Location Selection Row -->
@@ -36,18 +23,37 @@
           />
         </div>
       </div>
+      <!-- Sample File & Sample Button Row -->
+      <div class="row q-col-gutter-x-sm items-center" v-if="!readOnly">
+        <!-- Sample File Column -->
+        <div class="col-6">
+          <!-- Sample File Input -->
+          <input-value
+            v-model="sampleFile"
+            :label="$t('file.label.sampleFile')"
+            button-icon="search"
+            hide-bottom-space
+            @button-click="openFileSelectionDialog"
+          />
+        </div>
+        <!-- Sample Button Column -->
+        <div class="col-3">
+          <button-push
+            :label="$t('label.sampleDataStructure')"
+            @click="sampleMetaData"
+          />
+        </div>
+      </div>
       <!-- Path and Type Row -->
       <div class="row q-col-gutter-x-sm">
         <!-- Path Column -->
         <div class="col-6">
           <!-- Path -->
           <input-value
-            v-model="_modelValue.file"
-            :label="$t('file.label.path')"
+            v-model="_modelValue.filePattern"
+            :label="$t('file.label.filePattern')"
             :read-only="readOnly"
-            button-icon="search"
             mandatory
-            @button-click="openFileSelectionDialog"
           />
         </div>
         <!-- Type Selection Column -->
@@ -120,6 +126,9 @@ const _modelValue = computed({
   set: (value: EditorFileObjectData) => emit('update:modelValue', value),
 });
 
+// Sample file
+const sampleFile = ref<string>('');
+
 // Array of storage locations for the selection
 const storageLocations = computed(() => {
   // Options array
@@ -183,7 +192,7 @@ function openFileSelectionDialog(): void {
           fileNames.value = await post('getFiles', {
             provider: externalApp.data.provider,
             credentials: externalApp.data.credentials,
-            path: `${path}${_modelValue.value.file}`,
+            path: path,
           });
           if (fileNames.value.length > 0) {
             // Open the dialog
@@ -208,7 +217,13 @@ function openFileSelectionDialog(): void {
  */
 function onFileSelected(file: cm.TFileInfo): void {
   // Get file extension
-  const extension = file.name.split('.').pop();
+  let extension = file.name.split('.').pop();
+  if (extension === 'gz') {
+    // Extension marks file as GZIP, get real extension
+    const parts = file.name.split('.');
+    extension = parts[parts.length - 2] + '.gz';
+  }
+  console.debug(extension);
   // Set file type
   _modelValue.value.type = fo.getFileTypeFromExtension(extension);
   // Set file properties for current file type
@@ -221,8 +236,9 @@ function onFileSelected(file: cm.TFileInfo): void {
     .slice(0, -1)
     .join('.')
     .toUpperCase();
-  // Set the file name
-  _modelValue.value.file = file.name;
+  // Set the sample file and file pattern
+  sampleFile.value = file.name;
+  _modelValue.value.filePattern = file.name;
 }
 
 /**
@@ -264,7 +280,7 @@ function sampleMetaData(): void {
           const result = await post('getFileMetaData', {
             provider: externalApp.data.provider,
             credentials: externalApp.data.credentials,
-            path: `${path}${_modelValue.value.file}`,
+            path: `${path}${sampleFile.value}`,
             type: _modelValue.value.type,
             properties: {
               hasHeaderRow: _modelValue.value.properties

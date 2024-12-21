@@ -13,8 +13,6 @@ export type TFilePropertiesCSV = {
   rowSeparator: 'CRLF' | 'LF' | 'CR';
   /** Field Delimitor */
   fieldDelimitor: string;
-  /** Quote Character */
-  quoteCharacter: string;
   /** First row is header */
   hasHeaderRow: boolean;
   /** Date Format */
@@ -82,8 +80,8 @@ export interface IFileObjectData extends fd.IFirestoreDocumentData {
   stoageLocation: string;
   /** File Type */
   type: EFileType;
-  /** File name in the cloud storage */
-  file: string;
+  /** File name pattern of the files in the cloud storage */
+  filePattern: string;
   /** File Properties */
   properties: TFileProperties;
   /** Column definitions */
@@ -111,6 +109,7 @@ export function getFileTypeFromExtension(
   switch (extension.toLowerCase()) {
     // CSV File
     case 'csv':
+    case 'csv.gz':
       return EFileType.CSV;
     // Unknown file type
     default:
@@ -137,7 +136,6 @@ export function getFilePropertiesFromType(
       return {
         rowSeparator: csvProps ? csvProps.rowSeparator : 'CRLF',
         fieldDelimitor: csvProps ? csvProps.fieldDelimitor : ',',
-        quoteCharacter: csvProps ? csvProps.quoteCharacter : '"',
         hasHeaderRow: csvProps ? csvProps.hasHeaderRow : false,
         dateFormat: csvProps ? csvProps.dateFormat : 'yyyy-MM-dd',
         timeFormat: csvProps ? csvProps.timeFormat : 'HH:mm:ss',

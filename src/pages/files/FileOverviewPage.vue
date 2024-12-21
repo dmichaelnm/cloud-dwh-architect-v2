@@ -11,7 +11,7 @@
         label: $t('file.label.location'),
         align: 'left',
         headerStyle: 'width: 300px',
-        field: row => (row as fo.FileObject).data.file
+        field: row => (row as fo.FileObject).data.filePattern
       },
       {
         name: 'type',
@@ -53,7 +53,7 @@
               {{ getStorageLocation(props.row)?.data.path }}
             </div>
             <!-- File -->
-            <div class="text-italic">{{ props.row.data.file }}</div>
+            <div class="text-italic text-ellipsis">{{ props.row.data.filePattern }}</div>
           </div>
         </div>
       </q-td>
@@ -61,7 +61,14 @@
   </overview-container>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 225px;
+}
+</style>
 
 <script setup lang="ts">
 import * as cm from 'src/scripts/utilities/common';

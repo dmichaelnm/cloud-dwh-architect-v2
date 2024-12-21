@@ -664,8 +664,6 @@ export default {
       name: 'File Object Name',
       // Column Definitions
       columns: 'Spalten-Definition',
-      // Path
-      path: 'Name of the file in the chosen storage location',
       // File Type
       type: 'File Type',
       // Select Storage Location
@@ -674,6 +672,10 @@ export default {
       columnCount: 'Column Count',
       // Location
       location: 'File Location',
+      // Sample File
+      sampleFile: 'Sample File',
+      // File Pattern
+      filePattern: 'File Name Pattern',
     },
     // Overview Messages
     overview: {
