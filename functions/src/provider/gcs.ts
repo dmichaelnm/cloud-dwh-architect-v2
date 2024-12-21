@@ -1,6 +1,6 @@
 import { TFileInfo, TResult } from '../types';
 import { Storage } from '@google-cloud/storage';
-import { checkAndGetFilename } from './utilities';
+import { checkAndGetFilename, readContent } from './utilities';
 
 /**
  * Type definition for Google Cloud Storage provider credentials.
@@ -189,32 +189,13 @@ export async function readTextFile(
       // Get the file
       const file = bucket.file(path);
       // Create readable stream
-      const readable = file.createReadStream();
-      // Create chunk buffer
-      const buffer: Buffer[] = [];
-      // Bytes read
-      let readed = 0;
-      // Listener for reading chunks
-      readable.on('data', (chunk) => {
-        // Add chunk to buffer
-        buffer.push(chunk);
-        // Calculate read bytes
-        readed = readed + chunk.length;
-        // Check max Size
-        if (maxSize && readed >= maxSize) {
-          // Close stream
-          readable.destroy();
-        }
-      });
-      // Close listener
-      readable.on('close', () => {
-        // Create string from buffer
-        const content = Buffer.concat(buffer).toString('utf-8');
-        // Return result
-        resolve({
-          status: 'success',
-          data: content,
-        });
+      const stream = file.createReadStream();
+      // Read the file content
+      const content = await readContent(path, stream, maxSize);
+      // Resolve the promise
+      resolve({
+        status: 'success',
+        data: content,
       });
     } catch (error: any) {
       // Failed to connect

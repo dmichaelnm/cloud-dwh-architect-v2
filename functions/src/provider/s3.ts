@@ -2,7 +2,7 @@
 import * as s3 from '@aws-sdk/client-s3';
 import { TFileInfo, TResult } from '../types';
 import { Readable } from 'node:stream';
-import { checkAndGetFilename } from './utilities';
+import { checkAndGetFilename, readContent } from './utilities';
 
 /**
  * Represents the credentials and configuration needed to authenticate
@@ -215,32 +215,13 @@ export async function readTextFile(
         throw new Error('Failed to get a readable stream from S3.');
       }
       // Get readable
-      const readable = response.Body as Readable;
-      // Create buffer
-      const buffer: Buffer[] = [];
-      // Read bytes
-      let read = 0;
-      // Read listener
-      readable.on('data', (chunk) => {
-        // Add chunk to buffer
-        buffer.push(chunk);
-        // Add to read bytes
-        read += chunk.length;
-        // Check buffer size
-        if (maxSize && read >= maxSize) {
-          // Close stream
-          readable.destroy();
-        }
-      });
-      // Close listener
-      readable.on('close', () => {
-        // Create string from buffer
-        const content = Buffer.concat(buffer).toString('utf-8');
-        // Return result
-        resolve({
-          status: 'success',
-          data: content,
-        });
+      const stream = response.Body as Readable;
+      // Read the file content
+      const content = await readContent(path, stream, maxSize);
+      // Resolve the promise
+      resolve({
+        status: 'success',
+        data: content,
       });
     } catch (error: any) {
       // Failed to connect
