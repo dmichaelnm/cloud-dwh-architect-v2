@@ -3,6 +3,7 @@ import { ProjectDocument } from 'src/scripts/application/ProjectDocument';
 import { TCustomAttribute } from 'src/scripts/utilities/common';
 import { loadChildDocuments, Project } from 'src/scripts/application/Project';
 import { deleteDocument } from 'src/scripts/application/FirestoreDocument';
+import { deleteFileObject } from 'src/scripts/application/FileObject';
 
 /**
  * Represents a storage location data structure extending the base Firestore document data.
@@ -60,6 +61,16 @@ export async function loadStorageLocations(project: Project): Promise<void> {
 export async function deleteStorageLocation(storageLocation: StorageLocation) {
   // Get project
   const project = storageLocation.project;
+  // Get all file objects
+  const fileObjects = project.getFileObjects();
+  // Iterate over all file objects
+  for (const fileObject of fileObjects) {
+    // Check storage location
+    if (fileObject.data.stoageLocation === storageLocation.id) {
+      // Delete file object
+      await deleteFileObject(fileObject);
+    }
+  }
   // Delete storage location document
   await deleteDocument(storageLocation);
   // Remove document from project

@@ -126,12 +126,13 @@
               <!-- Private Key Row -->
               <div class="row" v-if="!isReadOnly">
                 <!-- Private Key Column -->
-                <div class="col">
+                <div class="col-6">
                   <!-- Private Key -->
                   <input-value
                     v-model="(_modelValue.credentials as TProviderCredentialsGCS).privateKey"
                     :label="$t('externalApp.provider.gcs.privateKey')"
                     type="textarea"
+                    blur
                     mandatory
                   />
                 </div>

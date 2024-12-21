@@ -99,3 +99,56 @@ export function getExternalApplicationProviders(): TSelectOption[] {
     },
   ];
 }
+
+/**
+ * Retrieves a list of file types as selectable options.
+ *
+ * @return {TSelectOption[]} An array of objects representing file types, each containing a `value` and a `label`.
+ */
+export function getFileTypes(): TSelectOption[] {
+  return [
+    {
+      value: 'unknown',
+      label: 'enumeration.fileType.unknown',
+    },
+    {
+      value: 'text/csv',
+      label: 'enumeration.fileType.csv',
+    },
+  ];
+}
+
+/**
+ * Retrieves a list of column types with their corresponding display labels.
+ *
+ * @return {TSelectOption[]} An array of objects, each containing a `value` and a `label` that represent a column
+ *                           type and its label for display purposes.
+ */
+export function getColumnTypes(): TSelectOption[] {
+  return [
+    {
+      value: 'string',
+      label: 'enumeration.columnType.string',
+    },
+    {
+      value: 'number',
+      label: 'enumeration.columnType.number',
+    },
+    {
+      value: 'date',
+      label: 'enumeration.columnType.date',
+    },
+    {
+      value: 'time',
+      label: 'enumeration.columnType.time',
+    },
+    {
+      value: 'timestamp',
+      label: 'enumeration.columnType.timestamp',
+    },
+    {
+      value: 'boolean',
+      label: 'enumeration.columnType.boolean',
+    },
+  ]
+}

@@ -1,5 +1,8 @@
-import { TResult } from '../types';
-import { ListObjectsCommand, S3Client } from '@aws-sdk/client-s3';
+//import * as logger from 'firebase-functions/logger';
+import * as s3 from '@aws-sdk/client-s3';
+import { TFileInfo, TResult } from '../types';
+import { Readable } from 'node:stream';
+import { checkAndGetFilename, readContent } from './utilities';
 
 /**
  * Represents the credentials and configuration needed to authenticate
@@ -17,6 +20,24 @@ export type TProviderCredentialsS3 = {
 };
 
 /**
+ * Creates and returns an instance of the S3Client configured with the provided credentials.
+ *
+ * @param {TProviderCredentialsS3} credentials - The credentials required to configure the S3 client, including
+ *                                               access key, secret key, and region.
+ * @return {s3.S3Client} The initialized S3 client instance.
+ */
+function createClient(credentials: TProviderCredentialsS3): s3.S3Client {
+  // Create S3 client
+  return new s3.S3Client({
+    region: credentials.region,
+    credentials: {
+      accessKeyId: credentials.accessKeyId,
+      secretAccessKey: credentials.secretAccessKey,
+    },
+  });
+}
+
+/**
  * Tests the connection to an S3 bucket using the provided credentials.
  *
  * @param {TProviderCredentialsS3} credentials - The credentials required to access the S3 bucket, including region,
@@ -29,16 +50,10 @@ export async function testConnection(
 ): Promise<TResult<string>> {
   return new Promise(async (resolve) => {
     try {
-      // Create S3 client
-      const client = new S3Client({
-        region: credentials.region,
-        credentials: {
-          accessKeyId: credentials.accessKeyId,
-          secretAccessKey: credentials.secretAccessKey,
-        },
-      });
+      // Create client
+      const client = createClient(credentials);
       // Create listObjects command
-      const command = new ListObjectsCommand({
+      const command = new s3.ListObjectsCommand({
         Bucket: credentials.bucket,
         MaxKeys: 1,
       });
@@ -73,16 +88,10 @@ export async function getFolders(
 ): Promise<TResult<string[]>> {
   return new Promise(async (resolve) => {
     try {
-      // Create S3 client
-      const client = new S3Client({
-        region: credentials.region,
-        credentials: {
-          accessKeyId: credentials.accessKeyId,
-          secretAccessKey: credentials.secretAccessKey,
-        },
-      });
+      // Create client
+      const client = createClient(credentials);
       // Create listObjects command
-      const command = new ListObjectsCommand({
+      const command = new s3.ListObjectsCommand({
         Bucket: credentials.bucket,
       });
       // Execute command
@@ -103,7 +112,7 @@ export async function getFolders(
           }
         }
       }
-      // Connection was successful
+      // Return the result
       resolve({
         status: 'success',
         data: folders,
@@ -112,7 +121,113 @@ export async function getFolders(
       // Failed to connect
       resolve({
         status: 'failure',
-        code: 'connection-failed',
+        code: 'unexpected-error',
+        message: error.message ? error.message : error,
+      });
+    }
+  });
+}
+
+/**
+ * Retrieves a list of files from a specified path in an S3 bucket.
+ *
+ * @param {TProviderCredentialsS3} credentials - The credentials required to access the S3 bucket, including access keys and bucket details.
+ * @param {string} path - The path or prefix within the S3 bucket to search for files.
+ * @return {Promise<TResult<string[]>>} A promise resolving to a TResult object containing a list of file names on success, or failure details on error.
+ */
+export async function getFiles(
+  credentials: TProviderCredentialsS3,
+  path: string
+): Promise<TResult<TFileInfo[]>> {
+  return new Promise(async (resolve) => {
+    try {
+      // Create client
+      const client = createClient(credentials);
+      // Create listObjects command
+      const command = new s3.ListObjectsCommand({
+        Bucket: credentials.bucket,
+        Prefix: path,
+      });
+      // Execute the command
+      const result = await client.send(command);
+      // Create result array
+      const files: TFileInfo[] = [];
+      // Check result
+      if (result.Contents) {
+        // Iterate over the result
+        for (const obj of result.Contents) {
+          // Check file path and get file name
+          const filename = checkAndGetFilename(obj.Key, path);
+          if (filename !== null) {
+            // Add to result array
+            files.push({
+              name: filename,
+              size: obj.Size,
+              lastModified: obj.LastModified,
+            });
+          }
+        }
+      }
+      // Return the result
+      resolve({
+        status: 'success',
+        data: files,
+      });
+    } catch (error: any) {
+      // Failed to connect
+      resolve({
+        status: 'failure',
+        code: 'unexpected-error',
+        message: error.message ? error.message : error,
+      });
+    }
+  });
+}
+
+/**
+ * Reads a text file from an S3 path and retrieves its contents line by line. Optionally limits the number of bytes read.
+ *
+ * @param {TProviderCredentialsS3} credentials - The credentials for accessing the S3 bucket.
+ * @param {string} path - The path to the text file in the S3 bucket.
+ * @param {number} [maxSize] - Optional parameter to specify the maximum number of bytes to read from the file.
+ * @return {Promise<TResult<string>>} A promise that resolves to a result object containing the status and either
+ *                                      the content as string or an error message.
+ */
+export async function readTextFile(
+  credentials: TProviderCredentialsS3,
+  path: string,
+  maxSize?: number
+): Promise<TResult<string>> {
+  // Return the promise
+  return new Promise(async (resolve) => {
+    try {
+      // Create client
+      const client = createClient(credentials);
+      // Create object stream
+      const command = new s3.GetObjectCommand({
+        Bucket: credentials.bucket,
+        Key: path,
+      });
+      // Send command
+      const response = await client.send(command);
+      // Check response
+      if (!response.Body || !(response.Body instanceof Readable)) {
+        throw new Error('Failed to get a readable stream from S3.');
+      }
+      // Get readable
+      const stream = response.Body as Readable;
+      // Read the file content
+      const content = await readContent(path, stream, maxSize);
+      // Resolve the promise
+      resolve({
+        status: 'success',
+        data: content,
+      });
+    } catch (error: any) {
+      // Failed to connect
+      resolve({
+        status: 'failure',
+        code: 'unexpected-error',
         message: error.message ? error.message : error,
       });
     }

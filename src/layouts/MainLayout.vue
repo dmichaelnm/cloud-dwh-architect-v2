@@ -80,9 +80,18 @@
           <!-- Storage Locations -->
           <drawer-item
             :label="$t('storageLoc.label.drawerItem')"
-            :disable="!hasStorageLocations"
-            icon="storage"
+            :disable="!hasFileBasedExternalApps"
+            icon="o_folder"
             route-to-page="/storageLoc/overview"
+          />
+          <!-- Modeling -->
+          <drawer-label :label="$t('label.modeling')" />
+          <!-- Files -->
+          <drawer-item
+            :label="$t('file.label.drawerItem')"
+            :disable="!hasStorageLocations"
+            icon="o_description"
+            route-to-page="/file/overview"
           />
         </q-list>
       </div>
@@ -202,10 +211,19 @@ const leftDrawerIcon = computed(() =>
 const project = computed(() => comp.session.project);
 
 // Flag for enabling the storage locations
-const hasStorageLocations = computed(() => {
+const hasFileBasedExternalApps = computed(() => {
   if (project.value !== null && project.value.loaded) {
     const apps = project.value.getExternalApplications();
     return apps.some((app) => app.data.locationType === ELocationType.file);
+  }
+  return false;
+});
+
+// Flag for enabling the files
+const hasStorageLocations = computed(() => {
+  if (project.value !== null && project.value.loaded) {
+    const locations = project.value.getStorageLocations();
+    return locations.length > 0;
   }
   return false;
 });
@@ -263,6 +281,8 @@ async function switchProject(): Promise<void> {
         const project = comp.session.getProject(projectId);
         // If project was found, current ID on account is valid
         if (project) {
+          // Set unloaded
+          project.loaded = false;
           // Set current project
           comp.session.project = project;
           // Load project details
@@ -270,6 +290,8 @@ async function switchProject(): Promise<void> {
         } else if (comp.session.projects.length > 0) {
           // Set the first project in the list as active
           comp.session.project = comp.session.projects[0];
+          // Set unloaded
+          comp.session.project.loaded = false;
           // Load project details
           await loadProject(comp.session.project);
         } else {

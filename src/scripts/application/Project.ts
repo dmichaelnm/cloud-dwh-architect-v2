@@ -1,6 +1,7 @@
 import * as fd from 'src/scripts/application/FirestoreDocument';
 import * as ea from 'src/scripts/application/ExternalApp';
 import * as sl from 'src/scripts/application/StorageLocation';
+import * as fo from 'src/scripts/application/FileObject';
 import { where } from 'firebase/firestore';
 import { getCurrentAccountId } from 'src/scripts/utilities/firebase';
 import { TCustomAttribute } from 'src/scripts/utilities/common';
@@ -72,14 +73,20 @@ export class Project extends fd.FirestoreDocument<IProjectData> {
   }
 
   /**
-   * Retrieves a list of external applications from the database.
+   * Retrieves and returns an array of external applications. The array is sorted alphabetically
+   * by the name of the external applications.
    *
-   * @return {ExternalApp[]} An array of external application instances.
+   * @return {ea.ExternalApp[]} An array of external applications sorted alphabetically by name.
    */
   getExternalApplications(): ea.ExternalApp[] {
-    return this.getDocuments<ea.IExternalAppData, ea.ExternalApp>(
+    // Get array of external applications
+    const array = this.getDocuments<ea.IExternalAppData, ea.ExternalApp>(
       fd.EFirestoreDocumentType.ExternalApp
     );
+    // Sort array alphabetically
+    array.sort((a, b) => a.data.common.name.localeCompare(b.data.common.name));
+    // Return array
+    return array;
   }
 
   /**
@@ -100,9 +107,15 @@ export class Project extends fd.FirestoreDocument<IProjectData> {
    * @return {StorageLocation[]} An array of storage locations.
    */
   getStorageLocations(): sl.StorageLocation[] {
-    return this.getDocuments<sl.IStorageLocationData, sl.StorageLocation>(
-      fd.EFirestoreDocumentType.StorageLoc
-    );
+    // Get array of storage locations
+    const array = this.getDocuments<
+      sl.IStorageLocationData,
+      sl.StorageLocation
+    >(fd.EFirestoreDocumentType.StorageLoc);
+    // Sort array alphabetically
+    array.sort((a, b) => a.data.common.name.localeCompare(b.data.common.name));
+    // Return the array
+    return array;
   }
 
   /**
@@ -114,6 +127,30 @@ export class Project extends fd.FirestoreDocument<IProjectData> {
   getStorageLocation(id: string): sl.StorageLocation | undefined {
     return this.getDocument<sl.IStorageLocationData, sl.StorageLocation>(
       fd.EFirestoreDocumentType.StorageLoc,
+      id
+    );
+  }
+
+  /**
+   * Retrieves an array of FileObject instances that represent file data from the database.
+   *
+   * @return {fo.FileObject[]} An array of FileObject instances containing file-related data.
+   */
+  getFileObjects(): fo.FileObject[] {
+    return this.getDocuments<fo.IFileObjectData, fo.FileObject>(
+      fd.EFirestoreDocumentType.File
+    );
+  }
+
+  /**
+   * Retrieves a file object corresponding to the given identifier.
+   *
+   * @param {string} id - The unique identifier of the file object to retrieve.
+   * @return {fo.FileObject | undefined} The file object if found, or undefined if no matching object is found.
+   */
+  getFileObject(id: string): fo.FileObject | undefined {
+    return this.getDocument<fo.IFileObjectData, fo.FileObject>(
+      fd.EFirestoreDocumentType.File,
       id
     );
   }
@@ -265,6 +302,8 @@ export async function loadProject(project: Project): Promise<void> {
   await ea.loadExternalApps(project);
   // Load storage locations
   await sl.loadStorageLocations(project);
+  // Load file objects
+  await fo.loadFileObjects(project);
   // Set project as loaded
   project.loaded = true;
 }

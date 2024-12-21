@@ -60,12 +60,16 @@ export default {
     lightMode: 'Light Mode',
     // Management
     management: 'Management',
+    // Modeling
+    modeling: 'Modeling',
     // Save
     save: 'Save',
     // Type
     type: 'Type',
     // Records per page
     recordsPerPage: 'Records per page',
+    // Sample Data Structure
+    sampleDataStructure: 'Sample Data Structure',
     // Value
     value: 'Value',
   },
@@ -170,6 +174,28 @@ export default {
       gcs: 'Google Cloud Storage',
       // Snowflake Database
       snowflake: 'Snowflake Database',
+    },
+    // File Types
+    fileType: {
+      // Unknown
+      unknown: 'Unknown File Type',
+      // CSV
+      csv: 'CSV File',
+    },
+    // Column Types
+    columnType: {
+      // String
+      string: 'String',
+      // Number
+      number: 'Number',
+      // Date
+      date: 'Date',
+      // Time
+      time: 'Time',
+      // Timestamp
+      timestamp: 'Timestamp',
+      // Boolean
+      boolean: 'Boolean',
     },
   },
 
@@ -620,6 +646,171 @@ export default {
         message:
           'Please select a storage location from the list of available paths. The selected path serves as a container ' +
           'for source files to be imported into the data warehouse.',
+      },
+    },
+  },
+
+  // Files
+  file: {
+    // Object Name
+    object: 'File Object',
+    // Article
+    article: 'the',
+    // File Labels
+    label: {
+      // Drawer Item Label
+      drawerItem: 'File Objects',
+      // Name
+      name: 'File Object Name',
+      // Column Definitions
+      columns: 'Spalten-Definition',
+      // File Type
+      type: 'File Type',
+      // Select Storage Location
+      storageLocation: 'Choose Storage Location',
+      // Column Count
+      columnCount: 'Column Count',
+      // Location
+      location: 'File Location',
+      // Sample File
+      sampleFile: 'Sample File',
+      // File Pattern
+      filePattern: 'File Name Pattern',
+    },
+    // Overview Messages
+    overview: {
+      // Title
+      title: 'File Objects',
+      // Message
+      message:
+        'The following overview displays a list of created file objects that reference files in ' +
+        'directories of cloud storage services such as S3 or Google Cloud Storage. These file objects ' +
+        'describe the structure of the files and are intended to simplify and automate the import process ' +
+        'into a data warehouse.',
+      // Empty Message
+      messageEmpty: 'No file objects have been defined yet.',
+      // Tooltip Messages
+      tooltip: {
+        // View
+        view: 'View File Object',
+        // Edit
+        edit: 'Edit File Object',
+        // Delete
+        delete: 'Delete File Object',
+      },
+    },
+    // File Properties Messages
+    properties: {
+      // CSV Properties
+      csv: {
+        // General message
+        message:
+          'Here you can specify the concrete properties of the selected CSV file, for example, to perform reverse ' +
+          'engineering to determine the structure of the CSV file.',
+        // Row Separator
+        rowSeparator: 'Line Break',
+        // Field Delimiter
+        fieldDelimiter: 'Field Delimiter',
+        // Quote Character
+        quoteCharacter: 'Quote Character',
+        // Has Header Row
+        hasHeaderRow: 'First Row Contains Column Names',
+        // Date Format
+        dateFormat: 'Date Format',
+        // Time Format
+        timeFormat: 'Time Format',
+        // Timestamp Format
+        timestampFormat: 'Timestamp Format',
+        // Decimal Separator
+        decimalSeparator: 'Decimal Separator',
+      },
+    },
+    // Messages for the columns table
+    columns: {
+      // General Message
+      message:
+        'Here you can define the structure of the data in the file object by specifying the individual columns ' +
+        'with their corresponding properties. You can also have the structure determined by the system using reverse ' +
+        'engineering.',
+      // Empty Message
+      messageEmpty: 'No columns have been defined yet.',
+      // New column default name
+      newColumn: 'New_Column',
+      // Column Name
+      name: 'Column Name',
+      // Column Type
+      type: 'Data Type',
+      // Precision
+      precision: 'Length / Precision',
+      // Scale
+      scale: 'Scale',
+      // Nullable
+      nullable: 'Allow Empty Values',
+      // Format
+      format: 'Format (Optional)',
+      // Comment
+      comment: 'Comment (Optional)',
+    }, // Editor Messages
+    editor: {
+      // Create Messages
+      create: {
+        // Title
+        title: 'Create new file object',
+        // Message
+        message:
+          'On this page, you can create a file object for a file in a cloud storage service. ' +
+          'You can either define the structure of the file manually or automatically determine it ' +
+          'using reverse engineering. This simplifies the integration of the file into your data warehouse.',
+      },
+      // View Messages
+      view: {
+        // Title
+        title: 'Dateiobjekt anzeigen',
+        // Message
+        message:
+          'Hier können Sie sich die Eigenschaften und die Struktur des Dateiobjekts ansehen. Aufgrund Ihrer ' +
+          'Rolle können Sie jedoch keine Änderungen vornehmen.',
+      },
+      // Edit Messages
+      edit: {
+        // Title
+        title: 'Edit file object',
+        // Message
+        message:
+          'Here you can edit the properties and structure of the file object. Please note that ' +
+          'this impacts dependent objects and they may no longer function correctly.',
+      },
+      // Tab Messages
+      message: {
+        // General
+        general:
+          'Enter the path to the file in cloud storage here along with the file type. You can also ' +
+          'automatically obtain all information via reverse engineering by selecting a file in cloud storage, ' +
+          'provided that the file type is supported by the application.',
+      },
+    },
+    // Dialog Messages
+    dialog: {
+      // File Selection Dialog
+      fileSelection: {
+        // Title
+        title: 'Select file',
+        // Message
+        message:
+          'Choose the file from the list for which you want to create a file object.',
+        // File Name
+        fileName: 'File Name',
+        // File Size
+        fileSize: 'Size',
+        // Last Modified
+        lastModified: 'Last Modified',
+      },
+      // No Files Warning Dialog Messages
+      noFiles: {
+        // Title
+        title: 'No files found',
+        // Message
+        message: 'No files were found in the selected directory.',
       },
     },
   },

@@ -9,6 +9,19 @@ import firebase from 'firebase/compat';
 import Timestamp = firebase.firestore.Timestamp;
 
 /**
+ * Enumeration representing different file types.
+ *
+ * This enum is commonly used to define and categorize
+ * supported file types by their MIME type.
+ */
+export enum EFileType {
+  /** Unknown file type */
+  Unknown = 'unknown',
+  /** Plain CSV */
+  CSV = 'text/csv',
+}
+
+/**
  * Enumeration representing operations that can be performed on a document.
  */
 export enum EDocumentOperation {
@@ -32,6 +45,18 @@ export enum ECustomAttributeType {
   Number = 'number',
   /** Boolean Value */
   Boolean = 'boolean',
+}
+
+/**
+ * Represents file information with details about its name, size, and last modified date.
+ */
+export type TFileInfo = {
+  /** Name */
+  name: string;
+  /** Size */
+  size: string | number | undefined;
+  /** Last Modified */
+  lastModified: Date | string | undefined;
 }
 
 /**
@@ -132,6 +157,24 @@ export type TFuncShowSuccessDialog = (
  * @param {Function | null | undefined} [result] - An optional callback function to handle the result of the dialog.
  */
 export type TFuncShowErrorDialog = (
+  title: string,
+  message: string,
+  detail?: string | null | undefined,
+  result?:
+    | ((value: string) => boolean | void | Promise<boolean | void>)
+    | null
+    | undefined
+) => void;
+
+/**
+ * Represents a function to display a warning dialog.
+ *
+ * @param {string} title - The title of the dialog.
+ * @param {string} message - The message to be displayed in the dialog.
+ * @param {string | null | undefined} [detail] - Additional details to be displayed, if any.
+ * @param {Function | null | undefined} [result] - An optional callback function to handle the result of the dialog.
+ */
+export type TFuncShowWarningDialog = (
   title: string,
   message: string,
   detail?: string | null | undefined,
@@ -308,6 +351,7 @@ export function useMessageDialog(): {
   showMessageDialog: TFuncShowMessageDialog;
   showSuccessDialog: TFuncShowSuccessDialog;
   showErrorDialog: TFuncShowErrorDialog;
+  showWarningDialog: TFuncShowWarningDialog;
   showConfirmationDialog: TFuncShowConfirmationDialog;
 } {
   return {
@@ -339,6 +383,17 @@ export function useMessageDialog(): {
       messageDialogOptions.value.message = message;
       messageDialogOptions.value.detail = detail;
       messageDialogOptions.value.color = '#C3606A';
+      messageDialogOptions.value.buttons = [
+        { value: 'close', label: 'label.close' },
+      ];
+      messageDialogOptions.value.result = result;
+      messageDialogOptions.value.visibility = true;
+    },
+    showWarningDialog: (title, message, detail, result) => {
+      messageDialogOptions.value.title = title;
+      messageDialogOptions.value.message = message;
+      messageDialogOptions.value.detail = detail;
+      messageDialogOptions.value.color = '#e6c774';
       messageDialogOptions.value.buttons = [
         { value: 'close', label: 'label.close' },
       ];

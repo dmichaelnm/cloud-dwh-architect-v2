@@ -1,6 +1,12 @@
 <template>
   <!-- Message Component -->
   <message-component :message="message">
+    <!-- Template: Buttons -->
+    <template v-slot:buttons>
+      <!-- Slot Buttons -->
+      <slot name="buttons" />
+    </template>
+
     <!-- Table DIV -->
     <div class="q-col-gutter-y-sm">
       <!-- Empty Message Row -->
@@ -42,6 +48,7 @@
                   :val="props.rowIndex"
                   dense
                   size="xs"
+                  @update:model-value="emit('rowSelected', props.rowIndex)"
                 />
               </q-td>
             </template>
@@ -63,14 +70,14 @@
                     "
                   >
                     <!-- Value DIV -->
-                    <div class="flex q-gutter-x-sm">
+                    <div class="flex q-gutter-x-sm" style="width: 100%">
                       <!-- Optional Icon DIV -->
-                      <div v-if="getIcon(col, props.row)">
+                      <div v-if="getIcon(col, props.row)" style="width: 100%">
                         <!-- Optional Icon -->
                         <q-icon :name="getIcon(col, props.row)" size="xs" />
                       </div>
                       <!-- Value -->
-                      <div>{{ props.value }}</div>
+                      <div style="width: 100%">{{ props.value }}</div>
                     </div>
                   </div>
                   <!-- Custom Boolean Column Value -->
@@ -91,7 +98,7 @@
                     <!-- Checkbox -->
                     <q-checkbox
                       v-if="!readOnly"
-                      v-model="props.row.value"
+                      v-model="props.row[col.name]"
                       size="xs"
                       dense
                     />
@@ -101,7 +108,10 @@
                     :ref="setEditorReference('pe', col, props.rowIndex)"
                     v-model="props.row[col.name]"
                     v-if="
-                      getInputType(col, props.row) === ETableColumnInput.Text &&
+                      (getInputType(col, props.row) ===
+                        ETableColumnInput.Text ||
+                        getInputType(col, props.row) ===
+                          ETableColumnInput.Number) &&
                       !readOnly
                     "
                     v-slot="scope"
@@ -113,6 +123,12 @@
                       :ref="setEditorReference('iv', col, props.rowIndex)"
                       v-model="scope.value"
                       :label="col.label"
+                      :type="
+                        getInputType(col, props.row) ===
+                        ETableColumnInput.Number
+                          ? 'number'
+                          : 'text'
+                      "
                       hide-bottom-space
                       @focusout="updateValue(props.rowIndex, col, scope.value)"
                       @keyup.enter="hideEditor(col, props.rowIndex)"
@@ -168,6 +184,46 @@
             @click="deleteRow"
             :tooltip="deleteTooltip"
           />
+          <!-- Move To Top Button -->
+          <button-icon
+            v-if="moveable"
+            :style="{ visibility: selectedRowIndex < 2 ? 'hidden' : 'visible' }"
+            icon="mdi-arrow-collapse-up"
+            @click="moveToTop"
+          />
+          <!-- Move Up Button -->
+          <button-icon
+            v-if="moveable"
+            :style="{ visibility: selectedRowIndex < 1 ? 'hidden' : 'visible' }"
+            icon="mdi-arrow-up"
+            @click="moveUp"
+          />
+          <!-- Move Down Button -->
+          <button-icon
+            v-if="moveable"
+            :style="{
+              visibility:
+                selectedRowIndex > _modelValue.length - 2 ||
+                selectedRowIndex === -1
+                  ? 'hidden'
+                  : 'visible',
+            }"
+            icon="mdi-arrow-down"
+            @click="moveDown"
+          />
+          <!-- Move To Bottom Button -->
+          <button-icon
+            v-if="moveable"
+            :style="{
+              visibility:
+                selectedRowIndex > _modelValue.length - 3 ||
+                selectedRowIndex === -1
+                  ? 'hidden'
+                  : 'visible',
+            }"
+            icon="mdi-arrow-collapse-down"
+            @click="moveToBottom"
+          />
         </div>
       </div>
     </div>
@@ -188,9 +244,6 @@ import { TSelectOption } from 'src/scripts/utilities/common';
 
 // Contains the references to popup editors in the editable table
 const references = reactive(<Record<string, any>>{});
-
-// Selected row index
-const selectedRowIndex = ref(-1);
 
 // Defines the properties of this component
 const props = defineProps<{
@@ -222,12 +275,21 @@ const props = defineProps<{
   sortBy?: string;
   /** Sort order */
   sortOrder?: 'asc' | 'desc';
+  /** Flag for the possibility of selecting a row */
+  selectable?: boolean;
+  /** Selected Row Index */
+  selectedRow?: number;
 }>();
+
+// Selected row index
+const selectedRowIndex = ref(props.selectedRow ?? -1);
 
 // Defines the events that can be emitted by this component
 const emit = defineEmits<{
   /** Model update event */
   (event: 'update:modelValue', value: Record<string, any>[]): void;
+  /** Row selection event */
+  (event: 'rowSelected', value: number): void;
 }>();
 
 // The internal model value of this component
@@ -241,7 +303,7 @@ const computedColumns = computed(() => {
   // Create computed columns array
   const colArr: TTableColumn[] = [];
   // If rows are deletable or moveable, create a selection column
-  if (props.deletable || props.moveable) {
+  if (props.deletable || props.moveable || props.selectable) {
     colArr.push({
       name: 'select',
       align: 'center',
@@ -425,5 +487,70 @@ function updateValue(
   if (hide) {
     hideEditor(column, index);
   }
+}
+
+/**
+ * Moves the currently selected row to the top of the list.
+ * Updates the selected row index to reflect the new position.
+ */
+function moveToTop(): void {
+  // Get element at the selected position
+  const temp = _modelValue.value[selectedRowIndex.value];
+  // Move all columns from the first to the selected index one position down
+  for (let i = selectedRowIndex.value - 1; i >= 0; i--) {
+    _modelValue.value[i + 1] = _modelValue.value[i];
+  }
+  // Replace first position with selected position
+  _modelValue.value[0] = temp;
+  // Adjust selected row index
+  selectedRowIndex.value = 0;
+}
+
+/**
+ * Moves the selected row one position up in the data model, swapping it with the row above.
+ */
+function moveUp(): void {
+  // Get element at the selected position
+  const temp = _modelValue.value[selectedRowIndex.value];
+  // Replace selected position with the element above
+  _modelValue.value[selectedRowIndex.value] =
+    _modelValue.value[selectedRowIndex.value - 1];
+  // Replace element above with the selected position
+  _modelValue.value[selectedRowIndex.value - 1] = temp;
+  // Adjust selected row index
+  selectedRowIndex.value -= 1;
+}
+
+/**
+ * Moves the currently selected row down by one position in a list.
+ * Updates the selected row index and swaps the position of elements.
+ */
+function moveDown(): void {
+  // Get element at the selected position
+  const temp = _modelValue.value[selectedRowIndex.value];
+  // Replace selected position with the element below
+  _modelValue.value[selectedRowIndex.value] =
+    _modelValue.value[selectedRowIndex.value + 1];
+  // Replace element below with the selected position
+  _modelValue.value[selectedRowIndex.value + 1] = temp;
+  // Adjust selected row index
+  selectedRowIndex.value += 1;
+}
+
+/**
+ * Moves the currently selected row in the data model to the bottom of the list.
+ * It also updates the selected row index to reflect its new position.
+ */
+function moveToBottom(): void {
+  // Get element at the selected position
+  const temp = _modelValue.value[selectedRowIndex.value];
+  // Move all columns from the selected index to the last index one position up
+  for (let i = selectedRowIndex.value + 1; i < _modelValue.value.length; i++) {
+    _modelValue.value[i - 1] = _modelValue.value[i];
+  }
+  // Replace first position with selected position
+  _modelValue.value[_modelValue.value.length - 1] = temp;
+  // Adjust selected row index
+  selectedRowIndex.value = _modelValue.value.length - 1;
 }
 </script>
